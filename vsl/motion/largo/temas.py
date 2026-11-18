@@ -60,9 +60,10 @@ COLORES = [
 DIR_LEGAL = {
     6: dict(nombre='Despacho', pal=_pal('#120d09', '#c39548', '#5a2e1f', '#e6c27a', '#1d150f', ink='#f4ece0', mut='#b5a796', sobre='#1a1208'), grad='none', ft=None, musica='musica/tears-of-joy.mp3'),
     7: dict(nombre='Expediente', pal=_pal('#111214', '#b3262c', '#c9a46a', '#e0524b', '#1b1c20', ink='#f2efe9', mut='#a7a49d', sobre='#ffffff'), grad='none', ft=None, musica='musica/wind-leaves.mp3'),
-    8: dict(nombre='Tribunal', pal=_pal('#0c0c0e', '#c9a654', '#e8e3d8', '#ecd08a', '#17171a', ink='#f5f2ea', mut='#aaa59a', sobre='#16120a'), grad='none', ft='Playfair', musica='musica/expressive-courage.mp3'),
-    9: dict(nombre='Código', pal=_pal('#0d1526', '#b8913f', '#e9e1cf', '#e3c27a', '#16213a', ink='#f3efe4', mut='#a9b1c3', sobre='#0d1526'), grad='none', ft='Playfair', musica='musica/possible-dreams.mp3'),
-    10: dict(nombre='Legal digital', pal=_pal('#08151c', '#3a8fc2', '#d9b46a', '#8cc8ee', '#10222c', ink='#eef5f8', mut='#9db2bd', sobre='#ffffff'), grad='none', ft=None, musica='musica/skyline.mp3'),
+    # 18 nov: a Christian no le gustó la serifa del Tribunal; Código y Legal digital descartados → Cine y Keynote
+    8: dict(nombre='Tribunal', pal=_pal('#0c0c0e', '#c9a654', '#e8e3d8', '#ecd08a', '#17171a', ink='#f5f2ea', mut='#aaa59a', sobre='#16120a'), grad='none', ft=None, musica='musica/expressive-courage.mp3'),
+    9: dict(nombre='Cine', pal=_pal('#0a0a0b', '#d4b06a', '#8a6a3a', '#f0d79a', '#141416', ink='#f7f3ea', mut='#b9b2a4', sobre='#16120a'), grad='none', ft=None, musica='musica/possible-dreams.mp3'),
+    10: dict(nombre='Keynote', pal=_pal('#000000', '#c9a654', '#5b6b8a', '#f2d48c', '#0e0e10', ink='#ffffff', mut='#9a9aa2', sobre='#14100a'), grad='none', ft=None, musica='musica/skyline.mp3'),
 }
 
 
