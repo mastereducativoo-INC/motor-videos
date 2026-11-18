@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>07 · Checklist antes de tocar</title>
+<link rel="stylesheet" href="base.css">
+<style>
+body{background:#ecebf6;color:#0a0a1e}
+.hoja{position:absolute;right:170px;top:110px;width:760px;height:860px;background:#fff;border-radius:28px;box-shadow:0 50px 100px rgba(10,10,30,.22);padding:64px 64px;animation:hoja 1.1s var(--out) both}
+@keyframes hoja{from{transform:translateY(120px) rotate(3deg);opacity:0}to{transform:rotate(-1.2deg);opacity:1}}
+.hoja h4{font-size:30px;font-weight:800;letter-spacing:-.02em;display:flex;justify-content:space-between}
+.hoja h4 span{font-family:Nunito;font-size:20px;letter-spacing:.14em;color:#8b88a8;font-weight:800}
+.it{display:flex;align-items:center;gap:26px;height:112px;border-bottom:2px solid #eeedf6;font-size:38px;font-weight:600;letter-spacing:-.02em;color:#8b88a8}
+.it.ok{color:#0a0a1e}
+.caja{width:52px;height:52px;border-radius:14px;border:4px solid #c9c7dd;flex:none;position:relative}
+.it.ok .caja{background:#0a0a1e;border-color:#0a0a1e}
+.caja svg{position:absolute;inset:0}
+.caja path{fill:none;stroke:#22d3ee;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:60;stroke-dashoffset:60}
+.tx{position:absolute;left:150px;top:230px;width:760px}
+.lbl{color:#6f6c8c}
+.tx h1{font-size:120px;font-weight:800;letter-spacing:-.045em;line-height:1;margin-top:18px}
+i.k{color:#0c8ea3}
+.tx p{font-size:42px;color:#55527a;margin-top:34px;font-weight:400;line-height:1.3}
+.sello{position:absolute;left:150px;bottom:130px;font-size:46px;font-weight:800;letter-spacing:-.02em;opacity:0;animation:fade .8s var(--out) both;animation-delay:11.6s}
+.sello small{display:block;font-family:Nunito;font-weight:700;font-size:26px;color:#6f6c8c;margin-top:8px;letter-spacing:0}
+.grain{display:none}
+</style></head>
+<body>
+<div class="tx"><div class="lbl fade" style="--d:.4s">Herramienta 3 de 7</div><h1 class="t" style="--d:.7s">Checklist antes de <i class="k">tocar.</i></h1><p class="fade" style="--d:2s">Control total antes de empezar cualquier evento.</p></div>
+<div class="hoja"><h4>Antes del evento <span>EJEMPLO · SÚPER PACK DJ</span></h4><div id="its"></div></div>
+<div class="sello">Llegas con todo preparado.<small>Incluido en el Súper Pack DJ · $12 USD</small></div>
+<script src="motion.js"></script>
+<script>
+window.DUR = 16; window.MUSICA = 'suave';
+const I = ['Conexiones revisadas', 'Equipo probado', 'Música organizada', 'Guion del evento a la mano', 'Plan B preparado', 'Listo para tocar'], T0 = 3, P = 1.35;
+window.SFX = I.map((_, i) => [T0 + i * P, 'click']);
+const c = document.getElementById('its');
+I.forEach((t) => c.insertAdjacentHTML('beforeend', `<div class="it"><div class="caja"><svg viewBox="0 0 52 52"><path d="M13 27 l9 9 l17 -19"/></svg></div>${t}</div>`));
+M.split('.t');
+const els = [...c.children];
+window.onFrame = (t) => els.forEach((el, i) => { const k = M.out((t - T0 - i * P) / .5); el.classList.toggle('ok', k > 0); el.querySelector('path').style.strokeDashoffset = 60 * (1 - k); el.querySelector('.caja').style.transform = `scale(${1 + .18 * Math.sin(Math.PI * M.cl((t - T0 - i * P) / .4))})`; });
+</script>
+</body></html>

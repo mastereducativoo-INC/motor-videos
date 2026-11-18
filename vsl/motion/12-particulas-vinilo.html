@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>12 · Partículas que forman un vinilo</title>
+<link rel="stylesheet" href="base.css">
+<style>
+body{background:#03030a}
+canvas{position:absolute;inset:0}
+.c{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.c h1{font-size:120px;font-weight:800;letter-spacing:-.045em;line-height:1.02}
+.c p{font-size:44px;color:var(--muted);margin-top:22px;font-weight:400}
+#a .c{align-content:end;padding-bottom:110px}
+#a h1{font-size:76px}
+</style></head>
+<body>
+<canvas id="cv" width="1920" height="1080"></canvas>
+<section class="sc" id="a" style="--in:0s;--to:8.6s"><div class="c"><h1 class="t" style="--d:1s">Todo lo que aprendiste, <i class="k">en orden.</i></h1></div></section>
+<section class="sc" id="b" style="--in:9.4s;--to:99s"><div class="c"><div><div class="lbl fade" style="--d:9.7s">El siguiente nivel de tu curso</div><h1 class="t" style="--d:10s">Súper Pack DJ</h1><p class="fade" style="--d:11.2s"><i class="k">Listo para cualquier evento</i> · $12 USD</p></div></div></section>
+<div class="grain"></div>
+<script src="motion.js"></script>
+<script>
+window.DUR = 15; window.MUSICA = 'suave'; window.SFX = [[2.2, 'riser'], [9.3, 'whoosh']];
+M.split('.t');
+const g = document.getElementById('cv').getContext('2d'), N = 1500, P = [];
+let s = 7; const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+for (let i = 0; i < N; i++) { const anillo = Math.floor(rnd() * 9), r = 70 + anillo * 34 + rnd() * 6, a = rnd() * 6.283; P.push({x0: rnd() * 1920, y0: rnd() * 1080, r, a, v: .5 + rnd() * .5, c: anillo % 3 === 0 ? '#f472d0' : (anillo === 8 ? '#f5c84a' : '#22d3ee'), z: 1.6 + rnd() * 2.6}); }
+window.onFrame = (t) => {
+  g.fillStyle = '#03030a'; g.fillRect(0, 0, 1920, 1080);
+  const k = M.io((t - 2.2) / 3.4), fuera = M.io((t - 8.4) / 1.2), cx = 960, cy = 470;
+  for (const p of P) {
+    const a = p.a + t * (.5 + k * .9) * p.v, rr = p.r * (1 + fuera * 3.5);
+    const x = p.x0 + (cx + Math.cos(a) * rr - p.x0) * k + Math.sin(t * p.v + p.a) * 14 * (1 - k), y = p.y0 + (cy + Math.sin(a) * rr * .96 - p.y0) * k + Math.cos(t * p.v * .8 + p.a) * 14 * (1 - k);
+    g.globalAlpha = (.35 + .65 * k) * (1 - fuera); g.fillStyle = p.c; g.beginPath(); g.arc(x, y, p.z, 0, 7); g.fill();
+  }
+  g.globalAlpha = k * (1 - fuera); g.fillStyle = '#f5c84a'; g.beginPath(); g.arc(cx, cy, 16, 0, 7); g.fill(); g.globalAlpha = 1;
+};
+</script>
+</body></html>

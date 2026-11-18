@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>15 · Carrusel 3D de las 7 herramientas</title>
+<link rel="stylesheet" href="base.css">
+<style>
+body{background:radial-gradient(900px 500px at 50% 62%,#22245a 0%,transparent 66%),var(--deep)}
+h1{position:absolute;left:0;right:0;top:80px;text-align:center;font-size:76px;font-weight:800;letter-spacing:-.04em}
+.esc{position:absolute;left:0;right:0;top:230px;height:620px;perspective:1800px}
+.aro{position:absolute;left:50%;top:50%;transform-style:preserve-3d}
+.car{position:absolute;width:420px;height:520px;margin:-260px 0 0 -210px;display:grid;place-items:center}
+.car img{max-width:100%;max-height:100%;filter:drop-shadow(0 30px 40px rgba(0,0,0,.6))}
+.piso{position:absolute;left:50%;top:790px;width:900px;height:70px;margin-left:-450px;border-radius:50%;background:radial-gradient(closest-side,rgba(34,211,238,.28),transparent)}
+.nom{position:absolute;left:0;right:0;top:880px;text-align:center}
+.nom b{font-size:58px;font-weight:700;letter-spacing:-.03em}
+.nom small{display:block;font-family:Nunito;font-weight:800;font-size:24px;letter-spacing:.16em;color:var(--gold);margin-bottom:8px}
+</style></head>
+<body>
+<h1 class="t" style="--d:.3s">7 herramientas. <i class="k">Un solo pack.</i></h1>
+<div class="esc"><div class="aro" id="aro"></div></div><div class="piso"></div>
+<div class="nom"><small id="n1">01 / 07</small><b id="n2"></b></div>
+<div class="grain"></div>
+<script src="motion.js"></script>
+<script>
+window.DUR = 18; window.MUSICA = 'dj';
+const C = ['Guiones completos de evento', 'Kit de emergencia en vivo', 'Checklist profesional', 'Intros, cortes y transiciones', 'Sistema para leer la pista', 'Plan de preparación en 7 días', 'Mensajes para cerrar eventos'];
+const aro = document.getElementById('aro'), R = 760, T0 = 1.6, P = 2.2; window.SFX = C.map((_, i) => [T0 + i * P - .1, 'whoosh']).slice(1);
+C.forEach((_, i) => aro.insertAdjacentHTML('beforeend', `<div class="car" style="transform:rotateY(${i * 360 / 7}deg) translateZ(${R}px)"><img src="assets/dj/c${i}_5.png" alt=""></div>`));
+M.split('.t');
+window.onFrame = (t) => {
+  const u = (t - T0) / P, k = Math.max(0, Math.min(6, Math.floor(u))), f = M.io(M.cl((u - k - .62) / .38)), pos = t < T0 ? 0 : Math.min(6, k + f);
+  aro.style.transform = `translateZ(${-R}px) rotateY(${-pos * 360 / 7}deg)`;
+  const sel = Math.round(pos); document.getElementById('n1').textContent = String(sel + 1).padStart(2, '0') + ' / 07'; document.getElementById('n2').textContent = C[sel];
+  [...aro.children].forEach((c, i) => { const d = Math.min(Math.abs(i - pos), 7 - Math.abs(i - pos)); c.style.opacity = d < .6 ? 1 : (d < 1.6 ? .35 : .08); });
+};
+</script>
+</body></html>

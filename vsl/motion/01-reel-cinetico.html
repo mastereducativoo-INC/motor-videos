@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>01 · Reel cinético a 124 BPM</title>
+<link rel="stylesheet" href="base.css">
+<style>
+body{background:radial-gradient(1200px 700px at 78% 18%,#1b1c4a 0%,transparent 60%),var(--deep)}
+#cv{position:absolute;inset:0}
+.hud{position:absolute;font-family:Nunito;font-weight:800;font-size:20px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);z-index:20}
+.hud b{color:var(--ink);font-weight:800}
+.tl{left:70px;top:58px}.tr{right:70px;top:58px;text-align:right}.br{right:70px;bottom:58px}.bl{left:70px;bottom:58px}
+.esq{position:absolute;width:34px;height:34px;border:3px solid rgba(255,255,255,.55);z-index:20}
+.e1{left:40px;top:40px;border-right:0;border-bottom:0}.e2{right:40px;top:40px;border-left:0;border-bottom:0}.e3{left:40px;bottom:40px;border-right:0;border-top:0}.e4{right:40px;bottom:40px;border-left:0;border-top:0}
+.big{position:absolute;left:150px;right:150px;font-weight:800;letter-spacing:-.035em;line-height:1.02}
+#a .big{top:330px;font-size:150px}
+#b .big{top:560px;font-size:128px;text-align:center}
+.pal{position:absolute;inset:0;display:grid;place-items:center;opacity:0;animation:pal var(--len,.48s) steps(1) forwards;animation-delay:var(--d)}
+@keyframes pal{0%{opacity:1}99%{opacity:1}100%{opacity:0}}
+.pal span{font-weight:800;font-size:210px;letter-spacing:-.045em;animation:golpe .45s var(--out) both;animation-delay:var(--d)}
+.pal:nth-child(even) span{font-family:Fraunces;font-style:italic;font-weight:500;color:var(--cyan);font-size:230px}
+@keyframes golpe{from{transform:scale(1.18);filter:blur(10px)}to{transform:none;filter:none}}
+.pal em{position:absolute;left:150px;top:160px;font-style:normal;font-family:Nunito;font-weight:800;font-size:30px;letter-spacing:.18em;color:var(--gold)}
+#d img{position:absolute;right:170px;top:150px;height:780px;filter:drop-shadow(0 50px 60px rgba(0,0,0,.6));animation:sube 1.3s var(--out) both;animation-delay:var(--in)}
+@keyframes sube{from{transform:translateY(160px) rotate(4deg);opacity:0}to{transform:none;opacity:1}}
+#d .txt{position:absolute;left:150px;top:300px;width:900px}
+#d h1{font-size:136px;font-weight:800;letter-spacing:-.04em;line-height:1}
+#d h2{font-size:64px;font-weight:400;margin-top:26px}
+#d .pre{margin-top:70px;display:flex;align-items:baseline;gap:26px}
+#d .pre b{font-size:110px;font-weight:800;letter-spacing:-.04em}
+#d .pre span{font-family:Nunito;font-weight:700;font-size:30px;color:var(--muted)}
+#d .raya{height:4px;background:var(--gold);width:0;margin-top:22px;animation:raya 1s var(--out) both;animation-delay:13.6s}
+@keyframes raya{to{width:420px}}
+</style></head>
+<body>
+<canvas id="cv" width="1920" height="1080"></canvas>
+<i class="esq e1"></i><i class="esq e2"></i><i class="esq e3"></i><i class="esq e4"></i>
+<div class="hud tl"><b>Master Educativo</b> · Súper Pack DJ</div>
+<div class="hud tr"><span id="bar">BAR 1/8</span> · <b>124 BPM</b></div>
+<div class="hud bl">Curso de DJ → siguiente nivel</div>
+<div class="hud br" id="tc">00:00:00</div>
+
+<section class="sc" id="a" style="--in:0s;--to:3.5s"><div class="big t" style="--d:.5s">Ya sabes<br><i class="k">mezclar.</i></div></section>
+<section class="sc" id="b" style="--in:3.75s;--to:7.4s"><div class="big t" style="--d:4.2s">Ahora toca en <i class="k">eventos reales.</i></div></section>
+<section class="sc cut" id="c" style="--in:7.74s;--to:11.14s">
+  <div class="pal" style="--d:7.74s"><em>01 / 07</em><span>Guiones.</span></div>
+  <div class="pal" style="--d:8.22s"><em>02 / 07</em><span>Emergencias.</span></div>
+  <div class="pal" style="--d:8.71s"><em>03 / 07</em><span>Checklist.</span></div>
+  <div class="pal" style="--d:9.19s"><em>04 / 07</em><span>Transiciones.</span></div>
+  <div class="pal" style="--d:9.68s"><em>05 / 07</em><span>Leer la pista.</span></div>
+  <div class="pal" style="--d:10.16s"><em>06 / 07</em><span>Plan de 7 días.</span></div>
+  <div class="pal" style="--d:10.65s"><em>07 / 07</em><span>Mensajes.</span></div>
+</section>
+<section class="sc" id="d" style="--in:11.2s;--to:99s">
+  <img src="assets/dj/pack_5.png" alt="">
+  <div class="txt"><div class="lbl fade" style="--d:11.5s">Todo en un solo pack</div>
+    <h1 class="t" style="--d:11.8s">Súper Pack DJ</h1><h2 class="t" style="--d:12.5s"><i class="k">Listo para cualquier evento.</i></h2><div class="raya"></div>
+    <div class="pre fade" style="--d:14s"><b>$12</b><span>USD · solo en esta página</span></div></div>
+</section>
+<div class="grain"></div>
+<script src="motion.js"></script>
+<script>
+window.DUR = 17; window.MUSICA = 'dj';
+window.SFX = [[3.6, 'whoosh'], [7.6, 'whoosh'], [11.1, 'whoosh'], [11.25, 'golpe']];
+M.split('.t');
+const cv = document.getElementById('cv'), g = cv.getContext('2d'), BEAT = 60 / 124;
+window.onFrame = (t) => {
+  g.clearRect(0, 0, 1920, 1080);
+  const ph = (t % BEAT) / BEAT, pulso = Math.exp(-ph * 6);
+  document.getElementById('bar').textContent = 'BAR ' + (Math.floor(t / (BEAT * 4)) % 8 + 1) + '/8';
+  const f = Math.floor(t * 30); document.getElementById('tc').textContent = '00:' + String(Math.floor(t)).padStart(2, '0') + ':' + String(f % 30).padStart(2, '0');
+  // A: un punto que late con el ritmo · B: el punto se estira y se vuelve onda de sonido · C: desaparece · D: aro detrás del pack
+  if (t < 3.75) {
+    const r = 26 + pulso * 30, x = 1560, y = 560 - M.out(t / 1) * 0;
+    g.fillStyle = '#22d3ee'; g.beginPath(); g.arc(x, y, r * M.out(t / .6), 0, 7); g.fill();
+    g.strokeStyle = 'rgba(34,211,238,' + (0.5 * (1 - ph)) + ')'; g.lineWidth = 4; g.beginPath(); g.arc(x, y, 40 + ph * 220, 0, 7); g.stroke();
+  } else if (t < 7.6) {
+    const k = M.out((t - 3.75) / 1.1), w = 60 + k * 1560, x0 = 960 - w / 2, y = 330;
+    g.strokeStyle = '#22d3ee'; g.lineWidth = 8; g.lineCap = 'round'; g.beginPath();
+    for (let i = 0; i <= 160; i++) { const u = i / 160, x = x0 + u * w, env = Math.sin(u * Math.PI); const a = k * env * (70 + pulso * 90) * Math.sin(u * 46 + t * 9) * (0.55 + 0.45 * Math.sin(u * 7 - t * 3)); i ? g.lineTo(x, y + a) : g.moveTo(x, y + a); }
+    g.stroke();
+    g.strokeStyle = 'rgba(244,114,208,.55)'; g.lineWidth = 4; g.beginPath();
+    for (let i = 0; i <= 160; i++) { const u = i / 160, x = x0 + u * w, a = k * Math.sin(u * Math.PI) * 60 * Math.sin(u * 30 - t * 6); i ? g.lineTo(x, y + a) : g.moveTo(x, y + a); }
+    g.stroke();
+  } else if (t >= 11.2) {
+    const k = M.out((t - 11.2) / 1.4);
+    g.strokeStyle = 'rgba(34,211,238,.35)'; g.lineWidth = 3;
+    for (let j = 0; j < 3; j++) { g.beginPath(); g.arc(1430, 540, (300 + j * 110) * k + pulso * 10, 0, 7); g.stroke(); }
+  }
+};
+</script>
+</body></html>

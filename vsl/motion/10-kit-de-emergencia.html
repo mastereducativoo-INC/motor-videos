@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>10 · Kit de emergencia en vivo</title>
+<link rel="stylesheet" href="base.css">
+<style>
+body{background:#12060c;transition:none}
+#bg{position:absolute;inset:0;background:radial-gradient(1000px 700px at 50% 40%,#5a1226 0%,transparent 66%)}
+#bg2{position:absolute;inset:0;background:radial-gradient(1000px 700px at 50% 40%,#12436a 0%,transparent 66%),#060615;opacity:0}
+.al{position:absolute;left:150px;top:110px;display:flex;align-items:center;gap:18px;font-family:Nunito;font-weight:800;font-size:28px;letter-spacing:.16em}
+.al i{width:22px;height:22px;border-radius:50%;background:#ff4d6d}
+h1{position:absolute;left:150px;top:190px;font-size:170px;font-weight:800;letter-spacing:-.05em;line-height:1}
+#h2{position:absolute;left:150px;top:190px;font-size:170px;font-weight:800;letter-spacing:-.05em;line-height:1;opacity:0}
+.pan{position:absolute;left:150px;right:150px;top:470px;display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.c{border-radius:26px;background:rgba(255,255,255,.06);border:1px solid var(--line);padding:34px;height:300px;position:relative}
+.c small{font-family:Nunito;font-weight:800;font-size:22px;letter-spacing:.14em;color:#ff8fa3}
+.c b{display:block;font-size:46px;font-weight:700;letter-spacing:-.02em;margin-top:14px;line-height:1.1}
+.c u{position:absolute;left:34px;bottom:30px;text-decoration:none;font-family:Nunito;font-weight:800;font-size:26px;color:var(--cyan);opacity:0}
+.c.ok{background:rgba(34,211,238,.1);border-color:rgba(34,211,238,.5)}
+.c.ok small{color:var(--cyan)}.c.ok u{opacity:1}
+.pie{position:absolute;left:150px;bottom:110px;font-size:44px;font-weight:400;opacity:0;animation:fade .8s var(--out) both;animation-delay:11.6s}
+.pie b{font-weight:800}
+</style></head>
+<body><div id="bg"></div><div id="bg2"></div>
+<div class="al"><i id="luz"></i><span id="est">ALERTA EN CABINA</span></div>
+<h1 id="h1" class="t" style="--d:.3s">La pista se enfrió.</h1>
+<div id="h2">Bajo <i class="k">control.</i></div>
+<div class="pan" id="pan"></div>
+<div class="pie"><b>Kit de emergencia en vivo.</b> Soluciones rápidas para situaciones reales · Súper Pack DJ</div>
+<div class="grain"></div>
+<script src="motion.js"></script>
+<script>
+window.DUR = 16; window.MUSICA = 'energia'; window.SFX = [[0.3, 'golpe'], [4.4, 'click'], [6.2, 'click'], [8, 'click'], [9.6, 'ding']];
+const P = [['Problema 1', 'Pista muerta', 4.4], ['Problema 2', 'Falla en cabina', 6.2], ['Problema 3', 'Imprevisto en vivo', 8]];
+const pan = document.getElementById('pan');
+P.forEach(([a, b]) => pan.insertAdjacentHTML('beforeend', `<div class="c fade" style="--d:1.6s"><small>${a.toUpperCase()}</small><b>${b}</b><u>✓ Solución lista</u></div>`));
+pan.querySelectorAll('u').forEach((u) => { u.textContent = 'Solución lista'; });
+M.split('.t');
+const cs = [...pan.children];
+window.onFrame = (t) => {
+  const ok = M.io((t - 9.4) / .8);
+  document.getElementById('luz').style.opacity = ok > 0 ? 1 : (Math.sin(t * 9) > 0 ? 1 : .2);
+  document.getElementById('luz').style.background = ok > .5 ? '#22d3ee' : '#ff4d6d';
+  document.getElementById('est').textContent = ok > .5 ? 'TODO EN ORDEN' : 'ALERTA EN CABINA';
+  document.getElementById('bg2').style.opacity = ok;
+  document.getElementById('h1').style.opacity = 1 - M.cl(ok * 2.2); document.getElementById('h2').style.opacity = M.cl(ok * 2.2 - 1.2); document.getElementById('h2').style.transform = `translateY(${(1 - ok) * 40}px)`;
+  cs.forEach((c, i) => c.classList.toggle('ok', t >= P[i][2]));
+};
+</script>
+</body></html>

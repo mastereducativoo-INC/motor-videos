@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>11 · Póster en movimiento</title>
+<link rel="stylesheet" href="base.css">
+<style>
+body{background:var(--cyan);color:#04121a}
+.fila{position:absolute;left:-200px;white-space:nowrap;font-size:230px;font-weight:800;letter-spacing:-.05em;line-height:1;will-change:transform}
+.fila.h{color:transparent;-webkit-text-stroke:4px #04121a}
+.fila i{font-family:Fraunces;font-style:italic;font-weight:500;letter-spacing:-.02em}
+.tar{position:absolute;left:50%;top:50%;width:760px;height:860px;margin:-430px 0 0 -380px;background:#04040e;border-radius:40px;color:var(--ink);text-align:center;padding:50px;box-shadow:0 60px 120px rgba(0,0,0,.5);animation:tar 1.2s var(--out) both;animation-delay:5.2s}
+@keyframes tar{from{transform:translateY(1300px) rotate(10deg)}to{transform:rotate(-3deg)}}
+.tar img{height:480px;margin-top:6px;filter:drop-shadow(0 30px 40px rgba(0,0,0,.6))}
+.tar h2{font-size:70px;font-weight:800;letter-spacing:-.04em;margin-top:20px}
+.tar p{font-size:34px;color:var(--muted);margin-top:8px}
+.tar b{display:inline-block;margin-top:24px;padding:14px 34px;border-radius:999px;background:var(--gold);color:#04121a;font-size:38px;font-weight:800}
+.grain{display:none}
+</style></head>
+<body>
+<div class="fila" style="top:-10px" data-v="-150">Listo para <i>cualquier evento</i> · Listo para <i>cualquier evento</i> · Listo para <i>cualquier evento</i> ·</div>
+<div class="fila h" style="top:210px" data-v="190">Súper Pack DJ · Súper Pack DJ · Súper Pack DJ · Súper Pack DJ · Súper Pack DJ ·</div>
+<div class="fila" style="top:430px" data-v="-220">Guiones · Emergencias · Checklist · Transiciones · Leer la pista · Plan de 7 días · Mensajes ·</div>
+<div class="fila h" style="top:650px" data-v="160">7 herramientas · un solo pack · 7 herramientas · un solo pack · 7 herramientas ·</div>
+<div class="fila" style="top:870px" data-v="-180">Del curso <i>al evento</i> · Del curso <i>al evento</i> · Del curso <i>al evento</i> · Del curso ·</div>
+<div class="tar"><img src="assets/dj/pack_1.png" alt=""><h2>Súper Pack DJ</h2><p>Listo para cualquier evento</p><b>$12 USD</b></div>
+<script src="motion.js"></script>
+<script>
+window.DUR = 15; window.MUSICA = 'dj'; window.SFX = [[5.2, 'whoosh']];
+const fs = [...document.querySelectorAll('.fila')];
+window.onFrame = (t) => fs.forEach((f) => { const v = +f.dataset.v; f.style.transform = `translateX(${(v < 0 ? 0 : -1400) + v * t}px)`; });
+</script>
+</body></html>

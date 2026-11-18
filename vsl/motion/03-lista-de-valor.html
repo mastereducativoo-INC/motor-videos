@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>03 · Lista de valor: de $120 a $12</title>
+<link rel="stylesheet" href="base.css">
+<style>
+body{background:radial-gradient(1000px 700px at 85% 100%,#22245a 0%,transparent 62%),var(--bg)}
+h3{position:absolute;left:150px;top:96px;font-size:54px;font-weight:700;letter-spacing:-.03em}
+.filas{position:absolute;left:150px;top:214px;width:1050px}
+.f{display:grid;grid-template-columns:1fr 110px;align-items:center;height:86px;border-bottom:1px solid var(--line);font-size:34px;font-weight:500;opacity:0;animation:fade .6s var(--out) both;animation-delay:calc(1s + var(--n)*.62s)}
+.f b{text-align:right;font-weight:700;color:var(--cyan)}
+.f i{position:absolute;left:0;bottom:-2px;height:3px;background:var(--cyan);width:0;animation:crece .9s var(--out) both;animation-delay:calc(1.1s + var(--n)*.62s)}
+.f{position:relative}
+@keyframes crece{to{width:var(--w)}}
+.total{position:absolute;right:150px;top:250px;width:460px;text-align:right}
+.total .lbl{display:block}
+#suma{font-size:190px;font-weight:800;letter-spacing:-.05em;line-height:1;margin-top:10px;position:relative;display:inline-block}
+#suma::after{content:'';position:absolute;left:-10px;right:-10px;top:52%;height:10px;background:var(--pink);transform:scaleX(0);transform-origin:left;animation:tacha .6s var(--io) both;animation-delay:7.4s}
+@keyframes tacha{to{transform:scaleX(1)}}
+.aro{position:absolute;right:170px;top:560px;width:300px;height:300px;opacity:0;animation:pop .8s var(--out) both;animation-delay:8.2s}
+.aro text{font-family:Sora;font-weight:800;font-size:62px;fill:var(--ink);letter-spacing:-.03em}
+.aro tspan{font-family:Nunito;font-weight:700;font-size:20px;fill:var(--muted);letter-spacing:.1em}
+#b{background:radial-gradient(900px 620px at 50% 46%,#22245a 0%,transparent 66%),var(--deep);display:grid;place-items:center;text-align:center}
+#b .lbl{font-size:30px}
+#b h1{font-size:330px;font-weight:800;letter-spacing:-.06em;line-height:1;margin:6px 0 0}
+#b h1 small{font-size:70px;font-weight:600;letter-spacing:0;color:var(--muted);margin-left:14px}
+#b p{font-size:46px;font-weight:400}
+#b .raya{height:4px;width:0;background:var(--gold);margin:26px auto 0;animation:raya2 1s var(--out) both;animation-delay:12.4s}
+@keyframes raya2{to{width:520px}}
+</style></head>
+<body>
+<section class="sc" id="a" style="--in:0s;--to:10.4s">
+  <h3 class="t" style="--d:.2s">Lo que recibes en el <i class="k">Súper Pack DJ</i></h3>
+  <div class="filas" id="filas"></div>
+  <div class="total"><span class="lbl fade" style="--d:1s">Valor total</span><div id="suma">$0</div></div>
+  <svg class="aro" viewBox="0 0 300 300"><circle cx="150" cy="150" r="128" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="14"/><circle id="arc" cx="150" cy="150" r="128" fill="none" stroke="#22d3ee" stroke-width="14" stroke-linecap="round" stroke-dasharray="804" stroke-dashoffset="804" transform="rotate(-90 150 150)"/>
+    <text x="150" y="158" text-anchor="middle" id="pct">0%</text><text x="150" y="196" text-anchor="middle"><tspan>DE DESCUENTO</tspan></text></svg>
+</section>
+<section class="sc" id="b" style="--in:10.6s;--to:99s"><div><div class="lbl fade" style="--d:10.9s">Hoy, por tu compra</div><h1 class="t" style="--d:11.2s">$12<small>USD</small></h1><div class="raya"></div><p class="fade" style="--d:12.9s;margin-top:30px">Acceso inmediato y de por vida · <i class="k">7 días de garantía</i></p></div></section>
+<div class="grain"></div>
+<script src="motion.js"></script>
+<script>
+window.DUR = 16; window.MUSICA = 'suave'; window.SFX = [[7.4, 'whoosh'], [10.5, 'whoosh']];
+const C = [['Guiones completos de evento', 25], ['Kit de emergencia en vivo', 15], ['Checklist profesional antes de tocar', 10], ['Pack de intros, cortes y transiciones', 20], ['Sistema para leer la pista', 15], ['Plan de preparación en 7 días', 15], ['Mensajes para conseguir y cerrar eventos', 20]];
+const F = document.getElementById('filas');
+C.forEach(([a, v], i) => F.insertAdjacentHTML('beforeend', `<div class="f" style="--n:${i};--w:${v / 25 * 100}%"><div>${a}</div><b>$${v}</b><i></i></div>`));
+M.split('.t');
+window.onFrame = (t) => {
+  let s = 0; C.forEach(([, v], i) => { s += v * M.out((t - 1.1 - i * .62) / .7); });
+  document.getElementById('suma').textContent = '$' + Math.round(s);
+  const k = M.io((t - 8.4) / 1.4);
+  document.getElementById('arc').setAttribute('stroke-dashoffset', 804 * (1 - .9 * k));
+  document.getElementById('pct').textContent = Math.round(90 * k) + '%';
+};
+</script>
+</body></html>

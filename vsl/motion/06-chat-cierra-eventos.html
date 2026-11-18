@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>06 · Chat: mensajes para cerrar eventos</title>
+<link rel="stylesheet" href="base.css">
+<style>
+body{background:radial-gradient(900px 700px at 20% 50%,#1b1c4a 0%,transparent 62%),var(--deep)}
+.tel{position:absolute;left:210px;top:70px;width:470px;height:940px;border-radius:64px;background:#0d0d1c;border:10px solid #2a2b55;box-shadow:0 60px 120px rgba(0,0,0,.6);overflow:hidden;animation:tel 1.2s var(--out) both}
+@keyframes tel{from{transform:translateY(160px) rotate(-5deg);opacity:0}to{transform:none;opacity:1}}
+.cab{height:110px;padding:44px 28px 0;display:flex;gap:14px;align-items:center;border-bottom:1px solid var(--line);font-size:24px;font-weight:700}
+.cab i{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--gold))}
+.cab small{display:block;font-family:Nunito;font-weight:600;font-size:16px;color:var(--cyan)}
+.msgs{padding:26px 22px;display:flex;flex-direction:column;gap:16px}
+.m{max-width:80%;padding:16px 20px;border-radius:24px;font-family:Nunito;font-weight:600;font-size:23px;line-height:1.3;opacity:0;transform:translateY(20px) scale(.94);transform-origin:left bottom}
+.m.yo{align-self:flex-end;background:var(--cyan);color:#04121a;border-bottom-right-radius:8px;transform-origin:right bottom}
+.m.el{background:#1f2048;border-bottom-left-radius:8px}
+.m.on{opacity:1;transform:none;transition:none}
+.esc{align-self:flex-end;display:flex;gap:6px;padding:16px 20px;border-radius:24px;background:rgba(34,211,238,.25);opacity:0}
+.esc i{width:10px;height:10px;border-radius:50%;background:var(--cyan)}
+.tx{position:absolute;left:820px;top:250px;width:940px}
+.tx h1{font-size:104px;font-weight:800;letter-spacing:-.04em;line-height:1.02;margin-top:18px}
+.tx p{font-size:42px;font-weight:400;color:var(--muted);margin-top:30px;line-height:1.3}
+.tx .raya{height:4px;background:var(--gold);width:0;margin-top:34px;animation:ry 1s var(--out) both;animation-delay:2.2s}
+@keyframes ry{to{width:360px}}
+.pie{position:absolute;left:820px;bottom:120px;font-family:Nunito;font-weight:700;font-size:26px;color:var(--muted)}
+.pie b{color:var(--gold)}
+</style></head>
+<body>
+<div class="tel"><div class="cab"><i></i><div>Cliente · Boda<small>en línea</small></div></div><div class="msgs" id="ms"></div></div>
+<div class="tx"><div class="lbl fade" style="--d:.6s">Herramienta 7 de 7 · ejemplo de uso</div><h1 class="t" style="--d:.9s">Mensajes para <i class="k">cerrar eventos.</i></h1><div class="raya"></div>
+  <p class="fade" style="--d:2.6s">Scripts listos para presentar tus servicios, dar seguimiento y responder cuando te preguntan el precio.</p></div>
+<div class="pie fade" style="--d:13s">Incluido en el <b>Súper Pack DJ</b> · $12 USD</div>
+<div class="grain"></div>
+<script src="motion.js"></script>
+<script>
+window.DUR = 17; window.MUSICA = 'suave';
+const C = [['el', 'Hola, vi tu perfil. ¿Tocas en bodas?', 2.4], ['yo', '¡Hola! Sí. Te cuento cómo trabajo y qué incluye mi servicio 🎧'.replace(' 🎧', ''), 5.0], ['el', 'Me interesa. ¿Cuánto sería para 5 horas?', 7.6], ['yo', 'Te envío la propuesta con todo detallado ahora mismo.', 10.2], ['el', 'Perfecto, la reviso hoy.', 12.6]];
+window.SFX = C.map((c) => [c[2], 'pop']);
+const ms = document.getElementById('ms');
+C.forEach(([q, t]) => ms.insertAdjacentHTML('beforeend', `<div class="m ${q}">${t}</div>`));
+ms.insertAdjacentHTML('beforeend', '<div class="esc" id="esc"><i></i><i></i><i></i></div>');
+M.split('.t');
+const els = [...ms.querySelectorAll('.m')], esc = document.getElementById('esc');
+window.onFrame = (t) => {
+  let escribe = false;
+  els.forEach((el, i) => { const k = M.out((t - C[i][2]) / .45); el.style.opacity = k; el.style.transform = `translateY(${(1 - k) * 20}px) scale(${.94 + .06 * k})`; if (C[i][0] === 'yo' && t > C[i][2] - 1.3 && t < C[i][2]) escribe = true; });
+  esc.style.opacity = escribe ? 1 : 0; esc.style.order = 99;
+  [...esc.children].forEach((d, j) => { d.style.transform = `translateY(${-Math.abs(Math.sin(t * 7 + j * .9)) * 7}px)`; });
+};
+</script>
+</body></html>

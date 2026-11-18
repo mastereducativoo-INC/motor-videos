@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>14 · Del cuarto al evento (película)</title>
+<link rel="stylesheet" href="base.css">
+<style>
+body{background:#000}
+.ft{position:absolute;inset:-60px;background:center/cover;animation:kb var(--len) linear both;animation-delay:var(--in)}
+@keyframes kb{from{transform:scale(1.02) translateX(var(--x0,0))}to{transform:scale(1.14) translateX(var(--x1,0))}}
+.velo{position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,4,14,.92) 0%,rgba(4,4,14,.55) 45%,transparent 75%)}
+.velo.d{background:linear-gradient(270deg,rgba(4,4,14,.92) 0%,rgba(4,4,14,.55) 45%,transparent 75%)}
+.per{position:absolute;bottom:60px;height:880px;filter:drop-shadow(0 40px 60px rgba(0,0,0,.7));animation:per 1.4s var(--out) both;animation-delay:var(--in)}
+@keyframes per{from{transform:translateX(var(--dx)) scale(.96);opacity:0}to{transform:none;opacity:1}}
+.cap{position:absolute;top:340px;width:820px}
+.cap h1{font-size:112px;font-weight:800;letter-spacing:-.04em;line-height:1.02;margin-top:16px}
+.bar{position:absolute;left:0;right:0;height:86px;background:#000;z-index:40}
+#c{background:radial-gradient(1000px 700px at 70% 50%,#22245a 0%,transparent 64%),var(--bg)}
+#c img{position:absolute;right:200px;top:190px;height:700px;filter:drop-shadow(0 50px 60px rgba(0,0,0,.6));animation:per 1.3s var(--out) both;animation-delay:11.2s;--dx:0px}
+</style></head>
+<body>
+<section class="sc" style="--in:0s;--to:5.3s"><div class="ft" style="background-image:url(assets/dj/f_cuarto.jpg);--len:6s;--in:0s;--x1:-30px"></div><div class="velo"></div>
+  <img class="per" src="assets/dj/j_practica.png" style="right:120px;--dx:120px;--in:.4s" alt="">
+  <div class="cap" style="left:150px"><div class="lbl fade" style="--d:.6s">Una historia de ejemplo</div><h1 class="t" style="--d:.9s">Empezaste en <i class="k">tu cuarto.</i></h1></div></section>
+<section class="sc" style="--in:5.5s;--to:10.8s"><div class="ft" style="background-image:url(assets/dj/f_evento.jpg);--len:6s;--in:5.5s;--x1:30px"></div><div class="velo d"></div>
+  <img class="per" src="assets/dj/j_nervioso.png" style="left:120px;--dx:-120px;--in:5.9s" alt="">
+  <div class="cap" style="right:130px"><div class="lbl fade" style="--d:6.1s">El siguiente paso</div><h1 class="t" style="--d:6.4s">Ahora viene <i class="k">tu primer evento.</i></h1></div></section>
+<section class="sc" id="c" style="--in:11s;--to:99s"><img src="assets/dj/pack_5.png" alt="">
+  <div class="cap" style="left:150px;top:320px"><div class="lbl fade" style="--d:11.4s">Llega preparado</div><h1 class="t" style="--d:11.7s">Súper Pack DJ</h1><h1 class="t" style="--d:12.5s;font-size:60px;font-weight:400"><i class="k">Listo para cualquier evento.</i></h1></div></section>
+<div class="bar" style="top:0"></div><div class="bar" style="bottom:0"></div>
+<script src="motion.js"></script>
+<script>window.DUR = 16; window.MUSICA = 'suave'; window.SFX = [[5.4, 'whoosh'], [10.9, 'whoosh']]; M.split('.t');</script>
+</body></html>

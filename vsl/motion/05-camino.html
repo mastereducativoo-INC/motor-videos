@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>05 · El camino: de aprender a cobrar</title>
+<link rel="stylesheet" href="base.css">
+<style>
+body{background:radial-gradient(1100px 700px at 12% 12%,#1b1c4a 0%,transparent 60%),var(--deep)}
+h3{position:absolute;left:150px;top:110px;font-size:70px;font-weight:800;letter-spacing:-.035em;width:1300px;line-height:1.05}
+svg{position:absolute;inset:0}
+.nodo{position:absolute;transform:translate(-50%,0);text-align:center;width:300px}
+.nodo .p{position:absolute;left:50%;top:var(--py);transform:translate(-50%,-50%);width:34px;height:34px;border-radius:50%;border:4px solid rgba(255,255,255,.35);background:var(--deep)}
+.nodo::before{content:'';position:absolute;left:50%;top:calc(var(--py) + 26px);bottom:100%;width:2px;height:calc(-1*var(--py) - 40px);background:rgba(255,255,255,.14)}
+.nodo.on .p{border-color:var(--cyan);background:var(--cyan);box-shadow:0 0 0 12px rgba(34,211,238,.16)}
+.nodo b{display:block;font-size:40px;font-weight:700;letter-spacing:-.02em;color:var(--muted)}
+.nodo.on b{color:var(--ink)}
+.nodo small{display:block;margin-top:8px;font-family:Nunito;font-weight:700;font-size:22px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);opacity:0}
+.nodo.on small{opacity:1}
+.nodo.pk small{color:var(--gold)}
+.tramo{position:absolute;top:996px;height:6px;border-radius:3px;opacity:0;animation:fade .8s var(--out) both;animation-delay:var(--d)}
+.tramo span{position:absolute;left:0;top:18px;font-family:Nunito;font-weight:800;font-size:24px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+#b{background:radial-gradient(900px 640px at 50% 50%,#22245a 0%,transparent 66%),var(--deep);display:grid;place-items:center;text-align:center}
+#b h1{font-size:112px;font-weight:800;letter-spacing:-.04em;line-height:1.04}
+.btn{display:inline-block;margin-top:56px;padding:30px 64px;border-radius:999px;background:var(--cyan);color:#04121a;font-size:44px;font-weight:800;letter-spacing:-.01em;animation:btn .9s var(--out) both,late 1.6s var(--io) infinite;animation-delay:13.6s,14.6s;opacity:0}
+@keyframes btn{from{opacity:0;transform:translateY(40px) scale(.9)}to{opacity:1;transform:none}}
+@keyframes late{50%{transform:scale(1.045)}}
+</style></head>
+<body>
+<section class="sc" id="a" style="--in:0s;--to:11.6s">
+  <h3 class="t" style="--d:.3s">Tu curso te enseña a mezclar. <i class="k">¿Y después?</i></h3>
+  <svg viewBox="0 0 1920 1080"><path id="guia" d="M200 700 C 420 520, 520 820, 580 700 S 860 520, 960 660 S 1240 820, 1340 640 S 1640 520, 1720 620" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="6" stroke-linecap="round"/>
+    <path id="traza" d="M200 700 C 420 520, 520 820, 580 700 S 860 520, 960 660 S 1240 820, 1340 640 S 1640 520, 1720 620" fill="none" stroke="#22d3ee" stroke-width="8" stroke-linecap="round"/>
+    <circle id="punto" r="20" fill="#f5c84a"/></svg>
+  <div id="nodos"></div>
+  <div class="tramo" style="left:140px;width:520px;background:rgba(255,255,255,.3);--d:3.4s"><span style="color:var(--muted)">Tu curso de DJ</span></div>
+  <div class="tramo" style="left:860px;width:920px;background:var(--gold);--d:8.6s"><span style="color:var(--gold)">Súper Pack DJ</span></div>
+</section>
+<section class="sc" id="b" style="--in:11.8s;--to:99s"><div><div class="lbl fade" style="--d:12s">El siguiente paso</div><h1 class="t" style="--d:12.3s">De aprender<br>a <i class="k">cobrar por tocar.</i></h1><div class="btn">Agregar a mi compra</div></div></section>
+<div class="grain"></div>
+<script src="motion.js"></script>
+<script>
+window.DUR = 17; window.MUSICA = 'energia'; window.SFX = [[1.4, 'pop'], [3.2, 'pop'], [5.2, 'pop'], [7.2, 'pop'], [9.2, 'pop'], [11.7, 'whoosh']];
+const N = [['Aprender', 'Curso'], ['Practicar', 'Curso'], ['Conseguir eventos', 'Súper Pack'], ['Cobrar', 'Súper Pack'], ['Crecer', 'Súper Pack']];
+const P = [0, .26, .5, .76, 1], T = [1.4, 3.2, 5.2, 7.2, 9.2];
+const guia = document.getElementById('guia'), traza = document.getElementById('traza'), LEN = guia.getTotalLength(), cont = document.getElementById('nodos');
+traza.setAttribute('stroke-dasharray', LEN);
+const els = N.map(([a, b], i) => { const pt = guia.getPointAtLength(LEN * P[i]); const d = document.createElement('div'); d.className = 'nodo' + (i > 1 ? ' pk' : ''); d.style.left = pt.x + 'px'; d.style.top = '840px'; d.style.setProperty('--py', (pt.y - 840) + 'px'); d.innerHTML = `<div class="p"></div><b>${a}</b><small>${b}</small>`; cont.append(d); return d; });
+M.split('.t');
+window.onFrame = (t) => {
+  // el punto avanza de nodo en nodo, frenando al llegar a cada uno
+  let u = 0;
+  for (let i = 1; i < 5; i++) { const k = M.io((t - T[i - 1] - .25) / (T[i] - T[i - 1] - .25)); u = P[i - 1] + (P[i] - P[i - 1]) * k; if (t < T[i]) break; u = P[i]; }
+  if (t < T[0]) u = 0;
+  const pt = guia.getPointAtLength(LEN * u);
+  traza.setAttribute('stroke-dashoffset', LEN * (1 - u));
+  const pu = document.getElementById('punto'); pu.setAttribute('cx', pt.x); pu.setAttribute('cy', pt.y); pu.setAttribute('opacity', M.cl((t - 1) / .4));
+  els.forEach((el, i) => el.classList.toggle('on', t >= T[i]));
+};
+</script>
+</body></html>

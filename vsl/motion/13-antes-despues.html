@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>13 · Solo el curso vs. curso + Súper Pack</title>
+<link rel="stylesheet" href="base.css">
+<style>
+body{background:var(--deep)}
+.col{position:absolute;top:0;bottom:0;width:960px;padding:120px 110px}
+#L{left:0;background:#0b0b18}
+#R{right:0;background:linear-gradient(160deg,#22245a,#0a0a1e 70%);clip-path:inset(0 0 0 100%)}
+h2{font-size:64px;font-weight:800;letter-spacing:-.035em;line-height:1.05;margin-top:16px;height:150px}
+.r{display:flex;align-items:center;gap:24px;height:96px;border-bottom:1px solid var(--line);font-size:36px;font-weight:500;opacity:0;animation:fade .6s var(--out) both;animation-delay:var(--d)}
+.r i{width:44px;height:44px;border-radius:50%;flex:none;display:grid;place-items:center;font-style:normal;font-weight:800;font-size:26px}
+.r.si i{background:var(--cyan);color:#04121a}.r.no i{background:rgba(255,255,255,.1);color:var(--muted)}
+.r.no{color:var(--muted)}
+#R .r.nuevo i{background:var(--gold)}
+.div{position:absolute;top:0;bottom:180px;width:4px;background:var(--gold);left:1918px}
+.pie{position:absolute;left:0;right:0;bottom:70px;text-align:center;font-size:44px;font-weight:700;letter-spacing:-.02em;opacity:0;animation:fade .8s var(--out) both;animation-delay:13s;z-index:5}
+</style></head>
+<body>
+<div class="col" id="L"><div class="lbl fade" style="--d:.3s">Solo con tu curso</div><h2 class="t" style="--d:.5s">Sabes mezclar.</h2><div id="l"></div></div>
+<div class="col" id="R"><div class="lbl fade" style="--d:6.4s;color:var(--gold)">Curso + Súper Pack DJ</div><h2 class="t" style="--d:6.6s">Sabes mezclar <i class="k">y estás listo para el evento.</i></h2><div id="r"></div></div>
+<div class="div" id="dv"></div>
+<div class="pie">El curso te enseña. El pack te prepara. <i class="k">$12 USD</i></div>
+<div class="grain"></div>
+<script src="motion.js"></script>
+<script>
+window.DUR = 17; window.MUSICA = 'energia'; window.SFX = [[5.6, 'whoosh']];
+const I = [['Mezclas y transiciones', 1], ['Guion para el evento', 0], ['Plan si la pista se enfría', 0], ['Checklist antes de tocar', 0], ['Mensajes para conseguir eventos', 0]];
+I.forEach(([t, s], i) => {
+  document.getElementById('l').insertAdjacentHTML('beforeend', `<div class="r ${s ? 'si' : 'no'}" style="--d:${1.6 + i * .5}s"><i>${s ? '✓' : '—'}</i>${t}</div>`);
+  document.getElementById('r').insertAdjacentHTML('beforeend', `<div class="r si ${s ? '' : 'nuevo'}" style="--d:${7.8 + i * .7}s"><i>✓</i>${t}</div>`);
+});
+M.split('.t');
+window.onFrame = (t) => { const k = M.io((t - 5.6) / 1.3); document.getElementById('R').style.clipPath = `inset(0 0 0 ${(1 - k) * 100}%)`; document.getElementById('dv').style.left = (1918 - k * 960) + 'px'; document.getElementById('dv').style.opacity = k > 0 ? 1 : 0; };
+</script>
+</body></html>

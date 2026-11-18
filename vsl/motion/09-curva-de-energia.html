@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>09 · La curva de energía de un evento</title>
+<link rel="stylesheet" href="base.css">
+<style>
+body{background:var(--deep)}
+h1{position:absolute;left:150px;top:90px;font-size:84px;font-weight:800;letter-spacing:-.04em}
+.sub{position:absolute;left:150px;top:206px;font-size:36px;color:var(--muted);font-weight:400}
+svg{position:absolute;left:0;top:0}
+.eje{stroke:rgba(255,255,255,.16);stroke-width:2}
+.fase{position:absolute;top:900px;transform:translateX(-50%);text-align:center;opacity:.3}
+.fase b{display:block;font-size:44px;font-weight:700;letter-spacing:-.02em}
+.fase small{font-family:Nunito;font-weight:700;font-size:22px;color:var(--muted)}
+.fase.on{opacity:1}.fase.on b{color:var(--cyan)}
+.ey{position:absolute;left:96px;top:540px;transform:rotate(-90deg);transform-origin:left top;font-family:Nunito;font-weight:800;font-size:20px;letter-spacing:.2em;color:var(--muted)}
+.fin{position:absolute;right:150px;top:100px;text-align:right;font-family:Nunito;font-weight:700;font-size:26px;color:var(--muted);opacity:0;animation:fade .8s var(--out) both;animation-delay:12.4s}
+.fin b{color:var(--gold)}
+</style></head>
+<body>
+<h1 class="t" style="--d:.3s">Un evento tiene <i class="k">estructura.</i></h1>
+<div class="sub fade" style="--d:1.5s">Guiones completos de evento: listos para tocar sin improvisar.</div>
+<div class="ey">ENERGÍA DE LA PISTA</div>
+<svg width="1920" height="1080"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#22d3ee" stop-opacity=".35"/><stop offset="1" stop-color="#22d3ee" stop-opacity="0"/></linearGradient></defs>
+  <line class="eje" x1="150" y1="860" x2="1770" y2="860"/><line class="eje" x1="150" y1="320" x2="150" y2="860"/>
+  <g id="rej"></g><path id="area" fill="url(#g)"/><path id="curva" d="M150 800 C 380 780, 430 720, 560 690 S 860 560, 990 470 S 1240 330, 1370 350 S 1610 600, 1770 760" fill="none" stroke="#22d3ee" stroke-width="9" stroke-linecap="round"/>
+  <circle id="pt" r="18" fill="#f5c84a"/></svg>
+<div id="fases"></div>
+<div class="fin">Herramienta 1 de 7 · <b>Súper Pack DJ</b></div>
+<div class="grain"></div>
+<script src="motion.js"></script>
+<script>
+window.DUR = 16; window.MUSICA = 'dj'; window.SFX = [[3, 'pop'], [5.4, 'pop'], [7.8, 'pop'], [10.2, 'pop']];
+const F = [['Inicio', 'Recibes a la gente', .1], ['Subida', 'Construyes el ambiente', .37], ['Clímax', 'La pista arriba', .72], ['Cierre', 'Terminas con fuerza', .9]];
+const cur = document.getElementById('curva'), L = cur.getTotalLength(), fc = document.getElementById('fases'), rej = document.getElementById('rej');
+cur.setAttribute('stroke-dasharray', L);
+for (let i = 1; i < 6; i++) rej.insertAdjacentHTML('beforeend', `<line class="eje" x1="150" y1="${860 - i * 90}" x2="1770" y2="${860 - i * 90}" stroke-dasharray="4 10"/>`);
+const els = F.map(([a, b, u]) => { const p = cur.getPointAtLength(L * u); const d = document.createElement('div'); d.className = 'fase'; d.style.left = p.x + 'px'; d.innerHTML = `<b>${a}</b><small>${b}</small>`; fc.append(d); return d; });
+M.split('.t');
+window.onFrame = (t) => {
+  const u = M.io((t - 2.4) / 9);
+  cur.setAttribute('stroke-dashoffset', L * (1 - u));
+  const p = cur.getPointAtLength(L * u); const pt = document.getElementById('pt'); pt.setAttribute('cx', p.x); pt.setAttribute('cy', p.y); pt.setAttribute('opacity', t > 2.2 ? 1 : 0);
+  let dd = 'M150 860'; for (let i = 0; i <= 60; i++) { const q = cur.getPointAtLength(L * u * i / 60); dd += ` L${q.x} ${q.y}`; } dd += ` L${p.x} 860 Z`; document.getElementById('area').setAttribute('d', dd);
+  els.forEach((el, i) => el.classList.toggle('on', u >= F[i][2] - .02));
+};
+</script>
+</body></html>

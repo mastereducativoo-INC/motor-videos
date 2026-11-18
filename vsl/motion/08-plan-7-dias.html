@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>08 · Plan de preparación en 7 días</title>
+<link rel="stylesheet" href="base.css">
+<style>
+body{background:linear-gradient(160deg,#22245a 0%,#0a0a1e 55%,#060615 100%)}
+h1{position:absolute;left:150px;top:120px;font-size:108px;font-weight:800;letter-spacing:-.04em;line-height:1.02;width:1500px}
+.sub{position:absolute;left:150px;top:380px;font-size:42px;color:var(--muted);font-weight:400}
+.dias{position:absolute;left:150px;right:150px;top:520px;display:grid;grid-template-columns:repeat(7,1fr);gap:22px;perspective:1600px}
+.d{height:330px;border-radius:26px;background:var(--surface);border:1px solid var(--line);padding:26px;position:relative;transform-origin:top center;opacity:0}
+.d small{font-family:Nunito;font-weight:800;font-size:22px;letter-spacing:.14em;color:var(--muted)}
+.d b{position:absolute;left:26px;bottom:18px;font-size:150px;font-weight:800;letter-spacing:-.06em;line-height:1;color:rgba(255,255,255,.16)}
+.d.on{background:var(--cyan);border-color:var(--cyan)}
+.d.on small,.d.on b{color:#04121a}
+.d.ya b{color:var(--ink)}
+.d:last-child.on{background:var(--gold);border-color:var(--gold)}
+.d em{position:absolute;right:22px;top:22px;font-style:normal;font-family:Nunito;font-weight:800;font-size:20px;color:#04121a;opacity:0}
+.d:last-child.on em{opacity:1}
+.linea{position:absolute;left:150px;right:150px;top:900px;height:6px;border-radius:3px;background:rgba(255,255,255,.12)}
+.linea i{display:block;height:100%;width:0;border-radius:3px;background:var(--cyan)}
+.pie{position:absolute;left:150px;top:940px;font-family:Nunito;font-weight:700;font-size:28px;color:var(--muted)}
+</style></head>
+<body>
+<h1 class="t" style="--d:.3s">Tu evento es en <i class="k">7 días.</i></h1>
+<div class="sub fade" style="--d:1.6s">Ruta exacta de preparación, día por día.</div>
+<div class="dias" id="dias"></div>
+<div class="linea"><i id="pr"></i></div>
+<div class="pie fade" style="--d:12.6s">Plan de preparación en 7 días · incluido en el Súper Pack DJ</div>
+<div class="grain"></div>
+<script src="motion.js"></script>
+<script>
+window.DUR = 16; window.MUSICA = 'energia';
+const T0 = 3.2, P = 1.25; window.SFX = Array.from({length: 7}, (_, i) => [T0 + i * P, 'pop']);
+const c = document.getElementById('dias');
+for (let i = 1; i <= 7; i++) c.insertAdjacentHTML('beforeend', `<div class="d"><small>DÍA</small><em>EVENTO</em><b>${i}</b></div>`);
+M.split('.t');
+const els = [...c.children];
+window.onFrame = (t) => {
+  const k = Math.floor((t - T0) / P);
+  els.forEach((el, i) => { const e = M.out((t - 2 - i * .1) / .7); el.style.opacity = e; const f = M.out((t - T0 - i * P) / .5);
+    el.style.transform = `translateY(${(1 - e) * 80}px) rotateX(${(1 - f) * (t >= T0 + i * P ? -70 : 0) * (1 - f)}deg) scale(${i === Math.min(6, k) && t >= T0 ? 1.06 : 1})`;
+    el.classList.toggle('on', i === Math.min(6, k) && t >= T0); el.classList.toggle('ya', i < k); });
+  document.getElementById('pr').style.width = (M.cl((t - T0) / (P * 6.4)) * 100) + '%';
+};
+</script>
+</body></html>
