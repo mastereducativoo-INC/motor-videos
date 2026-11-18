@@ -32,7 +32,7 @@ const ICO = {
 const IM = {};
 const carga = (k, src) => new Promise((ok) => { const im = new Image(); im.onload = () => { IM[k] = {src, el: im, w: im.naturalWidth, h: im.naturalHeight, ok: im.naturalWidth > 16}; ok(); }; im.onerror = () => { IM[k] = {src, ok: false}; ok(); }; im.src = src; });
 const N = (PR.cont || []).length;
-const lista = [['pack', A + 'pack_5.png'], ['prop', A + 'prop1.png'], ['cert', A2 + 'cert.png'], ['consola', A2 + 'consola.png'], ...['m1', 'm2', 'm3', 'm4', 'm5', 'm6', 'logo'].map((k) => [k, A2 + k + '.png']), ...Array.from({length: 12}, (_, i) => ['x' + (i + 1), A + 'x' + (i + 1) + '.jpg']), ...Array.from({length: N}, (_, i) => ['c' + i, A + 'c' + i + '_5.png'])];
+const lista = [['pack', A + 'pack_5.png'], ['prop', A + 'prop1.png'], ['cert', A2 + 'cert.png'], ['consola', A2 + 'consola.png'], ...[...Array.from({length: 12}, (_, i) => 'm' + (i + 1)), 'logo'].map((k) => [k, A2 + k + '.png']), ...Array.from({length: 12}, (_, i) => ['x' + (i + 1), A + 'x' + (i + 1) + '.jpg']), ...Array.from({length: N}, (_, i) => ['c' + i, A + 'c' + i + '_5.png'])];
 const img = (k, st = '') => (IM[k] && IM[k].ok ? `<img src="${IM[k].src}" style="${st}">` : '');
 
 // ---------- utilidades de animación ----------

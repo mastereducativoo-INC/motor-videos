@@ -10,7 +10,7 @@ ASSETS = os.path.join(os.path.dirname(AQUI), 'assets')
 # materiales del panel -> archivo que usa el motor
 NOMBRES = {'pack': 'pack_5.png', 'prop1': 'prop1.png', 'f_cuarto': 'f_cuarto.jpg', 'f_evento': 'f_evento.jpg',
            **{f'c{i}': f'c{i}_5.png' for i in range(12)}, **{f'x{i}': f'x{i}.jpg' for i in range(1, 13)}, **{f'j_{x}': f'j_{x}.png' for x in ('estudia', 'practica', 'celular', 'trato', 'cabina', 'feliz', 'ref')}}
-CURSO = {'m1': 'm1.png', 'm2': 'm2.png', 'm3': 'm3.png', 'm4': 'm4.png', 'm5': 'm5.png', 'm6': 'm6.png', 'cert': 'cert.png', 'consola': 'consola.png', 'logo': 'logo.png'}
+CURSO = {**{f'm{i}': f'm{i}.png' for i in range(1, 13)}, 'cert': 'cert.png', 'consola': 'consola.png', 'logo': 'logo.png'}
 PIDE = {'recorrido': ['j_estudia', 'j_celular', 'j_cabina'], 'gracias': ['m1'], 'revela': ['pack'], 'todas': ['pack'], 'cta2': ['pack'], 'porque': ['pack', 'm1']}
 
 
@@ -142,7 +142,7 @@ def armar(r, bajar):
     cont = [dict(titulo=c.get('titulo'), valor=c.get('valor'), corto=c.get('corto') or c.get('titulo')) for c in (prod.get('contenidos') or []) if c.get('titulo')]
     PR = dict(oferta=prod.get('oferta'), curso=prod.get('curso'), valor=_num(prod.get('valor')), precio=_num(prod.get('precio')), alumnos=_num(prod.get('alumnos')) or 0,
               dias=int(_num(prod.get('garantia_dias')) or 7), unidad=prod.get('unidad') or 'herramientas', etiqueta=prod.get('etiqueta') or 'Herramienta',
-              mods=[m for m in prod.get('mods') or [] if m] or None, logro=prod.get('logro'), cimgs=[k for k in ('m1', 'm2', 'm3', 'm4') if k in tiene] or None, vida=bool(prod.get('acceso_vida')) if 'acceso_vida' in prod else None, camino=prod.get('camino') or None, cont=cont or None)
+              mods=[m for m in prod.get('mods') or [] if m] or None, logro=prod.get('logro'), cimgs=[f'm{i}' for i in range(1, 13) if f'm{i}' in tiene] or None, vida=bool(prod.get('acceso_vida')) if 'acceso_vida' in prod else None, camino=prod.get('camino') or None, cont=cont or None)
     PR = {k: v for k, v in PR.items() if v is False or v not in (None, '', [])}
     v = dict(id=r['id'], titulo=r.get('titulo') or r['id'], estilo=E, escenas=escenas, prod=PR,
              assets='../../assets/est/%s/' % r['id'], assets2='../../assets/est/%s-curso/' % r['id'],
