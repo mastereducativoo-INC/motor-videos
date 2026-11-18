@@ -438,7 +438,7 @@ function orbita(cam, tl, sc, cue) {
   const pk = [...cam.querySelectorAll('img')].find((x) => /pack_5/.test(x.getAttribute('src') || ''));
   const L = (PR.cont || []).map((_, j) => 'c' + j).filter((k) => IM[k] && IM[k].ok); if (!pk || L.length < 2) return;
   const caja = pk.closest('.abs') || pk.parentElement; if (caja) caja.style.zIndex = 30;
-  const T0 = Math.max(1, cue('incluye', .55) || 1), n = L.length, G = {cx: 960, cy: 540, rx: 520, ry: 160, s: 190};
+  const T0 = 1.1, n = L.length  /* Christian, 18 nov 2:02 p.m.: las herramientas giran durante TODA la escena del pack, no solo al final */, G = {cx: 960, cy: 540, rx: 520, ry: 160, s: 190};
   // se mide cuando el pack ya está quieto y visible (antes la escena está oculta y no tiene medidas)
   const medir = () => { const r = pk.getBoundingClientRect(), c = cam.getBoundingClientRect(), k = c.width / 1920 || 1; if (!r.width) return;
     const w = r.width / k, h = r.height / k; G.cx = (r.left - c.left) / k + w / 2; G.cy = (r.top - c.top) / k + h * .58; G.rx = Math.max(320, w * .86); G.ry = Math.max(120, h * .42); G.s = Math.max(130, Math.min(220, h * .3)); };
@@ -446,7 +446,7 @@ function orbita(cam, tl, sc, cue) {
   const st = {a: 0, o: 0}, pon = () => it.forEach((d, j) => { const an = st.a + j * Math.PI * 2 / n, z = Math.sin(an), s = .6 + .4 * (z + 1) / 2;
     d.style.width = d.style.height = G.s + 'px'; d.style.margin = -G.s / 2 + 'px 0 0 ' + -G.s / 2 + 'px';
     d.style.transform = `translate(${G.cx + Math.cos(an) * G.rx}px,${G.cy + z * G.ry}px) scale(${s})`; d.style.zIndex = z > 0 ? 40 : 20; d.style.opacity = st.o * (.6 + .4 * (z + 1) / 2); });
-  tl.call(medir, null, T0 - .05); tl.to(st, {o: 1, duration: .6, onUpdate: pon}, T0); tl.to(st, {a: Math.PI * 2 * Math.max(.6, (sc.dur - T0) / 7), duration: Math.max(1, sc.dur - T0 + .4), ease: 'none', onUpdate: () => { if (!G.ok) { medir(); G.ok = 1; } pon(); }}, T0);
+  tl.call(medir, null, T0 - .05); tl.to(st, {o: 1, duration: .6, onUpdate: pon}, T0); tl.to(st, {a: Math.PI * 2 * Math.max(.6, (sc.dur - T0) / 9), duration: Math.max(1, sc.dur - T0 + .4), ease: 'none', onUpdate: () => { medir(); pon(); }}, T0);  // se mide siempre: el pack puede seguir moviéndose
 }
 // ================= FONDO, TRANSICIONES Y MONTAJE =================
 function montar() {

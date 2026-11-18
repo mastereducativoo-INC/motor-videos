@@ -135,7 +135,9 @@ def armar(r, bajar):
     E = preset((r.get('estilo') or {}).get('preset') or 'f05')
     st = r.get('estilo') or {}
     E.update(ritmo=float(st.get('ritmo') or 1.1), voz=st.get('voz') or 'em_alex', set=5)
-    if st.get('musica') and not E.get('tema'):  # en los temas por nicho la música la decide el tema
+    if str(st.get('musica') or '').startswith('!'):  # música elegida en una corrección ("no me gusta la música"): manda sobre el tema
+        E['musica'] = st['musica'][1:]
+    elif st.get('musica') and not E.get('tema'):  # en los temas por nicho la música la decide el tema
         E['musica'] = st['musica']
     if E.get('tema'):
         E['cinta'] = (prod.get('oferta') or '').upper()
