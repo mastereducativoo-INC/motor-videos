@@ -141,22 +141,71 @@ D[3] = {
     const {cu} = app(c, TEC ? ruta + ' — terminal' : ruta), tp = c.cue('compra', .3, 1.6);
     cu.innerHTML = `<div style="display:flex;gap:60px;height:100%"><div style="flex:1.15;display:flex;flex-direction:column;justify-content:center"><div class="K">${TEC ? '$ pedido --estado' : 'Estado de tu pedido'}</div><div class="T" style="font-size:112px;margin-top:26px">${pal(c.sc.t)}</div><div class="P" style="margin-top:26px">${esc(c.sc.s || '')}</div></div>
       <div class="reg" style="flex:1;position:relative"></div></div>`;
-    const reg = cu.querySelector('.reg'), ks = (PR.cimgs || ['m1', 'm2', 'm3', 'm4']).filter((k) => IM[k] && IM[k].ok), alto = ks.filter((k) => IM[k].h > IM[k].w), usar = (alto.length ? alto : ks).slice(0, 3), mid = (usar.length - 1) / 2;
-    usar.forEach((k, j) => { const o = j - mid, e = $(img(k, `position:absolute;left:${50 + (o + mid) * (usar.length > 1 ? 150 : 0) + (usar.length === 1 ? 120 : 0)}px;top:${60 + Math.abs(o) * 26}px;height:${alto.length ? 400 : 240}px;z-index:${9 - Math.abs(o)};filter:drop-shadow(0 30px 34px rgba(0,0,0,.6))`)); reg.appendChild(e);
-      c.tl.fromTo(e, {y: 300, rotation: 0, opacity: 0, scale: .7}, {y: 0, rotation: o * 7, opacity: 1, scale: 1, duration: .9, ease: 'back.out(1.4)', transformOrigin: '50% 100%'}, tp - .3 + j * .18); });
+    const reg = cu.querySelector('.reg'), lk = IM.logo && IM.logo.ok ? 'logo' : 'm1';
+    // corrección de Christian (17 nov, 22:56): en vez de los mockups, el logo del curso de la página principal
+    reg.innerHTML = `<div class="halo" style="left:50%;top:44%;width:620px;height:620px;transform:translate(-50%,-50%)"></div><div class="lg" style="position:absolute;left:0;right:0;top:20px;bottom:150px;display:flex;align-items:center;justify-content:center">${img(lk, 'max-width:100%;max-height:100%;filter:drop-shadow(0 30px 40px rgba(0,0,0,.55))')}</div>`;
+    const lg = reg.querySelector('.lg'); c.tl.fromTo(lg, {scale: .55, opacity: 0, y: 60}, {scale: 1, opacity: 1, y: 0, duration: 1.1, ease: 'back.out(1.5)'}, tp - .35); c.tl.to(lg, {y: -12, duration: 2.4, ease: 'sine.inOut', yoyo: true, repeat: 5}, tp + 1);
     const ya = $(`<div style="position:absolute;left:0;right:0;bottom:0;text-align:center"><span class="chip lleno" style="font-size:27px;padding:14px 28px;white-space:nowrap">${sobre(PAL)}Ya es tuyo</span><div style="font:700 26px Montserrat;margin-top:12px;white-space:nowrap">${esc(PR.curso || 'Tu curso')}</div></div>`); reg.appendChild(ya);
     salta(c.tl, ya.firstChild, tp + .5); c.fx(tp + .5, 'pop'); c.fx(.75, 'monedas');
     fit(cu.querySelector('.T'), 260, 50); c.tl.from(cu.querySelectorAll('.T .wi'), {yPercent: 125, duration: .9, ease: 'expo.out', stagger: .07}, .6); c.tl.from(cu.querySelectorAll('.T .ul'), {scaleX: 0, duration: .7, stagger: .1}, 1.1);
     c.fx(.7, 'venta');
   },
+  // 3) corrección (17 nov, 22:56): se entiende a la primera qué ya aprendieron y qué les falta. Dos paneles y un puente entre ellos.
   escalera: (c) => {
-    const cm = camino(), ya = YA(), {cu} = app(c, TEC ? ruta + '/ruta.md' : 'Tu ruta'), tf = c.cue('cliente', .42);
-    cu.innerHTML = `<div class="T" style="font-size:78px;margin-bottom:34px">${pal(c.sc.t)}</div><div style="display:flex;flex-direction:column;gap:${cm.length > 5 ? 10 : 14}px">${cm.map((t, i) => (i === 0 ? `<div class="K gr" style="color:${P.c}">Esto ya lo tienes con tu curso</div>` : i === ya ? `<div class="K gr" style="margin-top:14px;color:${P.ink}">Esto es lo que te vamos a mostrar ahora</div>` : '') + (i < ya ? `<div class="rowp"><span style="color:${P.c};display:inline-flex;transform:scale(1.3)">${PAL}</span><span style="width:420px">${esc(t)}</span><span class="br"><b style="width:100%"></b></span><em style="color:${P.c}">Ya lo tienes · tu curso</em></div>` : `<div class="rowp no"><span style="display:inline-flex;transform:scale(1.2)">${CAN}</span><span style="width:420px">${esc(t)}</span><span class="br"></span><em>Lo vemos ahora</em></div>`)).join('')}</div>`;
-    const rs = cu.querySelectorAll('.rowp'), gr = cu.querySelectorAll('.gr'); c.tl.from(cu.querySelectorAll('.T .wi'), {yPercent: 125, duration: .9, ease: 'expo.out', stagger: .07}, .5);
-    c.tl.from(gr[0], {opacity: 0, x: -30, duration: .5}, .7); if (gr[1]) c.tl.from(gr[1], {opacity: 0, x: -30, duration: .5}, Math.max(1.2, tf - .2));
-    rs.forEach((r, i) => { c.tl.from(r, {y: 50, opacity: 0, duration: .6, ease: 'expo.out'}, .8 + i * .14); if (i < ya) { c.tl.from(r.querySelector('b'), {width: '0%', duration: .9, ease: 'power2.out'}, 1.3 + i * .5); c.fx(2.1 + i * .5, 'pop'); }
-      else { const at = Math.max(tf + .3 + (i - ya) * .45, c.cue(String(cm[i]).split(/\s+/).pop(), .55 + .12 * (i - ya))); c.tl.to(r, {borderColor: P.c, color: P.ink, backgroundColor: rgba(P.a, .1), duration: .25}, at); c.tl.fromTo(r, {x: 0}, {x: 14, duration: .08, yoyo: true, repeat: 3}, at); c.fx(at, 'click'); } });
-    const k = cursor(c); c.tl.fromTo(k, {x: 1500, y: 1000, opacity: 0}, {x: 900, y: 480, opacity: 1, duration: .8, ease: 'power2.out'}, 1.2); c.tl.to(k, {x: 760, y: 560 + ya * 96, duration: .7, ease: 'power2.inOut'}, tf - .5);
+    const cm = camino(), ya = YA(), tieneT = cm.slice(0, ya), faltaT = cm.slice(ya), {cu} = app(c, TEC ? ruta + '/ruta.md' : 'Tu ruta'), tf = Math.max(1.6, c.cue('siguiente', .45));
+    const fila = (t, ok) => `<div class="rowp" style="font-size:40px;padding:18px 24px;${ok ? `border-color:${P.c};` : `border-style:dashed;color:${P.mut};`}"><span class="ic" style="display:inline-flex;width:44px;justify-content:center;color:${ok ? P.c : P.mut}">${ok ? '✓' : '🔒'}</span><span style="flex:1">${esc(t)}</span></div>`;
+    cu.innerHTML = `<div class="T ctr" style="font-size:76px">${pal(c.sc.t)}</div>
+      <div style="display:grid;grid-template-columns:1fr 150px 1fr;gap:0;margin-top:40px;align-items:stretch">
+        <div class="pA" style="border-radius:22px;padding:30px 30px 34px;background:${rgba(P.a, .1)};border:2px solid ${P.c}"><div class="K" style="color:${P.c}">Ya lo tienes · tu curso</div><div class="P" style="font-style:normal;font-weight:800;font-size:34px;margin:10px 0 22px">Lo que ya aprendes</div><div style="display:grid;gap:14px">${tieneT.map((t) => fila(t, 1)).join('')}</div><div class="bA" style="margin-top:24px;height:14px;border-radius:9px;background:${P.c}"></div></div>
+        <div class="pu" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px"><svg width="130" height="60" viewBox="0 0 130 60"><path class="fl" d="M6 30H112M92 10l22 20-22 20" fill="none" stroke="${P.c}" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></svg><div style="font:800 20px Montserrat;letter-spacing:.18em;text-transform:uppercase;color:${P.mut};text-align:center">Siguiente<br>paso</div></div>
+        <div class="pB" style="border-radius:22px;padding:30px 30px 34px;background:${rgba(P.ink, .03)};border:2px dashed ${rgba(P.ink, .35)}"><div class="K" style="color:${P.mut}">Lo que te falta</div><div class="P" style="font-style:normal;font-weight:800;font-size:34px;margin:10px 0 22px">Te lo mostramos ahora</div><div class="fB" style="display:grid;gap:14px">${faltaT.map((t) => fila(t, 0)).join('')}</div><div style="margin-top:24px;height:14px;border-radius:9px;background:${rgba(P.ink, .08)};overflow:hidden"><div class="bB" style="height:100%;width:100%;background:${P.c};transform-origin:0 50%"></div></div></div>
+      </div>`;
+    fit(cu.querySelector('.T'), 100, 40); c.tl.from(cu.querySelectorAll('.T .wi'), {yPercent: 125, duration: .9, ease: 'expo.out', stagger: .07}, .4);
+    const pA = cu.querySelector('.pA'), pB = cu.querySelector('.pB'), fl = cu.querySelector('.fl');
+    c.tl.from(pA, {x: -80, opacity: 0, duration: .8, ease: 'expo.out'}, .7); c.tl.from(pA.querySelectorAll('.rowp'), {x: -40, opacity: 0, duration: .5, stagger: .3}, 1); tieneT.forEach((_, j) => c.fx(1.1 + j * .3, 'tick'));
+    c.tl.from(pA.querySelector('.bA'), {scaleX: 0, transformOrigin: '0 50%', duration: .9, ease: 'power2.out'}, 1.4);
+    c.tl.from(pB, {x: 80, opacity: 0, duration: .8, ease: 'expo.out'}, 1.1); c.tl.set(pB.querySelector('.bB'), {scaleX: 0}, 0);
+    draw(c.tl, fl, tf - .3, .6); c.tl.from(cu.querySelector('.pu div'), {opacity: 0, duration: .4}, tf - .1); c.fx(tf - .3, 'whoosh');
+    c.tl.to(pB, {borderColor: P.c, borderStyle: 'solid', backgroundColor: rgba(P.a, .06), duration: .4}, tf);
+    pB.querySelectorAll('.rowp').forEach((r, j) => { const at = Math.max(tf + .3 + j * .45, c.cue(String(faltaT[j]).split(/\s+/).pop(), .6 + .12 * j));
+      c.tl.to(r, {borderColor: P.c, borderStyle: 'solid', color: P.ink, backgroundColor: rgba(P.a, .12), duration: .25}, at); c.tl.call(() => { r.querySelector('.ic').textContent = '→'; r.querySelector('.ic').style.color = P.c; }, null, at);
+      c.tl.fromTo(r, {scale: 1}, {scale: 1.04, duration: .18, yoyo: true, repeat: 1}, at); c.fx(at, 'click');
+      c.tl.to(pB.querySelector('.bB'), {scaleX: (j + 1) / faltaT.length, duration: .4, ease: 'power2.out'}, at); });
+  },
+  // 2) corrección (17 nov, 22:56): las cajas reales de la página del curso; cada una entra cuando se nombra, hasta verse todas
+  gracias: (c) => {
+    const {cu} = app(c, TEC ? ruta + '/mis-cursos' : 'Mis cursos', {x: 110, w: 1700, h: 930, y: 80, pad: '40px 56px'}), mods = (PR.mods || []);
+    const ks = ['m1', 'm2', 'm3', 'm4', 'm5', 'm6'].filter((k) => IM[k] && IM[k].ok), n = ks.length;
+    cu.innerHTML = `<div style="display:flex;gap:46px;height:100%"><div style="width:520px;display:flex;flex-direction:column;justify-content:center"><div class="K">${esc(c.sc.k || PR.curso || '')}</div><div class="T" style="font-size:96px;margin-top:20px">${pal(c.sc.t)}</div><div class="P" style="margin-top:22px">${esc(c.sc.s || '')}</div>
+      <div class="ex" style="margin-top:34px;display:flex;flex-wrap:wrap;gap:12px"></div></div>
+      <div class="gr" style="flex:1;display:grid;grid-template-columns:repeat(${n > 4 ? 3 : 2},1fr);grid-template-rows:repeat(${n > 3 ? 2 : 1},1fr);gap:18px 26px;align-items:center;justify-items:center">${ks.map((k) => `<div class="cx" style="height:${n > 3 ? 360 : 520}px;display:flex;align-items:flex-end;justify-content:center">${img(k, 'max-height:100%;max-width:100%;filter:drop-shadow(0 26px 30px rgba(0,0,0,.6))')}</div>`).join('')}</div></div>`;
+    fit(cu.querySelector('.T'), 230, 44); c.tl.from(cu.querySelectorAll('.T .wi'), {yPercent: 125, duration: .9, ease: 'expo.out', stagger: .07}, .4); c.tl.from(cu.querySelector('.P'), {opacity: 0, y: 20, duration: .6}, .8);
+    cu.querySelectorAll('.cx').forEach((b, j) => { const w = String(mods[j] || '').split(/\s+/)[0], at = Math.max(.6 + j * .25, (w ? c.cue(w, .25 + .55 * j / n) : .6 + j * .4) - .15);
+      c.tl.fromTo(b, {y: 160, opacity: 0, scale: .6, rotation: j % 2 ? 6 : -6}, {y: 0, opacity: 1, scale: 1, rotation: 0, duration: .8, ease: 'back.out(1.5)'}, at); c.fx(at + .15, 'pop');
+      c.tl.to(b, {y: -10, duration: 2.2 + j * .15, ease: 'sine.inOut', yoyo: true, repeat: 4}, at + 1); });
+    const vv = norm(c.sc.voz || ''), ex = cu.querySelector('.ex'); [['certificado', 'Certificado'], ['de por vida', 'Acceso de por vida']].forEach(([w, t]) => { if (!vv.includes(w)) return; const e = $(`<span class="chip lleno" style="font-size:24px;padding:12px 22px">${sobre(PAL)}${esc(t)}</span>`); ex.appendChild(e); salta(c.tl, e, Math.max(1.5, c.cue(w, .85))); });
+  },
+  // 4) corrección (17 nov, 22:56): más premium; que se sienta que accedieron a algo muy especial
+  porque: (c) => {
+    const tU = Math.max(1.2, c.cue('desbloque', .55)), pk = IM.pack && IM.pack.ok;
+    const rayos = $(`<div class="abs" style="left:960px;top:560px;width:2400px;height:2400px;margin:-1200px 0 0 -1200px;border-radius:50%;background:repeating-conic-gradient(${rgba(P.c, .13)} 0 4deg,transparent 4deg 16deg);-webkit-mask:radial-gradient(circle,#000 0,transparent 62%)"></div>`); c.cam.appendChild(rayos);
+    const glow = $(`<div class="abs" style="left:960px;top:560px;width:1100px;height:1100px;margin:-550px 0 0 -550px;border-radius:50%;background:radial-gradient(circle,${rgba(P.c, .42)} 0,${rgba(P.a, .14)} 34%,transparent 66%)"></div>`); c.cam.appendChild(glow);
+    const tar = $(`<div class="abs" style="left:560px;top:250px;width:800px;height:620px;border-radius:34px;padding:3px;background:conic-gradient(from var(--g,0deg),${P.c},${rgba(P.a, .2)},${P.b},${rgba(P.a, .2)},${P.c});box-shadow:0 60px 120px rgba(0,0,0,.6),0 0 90px ${rgba(P.c, .35)}">
+      <div style="width:100%;height:100%;border-radius:31px;background:linear-gradient(160deg,${P.sup},${P.bg});display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;overflow:hidden;position:relative">
+        <div class="brillo" style="position:absolute;top:-20%;bottom:-20%;width:180px;left:-40%;background:linear-gradient(90deg,transparent,${rgba('#ffffff', .22)},transparent);transform:skewX(-18deg)"></div>
+        <div class="K" style="color:${P.c}">Acceso exclusivo</div>
+        <div class="pk" style="height:330px;display:flex;align-items:center">${pk ? img('pack', 'max-height:100%;max-width:560px;filter:drop-shadow(0 30px 40px rgba(0,0,0,.6))') : ''}</div>
+        <div style="font:800 30px Montserrat;color:${P.ink}">Solo para quien compró ${esc(PR.curso || 'el curso')}</div></div></div>`); c.cam.appendChild(tar);
+    const can = $(`<svg class="abs" style="left:900px;top:120px" width="120" height="140" viewBox="0 0 120 140"><path class="ar" d="M30 66V44a30 30 0 0 1 60 0v22" fill="none" stroke="${P.c}" stroke-width="12" stroke-linecap="round"/><rect x="14" y="62" width="92" height="70" rx="16" fill="${P.c}"/><circle cx="60" cy="96" r="10" fill="${P.bg}"/></svg>`); c.cam.appendChild(can);
+    texto(c, {x: 120, y: 900, w: 1680, t: c.sc.t, size: 74, maxH: 150, at: .3, c: 1});
+    c.tl.from([rayos, glow], {scale: .2, opacity: 0, duration: 1.4, ease: 'expo.out'}, .1); c.tl.to(rayos, {rotation: 40, duration: c.D + 1, ease: 'none'}, 0); c.fx(.15, 'riser');
+    c.tl.from(can, {y: -200, opacity: 0, duration: .7, ease: 'back.out(1.6)'}, .3);
+    c.tl.to(can.querySelector('.ar'), {y: -26, rotation: -28, transformOrigin: '90px 66px', duration: .35, ease: 'back.out(2.5)'}, tU); c.tl.to(can, {y: -40, opacity: 0, scale: .7, duration: .5}, tU + .4); c.fx(tU, 'click');
+    c.tl.fromTo(tar, {y: 140, scale: .6, opacity: 0, rotationX: 40, transformPerspective: 1600}, {y: 0, scale: 1, opacity: 1, rotationX: 0, duration: 1.1, ease: 'expo.out'}, tU + .15); c.fx(tU + .3, 'golpe'); c.fx(tU + .55, 'ding');
+    c.tl.fromTo(tar, {'--g': '0deg'}, {'--g': '360deg', duration: 4, ease: 'none', repeat: 3}, tU + .2);
+    c.tl.fromTo(tar.querySelector('.brillo'), {left: '-40%'}, {left: '140%', duration: 1.1, ease: 'power2.inOut', repeat: 2, repeatDelay: 1.4}, tU + .9);
+    for (let j = 0; j < 26; j++) { const x = 300 + Math.random() * 1320, d = $(`<i class="abs" style="left:${x}px;top:1000px;width:${4 + Math.random() * 5}px;height:${4 + Math.random() * 5}px;border-radius:50%;background:${j % 3 ? P.c : P.b};box-shadow:0 0 12px ${P.c}"></i>`); c.cam.appendChild(d);
+      c.tl.fromTo(d, {y: 0, opacity: 0}, {y: -700 - Math.random() * 300, opacity: .9, duration: 3 + Math.random() * 2, ease: 'power1.out'}, tU + Math.random() * 1.5); c.tl.to(d, {opacity: 0, duration: .8}, tU + 3.2 + Math.random() * 1.5); }
   },
   tool2: (c) => {
     const k = tool(c), {a, cu} = app(c, TEC ? ruta + '/' + (PR.oferta || 'pack').toLowerCase().replace(/[^a-z0-9]+/g, '-') : (PR.oferta || 'Tu pack'), {x: 110, w: 1700, lado: 1, pad: '34px 44px'});
@@ -192,31 +241,40 @@ D[3] = {
     if (cod.length) c.tl.from(cu.querySelector('.cd'), {opacity: 0, y: 30, duration: .5}, .22 + c.vz * .25);
   },
   // 14) todo junto, en carrusel: cada herramienta pasa por el centro y el valor se va sumando
+  // 14) corrección (17 nov, 22:56): sin carrusel; la caja principal al centro y todas las herramientas girando en círculo alrededor
   todas: (c) => {
-    const L = (PR.cont || []), n = L.length, {cu} = app(c, (TEC ? ruta + '/' : '') + (PR.oferta || ''), {x: 130, y: 70, w: 1660, h: 940, pad: '40px 0 0'}), W = 1660, paso = 400, t0 = .9, dt = Math.max(.5, c.vz * .72 / Math.max(1, n));
-    cu.innerHTML = `<div class="T ctr" style="font-size:76px;padding:0 60px">${pal(c.sc.t)}</div><div style="position:relative;height:500px;margin-top:34px;overflow:hidden;-webkit-mask:linear-gradient(90deg,transparent,#000 16%,#000 84%,transparent)"><div class="tr" style="position:absolute;left:${W / 2 - 170}px;top:50px;display:flex;gap:${paso - 340}px">${L.map((ct, j) => `<div class="cc vid" style="flex:none;width:340px;height:400px;padding:20px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center"><div style="flex:1;min-height:0;display:flex">${img('c' + j, 'max-width:100%;max-height:100%;margin:auto;filter:drop-shadow(0 16px 18px rgba(0,0,0,.5))')}</div><b style="font:700 25px/1.15 Montserrat">${esc(ct.corto || ct.titulo)}</b><u style="text-decoration:none;font:800 28px Montserrat;color:${P.c}">${money(+ct.valor || 0)}</u></div>`).join('')}</div></div>
-      <div style="display:flex;align-items:center;justify-content:center;gap:36px;margin-top:22px"><div class="K">Valor de referencia</div><div class="num oro tt" style="font-size:112px">$0</div></div>`;
-    fit(cu.querySelector('.T'), 96, 36); c.tl.from(cu.querySelectorAll('.T .wi'), {yPercent: 125, duration: .9, ease: 'expo.out', stagger: .06}, .4);
-    const tr = cu.querySelector('.tr'), cs = cu.querySelectorAll('.cc'), tt = cu.querySelector('.tt'), o = {v: 0}; let sum = 0;
-    c.tl.from(tr, {x: 900, opacity: 0, duration: .9, ease: 'expo.out'}, .5); c.tl.set(cs, {opacity: .45, scale: .86}, 0);
-    L.forEach((ct, j) => { const at = t0 + j * dt; sum += +ct.valor || 0; const hasta = sum;
-      if (j) c.tl.to(tr, {x: -j * paso, duration: Math.min(.5, dt * .8), ease: 'power3.inOut'}, at - .1);
-      c.tl.to(cs[j], {opacity: 1, scale: 1.12, borderColor: P.c, duration: .35, ease: 'back.out(1.6)'}, at + .1); if (j < n - 1) c.tl.to(cs[j], {opacity: .45, scale: .86, borderColor: 'rgba(255,255,255,.1)', duration: .3}, at + dt - .05);
-      c.tl.to(o, {v: hasta, duration: Math.min(.5, dt * .7), ease: 'power1.out', onUpdate: () => { tt.textContent = money(Math.round(o.v)); }}, at + .25); c.fx(at + .25, 'tick'); });
-    const fin = t0 + n * dt + .2; c.tl.to(tt, {scale: 1.18, duration: .22, yoyo: true, repeat: 1, ease: 'power2.out'}, fin); c.fx(fin, 'monedas');
+    const L = (PR.cont || []), n = L.length, cx = 960, cy = 560, rx = 700, ry = 300, t0 = .9, dt = Math.max(.4, c.vz * .7 / Math.max(1, n));
+    const cen = $(`<div class="abs" style="left:${cx - 300}px;top:${cy - 290}px;width:600px;height:540px;display:flex;align-items:center;justify-content:center;z-index:50"><div class="halo" style="position:absolute;inset:-120px"></div>${img('pack', 'position:relative;max-width:100%;max-height:100%;filter:drop-shadow(0 50px 50px rgba(0,0,0,.65))')}</div>`); c.cam.appendChild(cen);
+    const ob = L.map((ct, j) => { const e = $(`<div class="abs" style="left:0;top:0;width:250px;margin:-150px 0 0 -125px;text-align:center">${img('c' + j, 'max-width:230px;max-height:230px;filter:drop-shadow(0 18px 22px rgba(0,0,0,.6))')}<div style="font:700 21px/1.15 Montserrat;margin-top:6px;color:${P.ink}">${esc(ct.corto || ct.titulo)}</div></div>`); c.cam.appendChild(e); return e; });
+    const st = {a: 0}, pon = () => ob.forEach((e, j) => { const an = st.a + j * Math.PI * 2 / n, z = Math.sin(an), sc = .62 + .38 * (z + 1) / 2;
+      e.style.transform = `translate(${cx + Math.cos(an) * rx}px,${cy + 40 + z * ry}px) scale(${sc})`; e.style.zIndex = z > 0 ? 60 + Math.round(z * 10) : 40 + Math.round(z * 10); e.style.filter = `brightness(${.55 + .45 * (z + 1) / 2})`; });
+    pon(); c.tl.to(st, {a: Math.PI * 2 * (c.D / 9), duration: c.D, ease: 'none', onUpdate: pon}, 0);
+    c.tl.from(cen, {scale: .4, opacity: 0, duration: 1, ease: 'back.out(1.5)'}, .2); c.fx(.25, 'golpe');
+    const tot = $(`<div class="abs ctr" style="left:0;right:0;bottom:46px;z-index:80"><div class="K">Valor de referencia</div><div class="num oro tt" style="font-size:104px;margin-top:6px">$0</div></div>`); c.cam.appendChild(tot);
+    const tt = tot.querySelector('.tt'), o = {v: 0}; let sum = 0;
+    ob.forEach((e, j) => { const at = t0 + j * dt; sum += +L[j].valor || 0; const hasta = sum; c.tl.from(e, {opacity: 0, duration: .5}, at);
+      c.tl.to(o, {v: hasta, duration: Math.min(.5, dt * .8), ease: 'power1.out', onUpdate: () => { tt.textContent = money(Math.round(o.v)); }}, at + .1); c.fx(at, 'tick'); });
+    texto(c, {x: 120, y: 40, w: 1680, t: c.sc.t, size: 76, maxH: 100, at: .3, c: 1}); c.fx(t0 + n * dt + .2, 'monedas');
   },
-  // 17) "un {logro} puede pagarlo": llega el aviso de pago y la barra supera de sobra el precio del pack
+  // 17) corrección (17 nov, 22:56): que se entienda que ahorra tiempo, que es barato y que con esto puede ganar dinero; el precio no pesa
   inversion: (c) => {
-    const {pre} = precio(), logro = PR.logro || 'cliente', {cu} = app(c, TEC ? ruta + ' — ingresos' : 'Tus ingresos', {x: 190, y: 90, w: 1540, h: 900, pad: '46px 70px'}), t1 = Math.min(Math.max(1.6, c.cue('concret', .4)), .22 + c.vz * .45);
-    cu.innerHTML = `<div class="T" style="font-size:80px">${pal(c.sc.t)}</div>
-      <div class="av rowp" style="margin-top:34px;border-color:${P.c};background:${rgba(P.a, .14)};font-size:40px;padding:26px 32px"><span style="color:${P.c};display:inline-flex;transform:scale(1.6);margin:0 10px">${PAL}</span><span style="flex:1">Pago recibido · 1 ${esc(logro)}</span><em style="color:${P.c};font-size:26px">Ahora</em></div>
-      <div style="margin-top:44px;display:grid;gap:26px"><div><div class="K" style="font-size:22px;margin-bottom:12px">Lo que deja 1 ${esc(logro)}</div><div style="height:74px;border-radius:14px;background:rgba(255,255,255,.07);overflow:hidden"><div class="b1" style="height:100%;width:100%;border-radius:14px;background:linear-gradient(90deg,${P.a},${P.c})"></div></div></div>
-        <div><div class="K" style="font-size:22px;margin-bottom:12px;color:${P.mut}">Lo que cuesta el ${esc(PR.oferta || 'pack')}</div><div style="display:flex;align-items:center;gap:24px"><div style="height:74px;width:11%;border-radius:14px;background:rgba(255,255,255,.3)" class="b2"></div><span class="num" style="font-size:74px">${money(pre)}</span></div></div></div>
-      <div style="margin-top:34px;display:flex;align-items:center;gap:22px"><span class="chip lleno ok" style="font-size:36px;padding:16px 36px">${sobre(PAL)}Inversión cubierta</span><span class="P" style="font-size:34px">${esc(c.sc.s || '')}</span></div>`;
-    fit(cu.querySelector('.T'), 100, 40); c.tl.from(cu.querySelectorAll('.T .wi'), {yPercent: 125, duration: .9, ease: 'expo.out', stagger: .07}, .5);
-    const av = cu.querySelector('.av'); c.tl.from(av, {y: -90, opacity: 0, scale: .9, duration: .7, ease: 'back.out(1.6)'}, t1); c.fx(t1, 'ding'); c.fx(t1 + .25, 'monedas');
-    c.tl.from(cu.querySelector('.b2'), {scaleX: 0, transformOrigin: '0 50%', duration: .6, ease: 'power3.out'}, 1.1); c.tl.from(cu.querySelector('.b1'), {scaleX: 0, transformOrigin: '0 50%', duration: 1.5, ease: 'power2.out'}, t1 + .4);
-    salta(c.tl, cu.querySelector('.ok'), t1 + 1.8); c.fx(t1 + 1.8, 'pop'); c.tl.from(cu.querySelector('.P'), {opacity: 0, x: 30, duration: .6}, Math.min(t1 + 2.3, .22 + c.vz * .8));
+    const {pre} = precio(), logro = PR.logro || 'proyecto', t1 = Math.max(1.4, c.cue(logro, .45)), tP = Math.max(t1 + .6, c.cue('pagaron', .8));
+    const cards = [['⏱', 'Ahorras horas', 'Proyectos y código base listos: no empiezas de cero'], ['$', money(pre) + ' hoy', 'Precio exclusivo por tu compra'], ['↗', '1 ' + logro + ' lo paga', String(c.sc.s || 'Lo demás es para seguir creciendo.')]];
+    const fila = $(`<div class="abs" style="left:120px;right:120px;top:210px;display:grid;grid-template-columns:repeat(3,1fr);gap:28px">${cards.map(([i, t, s]) => `<div class="cd" style="border-radius:22px;padding:28px 30px;background:${rgba(P.ink, .04)};border:1.5px solid ${rgba(P.ink, .12)}"><div style="width:62px;height:62px;border-radius:16px;background:${rgba(P.a, .18)};color:${P.c};display:flex;align-items:center;justify-content:center;font:800 34px Montserrat">${i}</div><div style="font:800 40px Montserrat;margin-top:18px;color:${P.ink}">${esc(t)}</div><div class="P" style="font-size:27px;margin-top:8px">${esc(s)}</div></div>`).join('')}</div>`); c.cam.appendChild(fila);
+    const cs = fila.querySelectorAll('.cd'); [.5, Math.max(1, t1 - .4), t1 + .2].forEach((at, j) => { c.tl.from(cs[j], {y: 80, opacity: 0, duration: .7, ease: 'expo.out'}, at); c.fx(at + .1, 'pop'); });
+    // balanza: de un lado el precio (pesa poco), del otro lo que ganas con un solo proyecto
+    const bal = $(`<svg class="abs" style="left:560px;top:540px;overflow:visible" width="800" height="460" viewBox="0 0 800 460">
+      <path d="M400 120V400M320 420H480" stroke="${rgba(P.ink, .55)}" stroke-width="10" stroke-linecap="round"/><circle cx="400" cy="112" r="16" fill="${P.c}"/>
+      <g class="vg"><path d="M110 120H690" stroke="${P.ink}" stroke-width="10" stroke-linecap="round"/>
+        <g class="pl"><path d="M110 120L50 250M110 120L170 250" stroke="${rgba(P.ink, .5)}" stroke-width="4"/><path d="M30 250H190" stroke="${P.ink}" stroke-width="8" stroke-linecap="round"/><rect x="62" y="196" width="96" height="52" rx="12" fill="${rgba(P.ink, .2)}"/><text x="110" y="232" text-anchor="middle" font-family="Montserrat" font-weight="900" font-size="30" fill="${P.ink}">${esc(money(pre))}</text></g>
+        <g class="pr"><path d="M690 120L630 250M690 120L750 250" stroke="${rgba(P.ink, .5)}" stroke-width="4"/><path d="M610 250H770" stroke="${P.ink}" stroke-width="8" stroke-linecap="round"/><rect x="618" y="150" width="144" height="98" rx="16" fill="${P.c}"/><text x="690" y="194" text-anchor="middle" font-family="Montserrat" font-weight="900" font-size="26" fill="${P.sobre}">1 ${esc(logro)}</text><text x="690" y="228" text-anchor="middle" font-family="Montserrat" font-weight="700" font-size="20" fill="${P.sobre}">lo que ganas</text></g></g></svg>`); c.cam.appendChild(bal);
+    const vg = bal.querySelector('.vg'), pl = bal.querySelector('.pl'), pr = bal.querySelector('.pr');
+    c.tl.from(bal, {y: 120, opacity: 0, duration: .8, ease: 'expo.out'}, .7);
+    c.tl.from(pr, {y: -260, opacity: 0, duration: .6, ease: 'bounce.out'}, t1 + .2); c.fx(t1 + .5, 'golpe');
+    c.tl.to(vg, {rotation: 14, svgOrigin: '400 120', duration: 1.1, ease: 'elastic.out(1,.5)'}, t1 + .5);
+    c.tl.to(pl, {y: -144, duration: 1.1, ease: 'elastic.out(1,.5)'}, t1 + .5); c.tl.to(pr, {y: 144, duration: 1.1, ease: 'elastic.out(1,.5)'}, t1 + .5);
+    const ok = $(`<div class="abs ctr" style="left:0;right:0;bottom:40px"><span class="chip lleno ok" style="font-size:38px;padding:16px 40px">${sobre(PAL)}Inversión cubierta</span></div>`); c.cam.appendChild(ok); salta(c.tl, ok.firstChild, tP); c.fx(tP, 'monedas');
+    texto(c, {x: 120, y: 50, w: 1680, t: c.sc.t, size: 80, maxH: 120, at: .2, c: 1});
   },
 };
 

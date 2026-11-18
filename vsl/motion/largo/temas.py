@@ -44,12 +44,27 @@ FAMILIAS = {
 }
 
 
+# Colores extra para un director (Christian, 17 nov 22:56: "no me gusta el verde"): 'd3-tec-2' = director 3, familia tec, color 2.
+# Ninguno usa verde. Fondos sólidos y profundos; el acento es el color protagonista.
+COLORES = [
+    dict(nombre='Azul eléctrico', pal=_pal('#070b14', '#3b82f6', '#d2a94c', '#8ab8ff', '#0f1626', ink='#eef3fb', mut='#9aa8bf', sobre='#ffffff'), grad='radial-gradient(1200px 800px at 80% 0%,#12244a 0%,#070b14 62%)'),
+    dict(nombre='Violeta y ámbar', pal=_pal('#0d0a16', '#8b5cf6', '#f5b84a', '#c4a6ff', '#18132a', ink='#f3f0fb', mut='#aaa2bf', sobre='#ffffff'), grad='radial-gradient(1200px 800px at 80% 0%,#2a1a4a 0%,#0d0a16 62%)'),
+    dict(nombre='Carbón y oro', pal=_pal('#0d0d0e', '#d4a84a', '#6b7280', '#f3cf6b', '#18181a', ink='#f4f2ec', mut='#aca89e', sobre='#140f05'), grad='radial-gradient(1000px 700px at 15% 100%,#2a2414 0%,#0d0d0e 62%)'),
+    dict(nombre='Medianoche y cian', pal=_pal('#061018', '#22b8e0', '#f2b24a', '#7fe3ff', '#0d1b26', ink='#eef7fb', mut='#98adb8', sobre='#03141c'), grad='radial-gradient(1200px 800px at 80% 0%,#0c3046 0%,#061018 62%)'),
+    dict(nombre='Grafito y coral', pal=_pal('#0f0f12', '#f2665a', '#3b82f6', '#ffb199', '#19191d', ink='#f5f2f1', mut='#b0a9a7', sobre='#ffffff'), grad='radial-gradient(1000px 700px at 15% 100%,#3a1a17 0%,#0f0f12 62%)'),
+    dict(nombre='Índigo y magenta', pal=_pal('#0b0b1a', '#6366f1', '#ec4899', '#a5b4fc', '#15152b', ink='#f1f1fb', mut='#a5a6c0', sobre='#ffffff'), grad='radial-gradient(1200px 800px at 80% 0%,#23234f 0%,#0b0b1a 62%)'),
+]
+
+
 def estilo(clave):
     """'t-legal-1' -> estilo completo del motor, o None si la clave no es un tema."""
     clave = str(clave or '')
     if len(clave) > 3 and clave[0] == 'd' and clave[1].isdigit() and clave[2] == '-':
         # 'd3-legal' = director 3 (otra interpretación visual de todas las escenas) con la familia legal
-        k = int(clave[1]); e = estilo('t-%s-%d' % (clave[3:], k)); e['dir'] = k; e['fam'] = clave[3:] if clave[3:] in FAMILIAS else 'gen'
+        resto = clave[3:].split('-'); fam = resto[0]
+        k = int(clave[1]); e = estilo('t-%s-%d' % (fam, k)); e['dir'] = k; e['fam'] = fam if fam in FAMILIAS else 'gen'
+        if len(resto) > 1 and resto[1].isdigit():  # color extra: 'd3-tec-2'
+            col = COLORES[(int(resto[1]) - 1) % len(COLORES)]; e['pal'] = dict(col['pal']); e['grad'] = col['grad']; e['color'] = col['nombre']
         return e
     if not clave.startswith('t-'):
         return None
