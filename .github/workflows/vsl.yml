@@ -90,7 +90,12 @@ jobs:
           key: u2net-v1
       - name: Programas
         run: |
-          for i in 1 2 3; do timeout 300 sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 update -qq && timeout 400 sudo apt-get -o Acquire::Retries=3 install -y -qq ffmpeg > /dev/null && break; echo "reintento $i"; sleep 5; done
+          if ! command -v ffmpeg >/dev/null; then
+            # ffmpeg ya armado desde GitHub (rápido); si falla, el espejo de Ubuntu con tiempo límite
+            curl -sSfL --retry 3 -o /tmp/ff.tar.xz https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-linux64-gpl.tar.xz && tar -xJf /tmp/ff.tar.xz -C /tmp && sudo cp /tmp/ffmpeg-master-latest-linux64-gpl/bin/ff* /usr/local/bin/ \
+              || (timeout 300 sudo apt-get -o Acquire::Retries=3 update -qq && timeout 400 sudo apt-get install -y -qq ffmpeg > /dev/null)
+          fi
+          ffmpeg -version | head -1
           if [ -n "${{ inputs.modo }}" ]; then pip install -q -r vsl/requirements-motion.txt; else pip install -q -r vsl/requirements.txt; fi
       - name: Navegador guardado
         if: inputs.modo != ''
@@ -143,7 +148,12 @@ jobs:
           cache-dependency-path: vsl/requirements-motion.txt
       - name: Programas
         run: |
-          for i in 1 2 3; do timeout 300 sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 update -qq && timeout 400 sudo apt-get -o Acquire::Retries=3 install -y -qq ffmpeg > /dev/null && break; echo "reintento $i"; sleep 5; done
+          if ! command -v ffmpeg >/dev/null; then
+            # ffmpeg ya armado desde GitHub (rápido); si falla, el espejo de Ubuntu con tiempo límite
+            curl -sSfL --retry 3 -o /tmp/ff.tar.xz https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-linux64-gpl.tar.xz && tar -xJf /tmp/ff.tar.xz -C /tmp && sudo cp /tmp/ffmpeg-master-latest-linux64-gpl/bin/ff* /usr/local/bin/ \
+              || (timeout 300 sudo apt-get -o Acquire::Retries=3 update -qq && timeout 400 sudo apt-get install -y -qq ffmpeg > /dev/null)
+          fi
+          ffmpeg -version | head -1
           pip install -q -r vsl/requirements-motion.txt
       - uses: actions/download-artifact@v4
         with:
