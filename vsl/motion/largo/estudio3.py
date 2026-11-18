@@ -9,7 +9,7 @@ ASSETS = os.path.join(os.path.dirname(AQUI), 'assets')
 
 # materiales del panel -> archivo que usa el motor
 NOMBRES = {'pack': 'pack_5.png', 'prop1': 'prop1.png', 'f_cuarto': 'f_cuarto.jpg', 'f_evento': 'f_evento.jpg',
-           **{f'c{i}': f'c{i}_5.png' for i in range(12)}, **{f'j_{x}': f'j_{x}.png' for x in ('estudia', 'practica', 'celular', 'trato', 'cabina', 'feliz', 'ref')}}
+           **{f'c{i}': f'c{i}_5.png' for i in range(12)}, **{f'x{i}': f'x{i}.jpg' for i in range(1, 13)}, **{f'j_{x}': f'j_{x}.png' for x in ('estudia', 'practica', 'celular', 'trato', 'cabina', 'feliz', 'ref')}}
 CURSO = {'m1': 'm1.png', 'm2': 'm2.png', 'm3': 'm3.png', 'm4': 'm4.png', 'm5': 'm5.png', 'm6': 'm6.png', 'cert': 'cert.png', 'consola': 'consola.png', 'logo': 'logo.png'}
 PIDE = {'recorrido': ['j_estudia', 'j_celular', 'j_cabina'], 'gracias': ['m1'], 'revela': ['pack'], 'todas': ['pack'], 'cta2': ['pack'], 'porque': ['pack', 'm1']}
 

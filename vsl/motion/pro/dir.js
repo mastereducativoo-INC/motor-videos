@@ -152,7 +152,7 @@ D[3] = {
   },
   // 3) corrección (17 nov, 22:56): se entiende a la primera qué ya aprendieron y qué les falta. Dos paneles y un puente entre ellos.
   escalera: (c) => {
-    const cm = camino(), ya = YA(), tieneT = cm.slice(0, ya), faltaT = cm.slice(ya), {cu} = app(c, TEC ? ruta + '/ruta.md' : 'Tu ruta'), tf = Math.max(1.6, c.cue('siguiente', .45));
+    const cm = camino(), ya = YA(), tieneT = cm.slice(0, ya), faltaT = cm.slice(ya), {cu} = app(c, TEC ? ruta + '/ruta.md' : 'Tu ruta'), tf = Math.max(1.6, c.cue(norm(c.sc.voz || '').includes('falta') ? 'falta' : 'siguiente', .45));
     const fila = (t, ok) => `<div class="rowp" style="font-size:40px;padding:18px 24px;${ok ? `border-color:${P.c};` : `border-style:dashed;color:${P.mut};`}"><span class="ic" style="display:inline-flex;width:44px;justify-content:center;color:${ok ? P.c : P.mut}">${ok ? '✓' : '🔒'}</span><span style="flex:1">${esc(t)}</span></div>`;
     cu.innerHTML = `<div class="T ctr" style="font-size:76px">${pal(c.sc.t)}</div>
       <div style="display:grid;grid-template-columns:1fr 150px 1fr;gap:0;margin-top:40px;align-items:stretch">
@@ -178,34 +178,35 @@ D[3] = {
     const ks = ['m1', 'm2', 'm3', 'm4', 'm5', 'm6'].filter((k) => IM[k] && IM[k].ok), n = ks.length;
     cu.innerHTML = `<div style="display:flex;gap:46px;height:100%"><div style="width:520px;display:flex;flex-direction:column;justify-content:center"><div class="K" style="white-space:normal;line-height:1.5">${esc(c.sc.k || PR.curso || '')}</div><div class="T" style="font-size:96px;margin-top:20px">${pal(c.sc.t)}</div><div class="P" style="margin-top:22px">${esc(c.sc.s || '')}</div>
       <div class="ex" style="margin-top:34px;display:flex;flex-wrap:wrap;gap:12px"></div></div>
-      <div class="gr" style="flex:1;display:grid;grid-template-columns:repeat(${n > 4 ? 3 : 2},1fr);grid-template-rows:repeat(${n > 3 ? 2 : 1},1fr);gap:18px 26px;align-items:center;justify-items:center">${ks.map((k) => `<div class="cx" style="height:${n > 3 ? 360 : 520}px;display:flex;align-items:flex-end;justify-content:center">${img(k, 'max-height:100%;max-width:100%;filter:drop-shadow(0 26px 30px rgba(0,0,0,.6))')}</div>`).join('')}</div></div>`;
+      <div class="gr" style="flex:1;display:grid;grid-template-columns:repeat(${n > 4 ? 3 : 2},1fr);grid-template-rows:repeat(${n > 3 ? 2 : 1},1fr);gap:18px 26px;align-items:center;justify-items:center">${ks.map((k, j) => `<div class="cx" style="height:${n > 3 ? 380 : 540}px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:12px"><div style="flex:1;min-height:0;display:flex;align-items:flex-end">${img(k, 'max-height:100%;max-width:100%;filter:drop-shadow(0 26px 30px rgba(0,0,0,.6))')}</div><span class="nm" style="font:800 26px Montserrat;color:${P.ink};padding:8px 18px;border-radius:999px;background:${rgba(P.a, .18)};border:1.5px solid ${rgba(P.c, .55)};white-space:nowrap">${esc(mods[j] || '')}</span></div>`).join('')}</div></div>`;
     fit(cu.querySelector('.T'), 230, 44); c.tl.from(cu.querySelectorAll('.T .wi'), {yPercent: 125, duration: .9, ease: 'expo.out', stagger: .07}, .4); c.tl.from(cu.querySelector('.P'), {opacity: 0, y: 20, duration: .6}, .8);
     cu.querySelectorAll('.cx').forEach((b, j) => { const w = String(mods[j] || '').split(/\s+/)[0], at = Math.max(.6 + j * .25, (w ? c.cue(w, .25 + .55 * j / n) : .6 + j * .4) - .15);
       c.tl.fromTo(b, {y: 160, opacity: 0, scale: .6, rotation: j % 2 ? 6 : -6}, {y: 0, opacity: 1, scale: 1, rotation: 0, duration: .8, ease: 'back.out(1.5)'}, at); c.fx(at + .15, 'pop');
-      c.tl.to(b, {y: -10, duration: 2.2 + j * .15, ease: 'sine.inOut', yoyo: true, repeat: 4}, at + 1); });
+      const nm = b.querySelector('.nm'); if (nm) c.tl.from(nm, {y: 24, opacity: 0, scale: .8, duration: .45, ease: 'back.out(2)'}, at + .25);
+      c.tl.to(b.firstChild, {y: -10, duration: 2.2 + j * .15, ease: 'sine.inOut', yoyo: true, repeat: 4}, at + 1); });
     const vv = norm(c.sc.voz || ''), ex = cu.querySelector('.ex'); [['certificado', 'Certificado'], ['de por vida', 'Acceso de por vida']].forEach(([w, t]) => { if (!vv.includes(w)) return; const e = $(`<span class="chip lleno" style="font-size:24px;padding:12px 22px">${sobre(PAL)}${esc(t)}</span>`); ex.appendChild(e); salta(c.tl, e, Math.max(1.5, c.cue(w, .85))); });
   },
   // 4) corrección (17 nov, 22:56): más premium; que se sienta que accedieron a algo muy especial
   porque: (c) => {
-    const tU = Math.max(1.2, c.cue('desbloque', .55)), pk = IM.pack && IM.pack.ok;
-    const rayos = $(`<div class="abs" style="left:960px;top:560px;width:2400px;height:2400px;margin:-1200px 0 0 -1200px;border-radius:50%;background:repeating-conic-gradient(${rgba(P.c, .13)} 0 4deg,transparent 4deg 16deg);-webkit-mask:radial-gradient(circle,#000 0,transparent 62%)"></div>`); c.cam.appendChild(rayos);
-    const glow = $(`<div class="abs" style="left:960px;top:560px;width:1100px;height:1100px;margin:-550px 0 0 -550px;border-radius:50%;background:radial-gradient(circle,${rgba(P.c, .42)} 0,${rgba(P.a, .14)} 34%,transparent 66%)"></div>`); c.cam.appendChild(glow);
-    const tar = $(`<div class="abs" style="left:560px;top:250px;width:800px;height:620px;border-radius:34px;padding:3px;background:conic-gradient(from var(--g,0deg),${P.c},${rgba(P.a, .2)},${P.b},${rgba(P.a, .2)},${P.c});box-shadow:0 60px 120px rgba(0,0,0,.6),0 0 90px ${rgba(P.c, .35)}">
-      <div style="width:100%;height:100%;border-radius:31px;background:linear-gradient(160deg,${P.sup},${P.bg});display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;overflow:hidden;position:relative">
-        <div class="brillo" style="position:absolute;top:-20%;bottom:-20%;width:180px;left:-40%;background:linear-gradient(90deg,transparent,${rgba('#ffffff', .22)},transparent);transform:skewX(-18deg)"></div>
-        <div class="K" style="color:${P.c}">Acceso exclusivo</div>
-        <div class="pk" style="height:330px;display:flex;align-items:center">${pk ? img('pack', 'max-height:100%;max-width:560px;filter:drop-shadow(0 30px 40px rgba(0,0,0,.6))') : ''}</div>
-        <div style="font:800 30px Montserrat;color:${P.ink}">Solo para quien compró ${esc(PR.curso || 'el curso')}</div></div></div>`); c.cam.appendChild(tar);
-    const can = $(`<svg class="abs" style="left:900px;top:120px" width="120" height="140" viewBox="0 0 120 140"><path class="ar" d="M30 66V44a30 30 0 0 1 60 0v22" fill="none" stroke="${P.c}" stroke-width="12" stroke-linecap="round"/><rect x="14" y="62" width="92" height="70" rx="16" fill="${P.c}"/><circle cx="60" cy="96" r="10" fill="${P.bg}"/></svg>`); c.cam.appendChild(can);
-    texto(c, {x: 120, y: 900, w: 1680, t: c.sc.t, size: 74, maxH: 150, at: .3, c: 1});
+    // corrección (18 nov, 9:46): sin recuadro. El pack aparece con luz y de él salen los mockups en abanico; el texto ordenado abajo.
+    const tU = Math.max(1.2, c.cue('desbloque', .5)), L = (PR.cont || []).map((_, j) => 'c' + j).filter((k) => IM[k] && IM[k].ok), n = L.length;
+    const rayos = $(`<div class="abs" style="left:960px;top:470px;width:2400px;height:2400px;margin:-1200px 0 0 -1200px;border-radius:50%;background:repeating-conic-gradient(${rgba(P.c, .12)} 0 4deg,transparent 4deg 16deg);-webkit-mask:radial-gradient(circle,#000 0,transparent 60%)"></div>`); c.cam.appendChild(rayos);
+    const glow = $(`<div class="abs" style="left:960px;top:470px;width:1100px;height:1100px;margin:-550px 0 0 -550px;border-radius:50%;background:radial-gradient(circle,${rgba(P.c, .45)} 0,${rgba(P.a, .14)} 34%,transparent 66%)"></div>`); c.cam.appendChild(glow);
+    const can = $(`<svg class="abs" style="left:900px;top:300px" width="120" height="140" viewBox="0 0 120 140"><path class="ar" d="M30 66V44a30 30 0 0 1 60 0v22" fill="none" stroke="${P.b}" stroke-width="12" stroke-linecap="round"/><rect x="14" y="62" width="92" height="70" rx="16" fill="${P.b}"/><circle cx="60" cy="96" r="10" fill="${P.bg}"/></svg>`); c.cam.appendChild(can);
+    const pk = $(`<div class="abs" style="left:660px;top:190px;width:600px;height:520px;display:flex;align-items:center;justify-content:center;z-index:20">${img('pack', 'max-width:100%;max-height:100%;filter:drop-shadow(0 40px 50px rgba(0,0,0,.65))')}</div>`); c.cam.appendChild(pk);
+    const ob = L.map((k, j) => { const e = $(`<div class="abs" style="left:885px;top:330px;width:150px;height:190px;display:flex;align-items:center;justify-content:center;z-index:${j < n / 2 ? 18 : 17}">${img(k, 'max-width:100%;max-height:100%;filter:drop-shadow(0 16px 20px rgba(0,0,0,.6))')}</div>`); c.cam.appendChild(e); return e; });
+    const pie = $(`<div class="abs ctr" style="left:160px;right:160px;top:760px"><div class="K" style="justify-content:center;color:${P.b}">Acceso exclusivo · solo para quien compró ${esc(PR.curso || 'el curso')}</div></div>`); c.cam.appendChild(pie);
+    texto(c, {x: 160, y: 830, w: 1600, t: c.sc.t, size: 84, maxH: 120, at: .3, c: 1});
     c.tl.from([rayos, glow], {scale: .2, opacity: 0, duration: 1.4, ease: 'expo.out'}, .1); c.tl.to(rayos, {rotation: 40, duration: c.D + 1, ease: 'none'}, 0); c.fx(.15, 'riser');
-    c.tl.from(can, {y: -200, opacity: 0, duration: .7, ease: 'back.out(1.6)'}, .3);
-    c.tl.to(can.querySelector('.ar'), {y: -26, rotation: -28, transformOrigin: '90px 66px', duration: .35, ease: 'back.out(2.5)'}, tU); c.tl.to(can, {y: -40, opacity: 0, scale: .7, duration: .5}, tU + .4); c.fx(tU, 'click');
-    c.tl.fromTo(tar, {y: 140, scale: .6, opacity: 0, rotationX: 40, transformPerspective: 1600}, {y: 0, scale: 1, opacity: 1, rotationX: 0, duration: 1.1, ease: 'expo.out'}, tU + .15); c.fx(tU + .3, 'golpe'); c.fx(tU + .55, 'ding');
-    c.tl.fromTo(tar, {'--g': '0deg'}, {'--g': '360deg', duration: 4, ease: 'none', repeat: 3}, tU + .2);
-    c.tl.fromTo(tar.querySelector('.brillo'), {left: '-40%'}, {left: '140%', duration: 1.1, ease: 'power2.inOut', repeat: 2, repeatDelay: 1.4}, tU + .9);
-    for (let j = 0; j < 26; j++) { const x = 300 + Math.random() * 1320, d = $(`<i class="abs" style="left:${x}px;top:1000px;width:${4 + Math.random() * 5}px;height:${4 + Math.random() * 5}px;border-radius:50%;background:${j % 3 ? P.c : P.b};box-shadow:0 0 12px ${P.c}"></i>`); c.cam.appendChild(d);
-      c.tl.fromTo(d, {y: 0, opacity: 0}, {y: -700 - Math.random() * 300, opacity: .9, duration: 3 + Math.random() * 2, ease: 'power1.out'}, tU + Math.random() * 1.5); c.tl.to(d, {opacity: 0, duration: .8}, tU + 3.2 + Math.random() * 1.5); }
+    c.tl.from(can, {y: -120, opacity: 0, duration: .6, ease: 'back.out(1.6)'}, .2);
+    c.tl.to(can.querySelector('.ar'), {y: -26, rotation: -28, transformOrigin: '90px 66px', duration: .35, ease: 'back.out(2.5)'}, tU - .5); c.tl.to(can, {y: -60, opacity: 0, scale: .7, duration: .4}, tU - .15); c.fx(tU - .5, 'click');
+    c.tl.fromTo(pk, {y: 160, scale: .55, opacity: 0}, {y: 0, scale: 1, opacity: 1, duration: 1, ease: 'back.out(1.4)'}, tU); c.fx(tU + .2, 'golpe'); c.fx(tU + .45, 'ding');
+    c.tl.to(pk, {y: -12, duration: 2.4, ease: 'sine.inOut', yoyo: true, repeat: 4}, tU + 1.1);
+    ob.forEach((e, j) => { const an = Math.PI * (1.08 + .84 * j / Math.max(1, n - 1)), r = 560, x = Math.cos(an) * r, y = Math.sin(an) * r * .62 + 120, at = tU + .6 + j * .12;
+      c.tl.fromTo(e, {x: 0, y: 0, scale: .2, opacity: 0, rotation: 0}, {x, y, scale: 1, opacity: 1, rotation: (j - (n - 1) / 2) * 4, duration: .9, ease: 'back.out(1.3)'}, at); c.fx(at, 'tick');
+      c.tl.to(e, {y: y - 10, duration: 2 + j * .1, ease: 'sine.inOut', yoyo: true, repeat: 3}, at + 1); });
+    for (let j = 0; j < 22; j++) { const x = 300 + Math.random() * 1320, d = $(`<i class="abs" style="left:${x}px;top:900px;width:${4 + Math.random() * 5}px;height:${4 + Math.random() * 5}px;border-radius:50%;background:${j % 3 ? P.b : P.c};box-shadow:0 0 12px ${P.b}"></i>`); c.cam.appendChild(d);
+      c.tl.fromTo(d, {y: 0, opacity: 0}, {y: -650 - Math.random() * 250, opacity: .85, duration: 3 + Math.random() * 2, ease: 'power1.out'}, tU + Math.random() * 1.5); c.tl.to(d, {opacity: 0, duration: .8}, tU + 3.2 + Math.random() * 1.5); }
   },
   tool2: (c) => {
     const k = tool(c), {a, cu} = app(c, TEC ? ruta + '/' + (PR.oferta || 'pack').toLowerCase().replace(/[^a-z0-9]+/g, '-') : (PR.oferta || 'Tu pack'), {x: 110, w: 1700, lado: 1, pad: '34px 44px'});
@@ -258,23 +259,35 @@ D[3] = {
   },
   // 17) corrección (17 nov, 22:56): que se entienda que ahorra tiempo, que es barato y que con esto puede ganar dinero; el precio no pesa
   inversion: (c) => {
-    const {pre} = precio(), logro = PR.logro || 'proyecto', t1 = Math.max(1.4, c.cue(logro, .45)), tP = Math.max(t1 + .6, c.cue('pagaron', .8));
-    const cards = [['⏱', 'Ahorras horas', 'Proyectos y código base listos: no empiezas de cero'], ['$', money(pre) + ' hoy', 'Precio exclusivo por tu compra'], ['↗', '1 ' + logro + ' lo paga', String(c.sc.s || 'Lo demás es para seguir creciendo.')]];
-    const fila = $(`<div class="abs" style="left:120px;right:120px;top:210px;display:grid;grid-template-columns:repeat(3,1fr);gap:28px">${cards.map(([i, t, s]) => `<div class="cd" style="border-radius:22px;padding:28px 30px;background:${rgba(P.ink, .04)};border:1.5px solid ${rgba(P.ink, .12)}"><div style="width:62px;height:62px;border-radius:16px;background:${rgba(P.a, .18)};color:${P.c};display:flex;align-items:center;justify-content:center;font:800 34px Montserrat">${i}</div><div style="font:800 40px Montserrat;margin-top:18px;color:${P.ink}">${esc(t)}</div><div class="P" style="font-size:27px;margin-top:8px">${esc(s)}</div></div>`).join('')}</div>`); c.cam.appendChild(fila);
-    const cs = fila.querySelectorAll('.cd'); [.5, Math.max(1, t1 - .4), t1 + .2].forEach((at, j) => { c.tl.from(cs[j], {y: 80, opacity: 0, duration: .7, ease: 'expo.out'}, at); c.fx(at + .1, 'pop'); });
-    // balanza: de un lado el precio (pesa poco), del otro lo que ganas con un solo proyecto
-    const bal = $(`<svg class="abs" style="left:560px;top:500px;overflow:visible" width="800" height="460" viewBox="0 0 800 460">
-      <path d="M400 120V400M320 420H480" stroke="${rgba(P.ink, .55)}" stroke-width="10" stroke-linecap="round"/><circle cx="400" cy="112" r="16" fill="${P.c}"/>
-      <path class="vg" d="M110 120H690" stroke="${P.ink}" stroke-width="10" stroke-linecap="round"/>
-        <g class="pl"><path d="M110 120L50 250M110 120L170 250" stroke="${rgba(P.ink, .5)}" stroke-width="4"/><path d="M30 250H190" stroke="${P.ink}" stroke-width="8" stroke-linecap="round"/><rect x="62" y="196" width="96" height="52" rx="12" fill="${rgba(P.ink, .2)}"/><text x="110" y="232" text-anchor="middle" font-family="Montserrat" font-weight="900" font-size="30" fill="${P.ink}">${esc(money(pre))}</text></g>
-        <g class="pr"><path d="M690 120L630 250M690 120L750 250" stroke="${rgba(P.ink, .5)}" stroke-width="4"/><path d="M610 250H770" stroke="${P.ink}" stroke-width="8" stroke-linecap="round"/><rect x="618" y="150" width="144" height="98" rx="16" fill="${P.c}"/><text x="690" y="194" text-anchor="middle" font-family="Montserrat" font-weight="900" font-size="22" fill="${P.sobre}">1 ${esc(logro)}</text><text x="690" y="228" text-anchor="middle" font-family="Montserrat" font-weight="700" font-size="20" fill="${P.sobre}">lo que ganas</text></g></svg>`); c.cam.appendChild(bal);
-    const vg = bal.querySelector('.vg'), pl = bal.querySelector('.pl'), pr = bal.querySelector('.pr');
-    c.tl.from(bal, {y: 120, opacity: 0, duration: .8, ease: 'expo.out'}, .7);
-    c.tl.from(pr, {y: -260, opacity: 0, duration: .6, ease: 'bounce.out'}, t1 + .2); c.fx(t1 + .5, 'golpe');
-    c.tl.to(vg, {rotation: 14, svgOrigin: '400 120', duration: 1.1, ease: 'elastic.out(1,.5)'}, t1 + .5);
-    c.tl.to(pl, {y: -70, duration: 1.1, ease: 'elastic.out(1,.5)'}, t1 + .5); c.tl.to(pr, {y: 70, duration: 1.1, ease: 'elastic.out(1,.5)'}, t1 + .5);
-    const ok = $(`<div class="abs ctr" style="left:0;right:0;bottom:40px"><span class="chip lleno ok" style="font-size:38px;padding:16px 40px">${sobre(PAL)}Inversión cubierta</span></div>`); c.cam.appendChild(ok); salta(c.tl, ok.firstChild, tP); c.fx(tP, 'monedas');
-    texto(c, {x: 120, y: 50, w: 1680, t: c.sc.t, size: 80, maxH: 120, at: .2, c: 1});
+    // corrección (18 nov, 9:46): que se entienda que todo vale mucho más que los $12 y que los recupera con cualquier proyecto
+    const {pre} = precio(), L = (PR.cont || []), n = L.length, tot = L.reduce((a, x) => a + (+x.valor || 0), 0), logro = PR.logro || 'proyecto';
+    const tB = Math.max(2.6, Math.min(c.vz * .55, c.cue('doce', .55))), x1 = IM.x1 && IM.x1.ok;
+    texto(c, {x: 110, y: 50, w: 1700, t: c.sc.t, size: 80, maxH: 110, at: .2, c: 1});
+    // parte 1: dos columnas: lo que recibes (alto) contra lo que pagas (bajito)
+    const A = $(`<div class="abs" style="left:170px;top:210px;width:1580px;height:800px">
+      <div class="colA" style="position:absolute;left:120px;bottom:170px;width:560px;height:600px;border-radius:24px 24px 8px 8px;background:linear-gradient(180deg,${rgba(P.a, .38)},${rgba(P.a, .12)});border:2px solid ${P.c};transform-origin:50% 100%;display:grid;grid-template-columns:repeat(2,1fr);gap:8px 14px;padding:20px;align-content:space-evenly">${L.map((_, j) => `<div class="mi" style="height:124px;display:flex;align-items:center;justify-content:center">${img('c' + j, 'max-width:100%;max-height:100%;filter:drop-shadow(0 10px 12px rgba(0,0,0,.5))')}</div>`).join('')}</div>
+      <div style="position:absolute;left:120px;width:560px;bottom:30px;text-align:center"><div class="K" style="justify-content:center">Lo que recibes</div><div class="num oro va" style="font-size:72px;margin-top:4px">${money(tot)}</div></div>
+      <div class="colB" style="position:absolute;left:900px;bottom:170px;width:300px;height:70px;border-radius:14px 14px 6px 6px;background:${rgba(P.ink, .14)};border:2px solid ${rgba(P.ink, .35)};transform-origin:50% 100%"></div>
+      <div style="position:absolute;left:900px;width:300px;bottom:30px;text-align:center"><div class="K" style="justify-content:center;color:${P.mut}">Lo que pagas hoy</div><div class="num" style="font-size:72px;margin-top:4px">${money(pre)}</div></div>
+      <div class="x10" style="position:absolute;left:820px;width:460px;bottom:270px;text-align:center"><div style="font:900 130px/1 Montserrat;color:${P.b}">×${Math.max(2, Math.round(tot / Math.max(1, pre)))}</div><div style="font:800 30px Montserrat;color:${P.ink};margin-top:6px">más valor del que pagas</div></div></div>`); c.cam.appendChild(A);
+    const colA = A.querySelector('.colA'), va = A.querySelector('.va'), o = {v: 0};
+    c.tl.from(A.querySelector('.colB'), {scaleY: 0, duration: .6, ease: 'power3.out'}, .6);
+    c.tl.from(colA, {scaleY: 0, duration: 1.2, ease: 'power3.out'}, .9); c.fx(.9, 'riser');
+    A.querySelectorAll('.mi').forEach((m, j) => { c.tl.from(m, {y: -260, opacity: 0, duration: .45, ease: 'bounce.out'}, 1.3 + j * .12); c.fx(1.35 + j * .12, 'tick'); });
+    c.tl.to(o, {v: tot, duration: 1.3, ease: 'power2.out', onUpdate: () => { va.textContent = money(Math.round(o.v)); }}, 1.2);
+    c.tl.from(A.querySelector('.x10'), {scale: 0, rotation: -12, opacity: 0, duration: .5, ease: 'back.out(2)'}, 2.5); c.fx(2.5, 'golpe');
+    // parte 2: un solo proyecto y los $12 regresan
+    const B = $(`<div class="abs" style="left:170px;top:210px;width:1580px;height:800px;display:flex;gap:46px;align-items:center">
+      <div class="im" style="flex:1.25;height:640px;border-radius:24px;overflow:hidden;position:relative;background:${rgba(P.a, .15)};border:1.5px solid ${rgba(P.c, .4)}">${x1 ? img('x1', 'width:100%;height:100%;object-fit:cover') : `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">${img('pack', 'max-width:80%;max-height:80%')}</div>`}
+        <div class="pg" style="position:absolute;right:26px;top:26px;padding:16px 22px;border-radius:16px;background:${P.sup};border:1.5px solid ${P.b};font:800 28px Montserrat;color:${P.ink};box-shadow:0 20px 40px rgba(0,0,0,.5)"><span style="color:${P.b}">✓</span> Pago recibido · 1 ${esc(logro)}</div></div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:22px"><div class="K">Con un solo ${esc(logro)}</div><div style="font:900 64px/1.08 Montserrat;color:${P.ink}">Recuperas tus <span style="color:${P.b}">${money(pre)}</span></div>
+        <div class="bar" style="height:22px;border-radius:12px;background:${rgba(P.ink, .1)};overflow:hidden"><div class="bf" style="height:100%;width:100%;background:linear-gradient(90deg,${P.a},${P.b});transform-origin:0 50%"></div></div>
+        <span class="chip lleno ok" style="align-self:flex-start;font-size:34px;padding:14px 32px">${sobre(PAL)}Inversión cubierta</span></div></div>`); c.cam.appendChild(B);
+    c.tl.set(B, {opacity: 0}, 0); c.tl.to(A, {opacity: 0, x: -120, duration: .5, ease: 'power2.in'}, tB - .3); c.fx(tB - .3, 'whoosh');
+    c.tl.to(B, {opacity: 1, duration: .4}, tB); c.tl.from(B.querySelector('.im'), {x: -140, scale: .92, duration: .9, ease: 'expo.out'}, tB);
+    c.tl.from(B.querySelector('.pg'), {y: -60, opacity: 0, scale: .8, duration: .6, ease: 'back.out(1.8)'}, tB + .7); c.fx(tB + .7, 'ding');
+    c.tl.from(B.querySelector('.bf'), {scaleX: 0, duration: 1.1, ease: 'power2.out'}, tB + 1); c.fx(tB + 1.1, 'monedas');
+    salta(c.tl, B.querySelector('.ok'), tB + 2); c.fx(tB + 2, 'pop');
   },
 };
 
