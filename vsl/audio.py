@@ -184,8 +184,16 @@ def musica(dur, estilo='dj', seed=7):
     return out[:int(dur * SR)] / (np.max(np.abs(out)) + 1e-6) * 0.8
 
 
+PARECIDO = {'mazo': 'golpe', 'sello': 'golpe', 'papel': 'whoosh', 'pagina': 'whoosh', 'pluma': 'tick'}
+
+
 def sfx(tipo):
-    f = os.path.join(MOTION, 'sfx', 'elegidos', tipo + '.wav')  # efectos reales elegidos (Mixkit)
+    # 1º la biblioteca CC0 elegida escuchando (earshot + Openverse); 2º los elegidos de Mixkit; 3º el sintético
+    f = os.path.join(MOTION, 'sfx', 'cc0', tipo + '.wav')
+    if not os.path.exists(f):
+        f = os.path.join(MOTION, 'sfx', 'elegidos', tipo + '.wav')
+    if not os.path.exists(f) and tipo in PARECIDO:
+        return sfx(PARECIDO[tipo])
     if os.path.exists(f):
         a = _decodifica(f)
         return (a / (np.max(np.abs(a)) + 1e-6) * 0.55).astype(np.float32)

@@ -136,7 +136,7 @@ jobs:
     needs: video
     if: inputs.partes != '' && inputs.partes != '[0]'
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
         with:
@@ -160,6 +160,17 @@ jobs:
           pattern: parte-*
           merge-multiple: true
           path: /tmp/partes
+      - name: Modelos para escuchar (earshot)
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/huggingface
+            ~/.cache/earshot
+          key: earshot-modelos-v1
+      - name: Oídos (earshot)
+        continue-on-error: true
+        run: |
+          pip install -q uv && uv tool install -q "earshot @ git+https://github.com/Leonxlnx/earshot" && earshot doctor --fetch > /dev/null && echo "VSL_ESCUCHAR=1" >> $GITHUB_ENV
       - name: Unir, revisar y subir
         env:
           VSL_ID: ${{ inputs.id }}

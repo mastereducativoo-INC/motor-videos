@@ -158,6 +158,16 @@ def unir_partes():
     import motion_render
     paso('Uniendo las partes del video')
     res = motion_render.unir_y_revisar(os.environ.get('VSL_CARPETA', '/tmp/partes'))
+    # escucha el video terminado (earshot): el veredicto del audio queda en la revisión de calidad
+    if os.environ.get('VSL_ESCUCHAR'):
+        try:
+            sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sonidos'))
+            import escuchar
+            paso('Escuchando el audio del video')
+            res['qa']['audio'] = escuchar.escuchar(res['salida'])
+            print('audio:', res['qa']['audio'].get('veredicto'), flush=True)
+        except Exception as ex:
+            print('no se pudo escuchar el video', ex, flush=True)
     try:
         api('qa', res['qa'])
     except Exception as ex:
