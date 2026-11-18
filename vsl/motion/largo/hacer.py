@@ -69,7 +69,9 @@ def preparar(v):
     for sc in v['escenas']:
         r = E.get('ritmo', 1.0)  # 1.15 = todo el video un 15 % más rápido (voz y tiempos de escena)
         a = voz_escena(sc, E.get('voz', 'em_alex'), E.get('vel', 1.06) * r, 0.18 / r)
-        vd = max(len(a) / SR + 0.5 / r, MIN.get(sc['c'], 2.4) / r, sc.get('seg', 0))
+        # 18 nov (Christian): la escena siguiente entra en cuanto termina la voz; la animación tiene a lo más 0.9 s extra
+        voz_s = len(a) / SR
+        vd = max(voz_s + 0.28 / r, min(MIN.get(sc['c'], 2.4) / r, voz_s + 0.9 / r), sc.get('seg', 0))
         sc['t0'] = round(t, 3); sc['vd'] = round(vd, 3); sc['vz'] = round(len(a) / SR, 3); sc['dur'] = round(vd + (5.0 if sc['c'] in ('cta', 'cta2') else 0), 3)
         pista.append((t + 0.22, a))
         if sc['c'] in ('precio', 'cta', 'cta2'): niv.append((t, t + sc['dur'], 1.15))

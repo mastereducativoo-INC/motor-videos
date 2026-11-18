@@ -432,6 +432,22 @@ S.generico = (c) => { const {sc} = c; texto(c, {x: 210, y: 330, w: 1500, c: 1, k
 // los "directores" (dir.js) registran aquí otras interpretaciones de cada escena: PRO.D[n][escena]
 window.PRO = {S, D: {}, alSeek: [], alMontar: [], V, E, P, PR, A, A2, IM, VAR, N: () => N, $, esc, pal, rgba, norm, money, rnd, fit, img, OK, ICO, texto, objeto, decor, draw, sube, salta, flota, onda, cuenta};
 
+// Regla A7 (18 nov): la primera vez que se muestra el Súper Pack, sus herramientas giran alrededor del mockup principal.
+// Funciona con cualquier director: busca la imagen del pack ya colocada y gira las herramientas a su alrededor.
+function orbita(cam, tl, sc, cue) {
+  const pk = [...cam.querySelectorAll('img')].find((x) => /pack_5/.test(x.getAttribute('src') || ''));
+  const L = (PR.cont || []).map((_, j) => 'c' + j).filter((k) => IM[k] && IM[k].ok); if (!pk || L.length < 2) return;
+  const caja = pk.closest('.abs') || pk.parentElement; if (caja) caja.style.zIndex = 30;
+  const T0 = Math.max(1, cue('incluye', .55) || 1), n = L.length, G = {cx: 960, cy: 540, rx: 520, ry: 160, s: 190};
+  // se mide cuando el pack ya está quieto y visible (antes la escena está oculta y no tiene medidas)
+  const medir = () => { const r = pk.getBoundingClientRect(), c = cam.getBoundingClientRect(), k = c.width / 1920 || 1; if (!r.width) return;
+    const w = r.width / k, h = r.height / k; G.cx = (r.left - c.left) / k + w / 2; G.cy = (r.top - c.top) / k + h * .58; G.rx = Math.max(320, w * .86); G.ry = Math.max(120, h * .42); G.s = Math.max(130, Math.min(220, h * .3)); };
+  const it = L.map((k) => { const d = document.createElement('div'); d.className = 'abs'; d.style.cssText = 'left:0;top:0;display:flex;align-items:center;justify-content:center;opacity:0'; d.innerHTML = img(k, 'max-width:100%;max-height:100%;filter:drop-shadow(0 14px 18px rgba(0,0,0,.55))'); cam.appendChild(d); return d; });
+  const st = {a: 0, o: 0}, pon = () => it.forEach((d, j) => { const an = st.a + j * Math.PI * 2 / n, z = Math.sin(an), s = .6 + .4 * (z + 1) / 2;
+    d.style.width = d.style.height = G.s + 'px'; d.style.margin = -G.s / 2 + 'px 0 0 ' + -G.s / 2 + 'px';
+    d.style.transform = `translate(${G.cx + Math.cos(an) * G.rx}px,${G.cy + z * G.ry}px) scale(${s})`; d.style.zIndex = z > 0 ? 40 : 20; d.style.opacity = st.o * (.6 + .4 * (z + 1) / 2); });
+  tl.call(medir, null, T0 - .05); tl.to(st, {o: 1, duration: .6, onUpdate: pon}, T0); tl.to(st, {a: Math.PI * 2 * Math.max(.6, (sc.dur - T0) / 7), duration: Math.max(1, sc.dur - T0 + .4), ease: 'none', onUpdate: () => { if (!G.ok) { medir(); G.ok = 1; } pon(); }}, T0);
+}
 // ================= FONDO, TRANSICIONES Y MONTAJE =================
 function montar() {
   const B = document.body, bg = $('<div id="bg"><div class="luz"></div><div class="luz b"></div></div>'), ESC = $('<div id="esc"></div>'), FX = $('<div id="fx"></div>');
@@ -454,6 +470,7 @@ function montar() {
     const cue = (w, def, min) => { const v = norm(sc.voz), k = w ? v.indexOf(norm(w)) : -1; const t = k < 0 ? (def == null ? null : .22 + def * vz) : Math.max(.2, .22 + (k / Math.max(1, v.length)) * vz - .12); return t == null ? null : Math.max(t, min || 0); };
     try { ((window.PRO.D[E.dir] || {})[sc.c] || S[sc.c] || S.generico)({sc, i, el, cam: el.firstChild, tl, D: sc.dur, vz, cue, t0: sc.t0 - ade, fx: (t, n) => sfx(sc.t0 - ade + t, n)}); }
     catch (e) { console.error(e); window.__errores = (window.__errores || []).concat(sc.c + ': ' + e.message); }
+    if (sc.c === 'revela' && !V.__orbita) { V.__orbita = 1; try { orbita(el.firstChild, tl, sc, cue); } catch (e) { console.error(e); } }
     tl.fromTo(el.firstChild, {scale: 1}, {scale: 1.03, duration: sc.dur + .6, ease: 'none'}, 0);
     const oro = el.querySelectorAll('.oro,.T .k .wi'); if (oro.length) tl.fromTo(oro, {backgroundPosition: '0% 0'}, {backgroundPosition: '100% 0', duration: 2.6, ease: 'sine.inOut', yoyo: true, repeat: Math.ceil(sc.dur / 2.6) + 1}, .5);
     M.add(tl, sc.t0 - ade);
@@ -461,16 +478,16 @@ function montar() {
     const pv = V.escenas[i - 1].el, t = sc.t0, tool = sc.c === 'tool2' && V.escenas[i - 1].c === 'tool2';
     const tr = tool ? (i % 2 ? 'lateral' : 'sube') : TR[(i + VAR * 2) % TR.length];
     let on = t - .02, off = t + .02;
-    if (tr === 'fundido') { on = t - .12; off = t + .3; M.to(pv, {opacity: 0, scale: 1.06, filter: 'blur(16px)', duration: .42, ease: 'power2.in'}, t - .3); M.from(el, {opacity: 0, scale: .96, filter: 'blur(16px)', duration: .55, ease: 'power2.out'}, t - .08); }
-    else if (tr === 'sube') { off = t + .1; M.to(pv, {y: -160, opacity: 0, duration: .34, ease: 'power2.in'}, t - .26); M.from(el, {y: 200, opacity: 0, duration: .6, ease: 'expo.out'}, t); }
-    else if (tr === 'lateral') { off = t + .1; M.to(pv, {x: -260, opacity: 0, duration: .34, ease: 'power2.in'}, t - .26); M.from(el, {x: 320, opacity: 0, duration: .6, ease: 'expo.out'}, t); }
-    else if (tr === 'zoom') { off = t + .08; M.to(pv, {scale: 1.6, opacity: 0, filter: 'blur(10px)', duration: .36, ease: 'power2.in'}, t - .28); M.from(el, {scale: .72, opacity: 0, duration: .65, ease: 'expo.out'}, t); }
-    else if (tr === 'barrido') { on = t - .28; off = t + .3;  // las dos escenas comparten un borde que cruza la pantalla
-      M.fromTo(el, {clipPath: 'inset(0% 100% 0% 0%)'}, {clipPath: 'inset(0% 0% 0% 0%)', duration: .56, ease: 'power2.inOut'}, on); M.set(el, {clipPath: 'none'}, on + .58);
-      M.fromTo(pv, {clipPath: 'inset(0% 0% 0% 0%)'}, {clipPath: 'inset(0% 0% 0% 100%)', duration: .56, ease: 'power2.inOut'}, on); }
-    else { M.fromTo(pan, {x: 0}, {x: 2440, duration: .44, ease: 'power3.in'}, t - .42); M.to(pan, {x: 4900, duration: .5, ease: 'power3.out'}, t + .02); M.set(pan, {x: 0}, t + .6); }
+    if (tr === 'fundido') { on = t - .1; off = t + .22; M.to(pv, {opacity: 0, scale: 1.06, filter: 'blur(16px)', duration: .28, ease: 'power2.in'}, t - .2); M.from(el, {opacity: 0, scale: .96, filter: 'blur(16px)', duration: .38, ease: 'power2.out'}, t - .06); }
+    else if (tr === 'sube') { off = t + .1; M.to(pv, {y: -160, opacity: 0, duration: .24, ease: 'power2.in'}, t - .18); M.from(el, {y: 200, opacity: 0, duration: .42, ease: 'expo.out'}, t - .04); }
+    else if (tr === 'lateral') { off = t + .1; M.to(pv, {x: -260, opacity: 0, duration: .24, ease: 'power2.in'}, t - .18); M.from(el, {x: 320, opacity: 0, duration: .42, ease: 'expo.out'}, t - .04); }
+    else if (tr === 'zoom') { off = t + .08; M.to(pv, {scale: 1.6, opacity: 0, filter: 'blur(10px)', duration: .26, ease: 'power2.in'}, t - .2); M.from(el, {scale: .72, opacity: 0, duration: .45, ease: 'expo.out'}, t - .04); }
+    else if (tr === 'barrido') { on = t - .2; off = t + .22;  // las dos escenas comparten un borde que cruza la pantalla
+      M.fromTo(el, {clipPath: 'inset(0% 100% 0% 0%)'}, {clipPath: 'inset(0% 0% 0% 0%)', duration: .4, ease: 'power2.inOut'}, on); M.set(el, {clipPath: 'none'}, on + .42);
+      M.fromTo(pv, {clipPath: 'inset(0% 0% 0% 0%)'}, {clipPath: 'inset(0% 0% 0% 100%)', duration: .4, ease: 'power2.inOut'}, on); }
+    else { M.fromTo(pan, {x: 0}, {x: 2440, duration: .3, ease: 'power3.in'}, t - .3); M.to(pan, {x: 4900, duration: .34, ease: 'power3.out'}, t + .02); M.set(pan, {x: 0}, t + .42); }
     M.set(el, {visibility: 'visible'}, on); M.set(pv, {visibility: 'hidden'}, off);
-    sfx(t - .28, 'whoosh');
+    if (i % 4 === 0) sfx(t - .2, 'whoosh');  // 18 nov: no un sonido en cada corte
   });
   window.__seek = (t) => { M.time(Math.max(0, t), false); amb(t); window.PRO.alSeek.forEach((f) => f(t)); };
   window.__seek(0); window.__listo = true;

@@ -260,11 +260,16 @@ def mezcla(voz, eventos, dur, estilo, ruta, niveles=None):
     mix = v + m * duck * fade * niv * 0.6
     # 18 nov (earshot): demasiados golpes por segundo → los grandes se quedan, los chicos van 6 dB más bajos y no se amontonan
     GRANDES = {'golpe', 'mazo', 'sello', 'venta', 'riser', 'monedas', 'ding'}
-    ultimo = -9.0
+    ultimo, ult_g = -9.0, -9.0
     for s, tipo in sorted(eventos):
         grande = tipo in GRANDES
-        if not grande and s - ultimo < 0.35:
+        # Christian, 18 nov: "sobran efectos". Uno chico por cada 1.1 s como máximo y nunca pegado a uno grande.
+        if not grande and (s - ultimo < 1.1 or abs(s - ult_g) < 0.6):
             continue
+        if grande and s - ult_g < 0.7:
+            continue
+        if grande:
+            ult_g = s
         x = sfx(tipo)
         p = int(s * SR)
         if 0 <= p < n:
