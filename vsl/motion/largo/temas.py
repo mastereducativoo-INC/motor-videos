@@ -56,13 +56,27 @@ COLORES = [
 ]
 
 
+# Directores exclusivos de abogados (18 nov): 5 mundos visuales del derecho, cada uno con su paleta, tipografía y música.
+DIR_LEGAL = {
+    6: dict(nombre='Despacho', pal=_pal('#120d09', '#c39548', '#5a2e1f', '#e6c27a', '#1d150f', ink='#f4ece0', mut='#b5a796', sobre='#1a1208'), grad='none', ft=None, musica='musica/tears-of-joy.mp3'),
+    7: dict(nombre='Expediente', pal=_pal('#111214', '#b3262c', '#c9a46a', '#e0524b', '#1b1c20', ink='#f2efe9', mut='#a7a49d', sobre='#ffffff'), grad='none', ft=None, musica='musica/wind-leaves.mp3'),
+    8: dict(nombre='Tribunal', pal=_pal('#0c0c0e', '#c9a654', '#e8e3d8', '#ecd08a', '#17171a', ink='#f5f2ea', mut='#aaa59a', sobre='#16120a'), grad='none', ft='Playfair', musica='musica/expressive-courage.mp3'),
+    9: dict(nombre='Código', pal=_pal('#0d1526', '#b8913f', '#e9e1cf', '#e3c27a', '#16213a', ink='#f3efe4', mut='#a9b1c3', sobre='#0d1526'), grad='none', ft='Playfair', musica='musica/possible-dreams.mp3'),
+    10: dict(nombre='Legal digital', pal=_pal('#08151c', '#3a8fc2', '#d9b46a', '#8cc8ee', '#10222c', ink='#eef5f8', mut='#9db2bd', sobre='#ffffff'), grad='none', ft=None, musica='musica/skyline.mp3'),
+}
+
+
 def estilo(clave):
     """'t-legal-1' -> estilo completo del motor, o None si la clave no es un tema."""
     clave = str(clave or '')
-    if len(clave) > 3 and clave[0] == 'd' and clave[1].isdigit() and clave[2] == '-':
+    if len(clave) > 3 and clave[0] == 'd' and clave[1].isdigit() and (clave[2] == '-' or (clave[2].isdigit() and clave[3] == '-')):
         # 'd3-legal' = director 3 (otra interpretación visual de todas las escenas) con la familia legal
-        resto = clave[3:].split('-'); fam = resto[0]
-        k = int(clave[1]); e = estilo('t-%s-%d' % (fam, k)); e['dir'] = k; e['fam'] = fam if fam in FAMILIAS else 'gen'
+        resto = clave[clave.index('-') + 1:].split('-'); fam = resto[0]
+        num = ''.join(ch for ch in clave[1:3] if ch.isdigit()); k = int(num)
+        if k in DIR_LEGAL:  # 'd6-legal' … 'd10-legal'
+            L = DIR_LEGAL[k]; e = estilo('t-legal-1'); e['dir'] = k; e['fam'] = 'legal'; e['pal'] = dict(L['pal']); e['grad'] = L['grad']; e['musica'] = L['musica']; e['dirFt'] = L['ft']; e['color'] = L['nombre']
+            return e
+        e = estilo('t-%s-%d' % (fam, k)); e['dir'] = k; e['fam'] = fam if fam in FAMILIAS else 'gen'
         if len(resto) > 1 and resto[1].isdigit():  # color extra: 'd3-tec-2'
             col = COLORES[(int(resto[1]) - 1) % len(COLORES)]; e['pal'] = dict(col['pal']); e['grad'] = col['grad']; e['color'] = col['nombre']
         return e

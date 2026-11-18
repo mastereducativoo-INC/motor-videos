@@ -8,7 +8,7 @@ gsap.defaults({lazy: false, overwrite: false}); gsap.config({nullTargetWarn: fal
 const rgba = (hex, a) => { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`; };
 const R = document.documentElement.style;
 Object.entries({bg: P.bg, a: P.a, b: P.b, c: P.c, sup: P.sup, ink: P.ink, mut: P.mut, sobre: P.sobre, aB: rgba(P.a, .5), aS: rgba(P.a, .32), halo: rgba(P.a, .26), luz: rgba(P.b, .34), luz2: rgba(P.a, .1),
-  mutB: rgba(P.mut, .3), inkB: rgba(P.ink, .42), ft: E.dir ? 'Montserrat' : E.ft || 'Montserrat', fb: E.fb || 'Montserrat', fw: E.dir ? 900 : E.fw || 800, ls: E.dir ? '-.035em' : E.ls || '-.02em', kst: !E.dir && /Playfair|Fraunces/.test(E.ft || '') ? 'italic' : 'normal'})
+  mutB: rgba(P.mut, .3), inkB: rgba(P.ink, .42), ft: E.dir ? E.dirFt || 'Montserrat' : E.ft || 'Montserrat', fb: E.fb || 'Montserrat', fw: E.dir ? (E.dirFt ? 800 : 900) : E.fw || 800, ls: E.dir ? (E.dirFt ? '-.015em' : '-.035em') : E.ls || '-.02em', kst: !E.dir && /Playfair|Fraunces/.test(E.ft || '') ? 'italic' : 'normal'})
   .forEach(([k, v]) => R.setProperty('--' + k, v));
 let seed = 7 + VAR * 101; const rnd = () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
 const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
@@ -475,7 +475,7 @@ function montar() {
   window.__seek = (t) => { M.time(Math.max(0, t), false); amb(t); window.PRO.alSeek.forEach((f) => f(t)); };
   window.__seek(0); window.__listo = true;
 }
-const fu = [E.dir ? 'Montserrat' : E.ft || 'Montserrat', E.fb || 'Montserrat'].concat(E.dir ? ['JetBrains'] : []);
+const fu = [E.dir ? E.dirFt || 'Montserrat' : E.ft || 'Montserrat', E.fb || 'Montserrat', 'Montserrat'].concat(E.dir ? ['JetBrains'] : []);
 Promise.all([...lista.map(([k, s]) => carga(k, s)), ...fu.flatMap((f) => [document.fonts.load(`800 40px ${f}`), document.fonts.load(`italic 800 40px ${f}`), document.fonts.load(`500 40px ${f}`), document.fonts.load(`700 40px ${f}`), document.fonts.load(`900 40px ${f}`)])])
   .then(() => document.fonts.ready).then(montar).catch((e) => { console.error(e); window.__errores = [String(e)]; window.__listo = true; });
 })();
