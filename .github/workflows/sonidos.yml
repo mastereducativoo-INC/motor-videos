@@ -7,6 +7,10 @@ on:
         description: 'Tipos separados por coma (vacío = todos)'
         required: false
         default: ''
+      que:
+        description: 'efectos | musica'
+        required: false
+        default: 'efectos'
 permissions:
   contents: write
 jobs:
@@ -29,11 +33,15 @@ jobs:
         run: |
           curl -sSfL --retry 3 -o /tmp/ff.tar.xz https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-linux64-gpl.tar.xz && tar -xJf /tmp/ff.tar.xz -C /tmp && sudo cp /tmp/ffmpeg-master-latest-linux64-gpl/bin/ff* /usr/local/bin/
           pip install -q uv && uv tool install -q "earshot @ git+https://github.com/Leonxlnx/earshot" && earshot doctor --fetch
-      - name: Buscar, escuchar y elegir
+      - name: Buscar, escuchar y elegir efectos
+        if: inputs.que != 'musica'
         env:
           TIPOS: ${{ inputs.tipos }}
         run: python vsl/sonidos/biblioteca.py
+      - name: Escuchar la música y calificarla por nicho
+        if: inputs.que == 'musica'
+        run: python vsl/sonidos/musica.py
       - name: Guardar la biblioteca
         run: |
           git config user.name "Fábrica de sonidos" && git config user.email "noreply@github.com"
-          git add vsl/motion/sfx/cc0 && git commit -m "Sonidos CC0 elegidos escuchando (earshot + Openverse)" && git push || echo "sin cambios"
+          git add vsl/motion/sfx/cc0 vsl/motion/musica/escuchada.json 2>/dev/null; git commit -m "Sonido escuchado con earshot (${{ inputs.que }})" && git push || echo "sin cambios"
