@@ -2,7 +2,7 @@
 // 1 Cine 3D (Three.js) · 2 Tipografía cinética · 3 Pantalla viva · 4 Escritorio físico · 5 Infografía isométrica.
 // Cada director registra PRO.D[n][escena]; lo que no defina cae en la escena base de pro.js.
 (() => {
-const {D, V, E, P, PR, IM, $, esc, pal, rgba, money, rnd, fit, img, OK, ICO, texto, objeto, draw, sube, salta, flota, onda, cuenta} = window.PRO;
+const {D, V, E, P, PR, IM, $, esc, pal, rgba, norm, money, rnd, fit, img, OK, ICO, texto, objeto, draw, sube, salta, flota, onda, cuenta} = window.PRO;
 const N = () => window.PRO.N(), FAM = E.fam || 'gen', TEC = FAM === 'tec';
 const camino = () => (PR.camino || ['Aprender', 'Practicar', 'Aplicar', 'Cobrar']).slice(0, 6), YA = () => Math.min(camino().length - 1, PR.camino_ya || 2);
 const tool = (c) => { const i = c.sc.i || 0, ct = (PR.cont || [])[i] || {}; return {i, ct, t: ct.titulo || c.sc.demoT || '', s: c.sc.s || ct.sub || '', pts: (c.sc.puntos || []).slice(0, 4), et: (PR.etiqueta || 'Herramienta') + ' ' + (i + 1) + ' de ' + (N() || i + 1)}; };
@@ -176,7 +176,7 @@ D[3] = {
   gracias: (c) => {
     const {cu} = app(c, TEC ? ruta + '/mis-cursos' : 'Mis cursos', {x: 110, w: 1700, h: 930, y: 80, pad: '40px 56px'}), mods = (PR.mods || []);
     const ks = ['m1', 'm2', 'm3', 'm4', 'm5', 'm6'].filter((k) => IM[k] && IM[k].ok), n = ks.length;
-    cu.innerHTML = `<div style="display:flex;gap:46px;height:100%"><div style="width:520px;display:flex;flex-direction:column;justify-content:center"><div class="K">${esc(c.sc.k || PR.curso || '')}</div><div class="T" style="font-size:96px;margin-top:20px">${pal(c.sc.t)}</div><div class="P" style="margin-top:22px">${esc(c.sc.s || '')}</div>
+    cu.innerHTML = `<div style="display:flex;gap:46px;height:100%"><div style="width:520px;display:flex;flex-direction:column;justify-content:center"><div class="K" style="white-space:normal;line-height:1.5">${esc(c.sc.k || PR.curso || '')}</div><div class="T" style="font-size:96px;margin-top:20px">${pal(c.sc.t)}</div><div class="P" style="margin-top:22px">${esc(c.sc.s || '')}</div>
       <div class="ex" style="margin-top:34px;display:flex;flex-wrap:wrap;gap:12px"></div></div>
       <div class="gr" style="flex:1;display:grid;grid-template-columns:repeat(${n > 4 ? 3 : 2},1fr);grid-template-rows:repeat(${n > 3 ? 2 : 1},1fr);gap:18px 26px;align-items:center;justify-items:center">${ks.map((k) => `<div class="cx" style="height:${n > 3 ? 360 : 520}px;display:flex;align-items:flex-end;justify-content:center">${img(k, 'max-height:100%;max-width:100%;filter:drop-shadow(0 26px 30px rgba(0,0,0,.6))')}</div>`).join('')}</div></div>`;
     fit(cu.querySelector('.T'), 230, 44); c.tl.from(cu.querySelectorAll('.T .wi'), {yPercent: 125, duration: .9, ease: 'expo.out', stagger: .07}, .4); c.tl.from(cu.querySelector('.P'), {opacity: 0, y: 20, duration: .6}, .8);
@@ -243,18 +243,18 @@ D[3] = {
   // 14) todo junto, en carrusel: cada herramienta pasa por el centro y el valor se va sumando
   // 14) corrección (17 nov, 22:56): sin carrusel; la caja principal al centro y todas las herramientas girando en círculo alrededor
   todas: (c) => {
-    const L = (PR.cont || []), n = L.length, cx = 960, cy = 560, rx = 700, ry = 300, t0 = .9, dt = Math.max(.4, c.vz * .7 / Math.max(1, n));
+    const L = (PR.cont || []), n = L.length, cx = 960, cy = 590, rx = 640, ry = 250, t0 = .9, dt = Math.max(.4, c.vz * .7 / Math.max(1, n));
     const cen = $(`<div class="abs" style="left:${cx - 300}px;top:${cy - 290}px;width:600px;height:540px;display:flex;align-items:center;justify-content:center;z-index:50"><div class="halo" style="position:absolute;inset:-120px"></div>${img('pack', 'position:relative;max-width:100%;max-height:100%;filter:drop-shadow(0 50px 50px rgba(0,0,0,.65))')}</div>`); c.cam.appendChild(cen);
     const ob = L.map((ct, j) => { const e = $(`<div class="abs" style="left:0;top:0;width:250px;margin:-150px 0 0 -125px;text-align:center">${img('c' + j, 'max-width:230px;max-height:230px;filter:drop-shadow(0 18px 22px rgba(0,0,0,.6))')}<div style="font:700 21px/1.15 Montserrat;margin-top:6px;color:${P.ink}">${esc(ct.corto || ct.titulo)}</div></div>`); c.cam.appendChild(e); return e; });
     const st = {a: 0}, pon = () => ob.forEach((e, j) => { const an = st.a + j * Math.PI * 2 / n, z = Math.sin(an), sc = .62 + .38 * (z + 1) / 2;
       e.style.transform = `translate(${cx + Math.cos(an) * rx}px,${cy + 40 + z * ry}px) scale(${sc})`; e.style.zIndex = z > 0 ? 60 + Math.round(z * 10) : 40 + Math.round(z * 10); e.style.filter = `brightness(${.55 + .45 * (z + 1) / 2})`; });
     pon(); c.tl.to(st, {a: Math.PI * 2 * (c.D / 9), duration: c.D, ease: 'none', onUpdate: pon}, 0);
     c.tl.from(cen, {scale: .4, opacity: 0, duration: 1, ease: 'back.out(1.5)'}, .2); c.fx(.25, 'golpe');
-    const tot = $(`<div class="abs ctr" style="left:0;right:0;bottom:46px;z-index:80"><div class="K">Valor de referencia</div><div class="num oro tt" style="font-size:104px;margin-top:6px">$0</div></div>`); c.cam.appendChild(tot);
+    const tot = $(`<div class="abs" style="right:90px;top:46px;z-index:80;text-align:right"><div class="K" style="justify-content:flex-end">Valor de referencia</div><div class="num oro tt" style="font-size:96px;margin-top:4px">$0</div></div>`); c.cam.appendChild(tot);
     const tt = tot.querySelector('.tt'), o = {v: 0}; let sum = 0;
     ob.forEach((e, j) => { const at = t0 + j * dt; sum += +L[j].valor || 0; const hasta = sum; c.tl.from(e, {opacity: 0, duration: .5}, at);
       c.tl.to(o, {v: hasta, duration: Math.min(.5, dt * .8), ease: 'power1.out', onUpdate: () => { tt.textContent = money(Math.round(o.v)); }}, at + .1); c.fx(at, 'tick'); });
-    texto(c, {x: 120, y: 40, w: 1680, t: c.sc.t, size: 76, maxH: 100, at: .3, c: 1}); c.fx(t0 + n * dt + .2, 'monedas');
+    texto(c, {x: 110, y: 50, w: 1150, t: c.sc.t, size: 80, maxH: 110, at: .3}); c.fx(t0 + n * dt + .2, 'monedas');
   },
   // 17) corrección (17 nov, 22:56): que se entienda que ahorra tiempo, que es barato y que con esto puede ganar dinero; el precio no pesa
   inversion: (c) => {
@@ -263,16 +263,16 @@ D[3] = {
     const fila = $(`<div class="abs" style="left:120px;right:120px;top:210px;display:grid;grid-template-columns:repeat(3,1fr);gap:28px">${cards.map(([i, t, s]) => `<div class="cd" style="border-radius:22px;padding:28px 30px;background:${rgba(P.ink, .04)};border:1.5px solid ${rgba(P.ink, .12)}"><div style="width:62px;height:62px;border-radius:16px;background:${rgba(P.a, .18)};color:${P.c};display:flex;align-items:center;justify-content:center;font:800 34px Montserrat">${i}</div><div style="font:800 40px Montserrat;margin-top:18px;color:${P.ink}">${esc(t)}</div><div class="P" style="font-size:27px;margin-top:8px">${esc(s)}</div></div>`).join('')}</div>`); c.cam.appendChild(fila);
     const cs = fila.querySelectorAll('.cd'); [.5, Math.max(1, t1 - .4), t1 + .2].forEach((at, j) => { c.tl.from(cs[j], {y: 80, opacity: 0, duration: .7, ease: 'expo.out'}, at); c.fx(at + .1, 'pop'); });
     // balanza: de un lado el precio (pesa poco), del otro lo que ganas con un solo proyecto
-    const bal = $(`<svg class="abs" style="left:560px;top:540px;overflow:visible" width="800" height="460" viewBox="0 0 800 460">
+    const bal = $(`<svg class="abs" style="left:560px;top:500px;overflow:visible" width="800" height="460" viewBox="0 0 800 460">
       <path d="M400 120V400M320 420H480" stroke="${rgba(P.ink, .55)}" stroke-width="10" stroke-linecap="round"/><circle cx="400" cy="112" r="16" fill="${P.c}"/>
-      <g class="vg"><path d="M110 120H690" stroke="${P.ink}" stroke-width="10" stroke-linecap="round"/>
+      <path class="vg" d="M110 120H690" stroke="${P.ink}" stroke-width="10" stroke-linecap="round"/>
         <g class="pl"><path d="M110 120L50 250M110 120L170 250" stroke="${rgba(P.ink, .5)}" stroke-width="4"/><path d="M30 250H190" stroke="${P.ink}" stroke-width="8" stroke-linecap="round"/><rect x="62" y="196" width="96" height="52" rx="12" fill="${rgba(P.ink, .2)}"/><text x="110" y="232" text-anchor="middle" font-family="Montserrat" font-weight="900" font-size="30" fill="${P.ink}">${esc(money(pre))}</text></g>
-        <g class="pr"><path d="M690 120L630 250M690 120L750 250" stroke="${rgba(P.ink, .5)}" stroke-width="4"/><path d="M610 250H770" stroke="${P.ink}" stroke-width="8" stroke-linecap="round"/><rect x="618" y="150" width="144" height="98" rx="16" fill="${P.c}"/><text x="690" y="194" text-anchor="middle" font-family="Montserrat" font-weight="900" font-size="26" fill="${P.sobre}">1 ${esc(logro)}</text><text x="690" y="228" text-anchor="middle" font-family="Montserrat" font-weight="700" font-size="20" fill="${P.sobre}">lo que ganas</text></g></g></svg>`); c.cam.appendChild(bal);
+        <g class="pr"><path d="M690 120L630 250M690 120L750 250" stroke="${rgba(P.ink, .5)}" stroke-width="4"/><path d="M610 250H770" stroke="${P.ink}" stroke-width="8" stroke-linecap="round"/><rect x="618" y="150" width="144" height="98" rx="16" fill="${P.c}"/><text x="690" y="194" text-anchor="middle" font-family="Montserrat" font-weight="900" font-size="22" fill="${P.sobre}">1 ${esc(logro)}</text><text x="690" y="228" text-anchor="middle" font-family="Montserrat" font-weight="700" font-size="20" fill="${P.sobre}">lo que ganas</text></g></svg>`); c.cam.appendChild(bal);
     const vg = bal.querySelector('.vg'), pl = bal.querySelector('.pl'), pr = bal.querySelector('.pr');
     c.tl.from(bal, {y: 120, opacity: 0, duration: .8, ease: 'expo.out'}, .7);
     c.tl.from(pr, {y: -260, opacity: 0, duration: .6, ease: 'bounce.out'}, t1 + .2); c.fx(t1 + .5, 'golpe');
     c.tl.to(vg, {rotation: 14, svgOrigin: '400 120', duration: 1.1, ease: 'elastic.out(1,.5)'}, t1 + .5);
-    c.tl.to(pl, {y: -144, duration: 1.1, ease: 'elastic.out(1,.5)'}, t1 + .5); c.tl.to(pr, {y: 144, duration: 1.1, ease: 'elastic.out(1,.5)'}, t1 + .5);
+    c.tl.to(pl, {y: -70, duration: 1.1, ease: 'elastic.out(1,.5)'}, t1 + .5); c.tl.to(pr, {y: 70, duration: 1.1, ease: 'elastic.out(1,.5)'}, t1 + .5);
     const ok = $(`<div class="abs ctr" style="left:0;right:0;bottom:40px"><span class="chip lleno ok" style="font-size:38px;padding:16px 40px">${sobre(PAL)}Inversión cubierta</span></div>`); c.cam.appendChild(ok); salta(c.tl, ok.firstChild, tP); c.fx(tP, 'monedas');
     texto(c, {x: 120, y: 50, w: 1680, t: c.sc.t, size: 80, maxH: 120, at: .2, c: 1});
   },
