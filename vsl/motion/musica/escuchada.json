@@ -1,0 +1,1109 @@
+{
+ "musica/b-o-r-n.mp3": {
+  "tags": [
+   "transitions",
+   "impacts",
+   "ui",
+   "keyboard",
+   "foley",
+   "water",
+   "nature",
+   "chimes"
+  ],
+  "resumen": "45.00 s busy, 5.0 onsets/s, loudness range 1 LU. Music (AudioSet Music 0.82). Unvalidated hints - genre: techno music (z +3.8), dubstep music (z +3.7); mood (wrong for ~1 in 5 tracks in a test): energ",
+  "por_nicho": {
+   "legal": 0.028,
+   "tec": 0.181,
+   "dj": 0.4,
+   "educacion": 0.052,
+   "creativo": 0.111,
+   "musica": -0.002
+  }
+ },
+ "musica/close-up.mp3": {
+  "tags": [
+   "transitions",
+   "impacts",
+   "ui",
+   "keyboard",
+   "foley",
+   "water",
+   "nature",
+   "chimes"
+  ],
+  "resumen": "45.00 s busy, 5.2 onsets/s, loudness range 4 LU. Music (AudioSet Music 0.89). Unvalidated hints - genre: techno music (z +3.8), inspirational corporate background music (z +3.1); mood (wrong for ~1 in",
+  "por_nicho": {
+   "legal": 0.225,
+   "tec": 0.355,
+   "dj": 0.242,
+   "educacion": 0.272,
+   "creativo": 0.303,
+   "musica": 0.135
+  }
+ },
+ "musica/deep-techno.mp3": {
+  "tags": [
+   "transitions",
+   "impacts",
+   "ui",
+   "keyboard",
+   "foley",
+   "water",
+   "nature",
+   "chimes"
+  ],
+  "resumen": "45.00 s busy, 4.3 onsets/s, loudness range 2 LU. Music (AudioSet Music 0.95). Unvalidated hints - genre: drum and bass music (z +4.0), hip hop beat with heavy bass (z +3.7); mood (wrong for ~1 in 5 tr",
+  "por_nicho": {
+   "legal": 0.147,
+   "tec": 0.301,
+   "dj": 0.401,
+   "educacion": 0.18,
+   "creativo": 0.152,
+   "musica": 0.12
+  }
+ },
+ "musica/digital-clouds.mp3": {
+  "tags": [
+   "transitions",
+   "impacts",
+   "ui",
+   "keyboard",
+   "foley",
+   "water",
+   "nature",
+   "chimes"
+  ],
+  "resumen": "45.00 s busy, 6.6 onsets/s, loudness range 4 LU. Music (AudioSet Music 0.78). Unvalidated hints - genre: techno music (z +3.6), drum and bass music (z +3.4); mood (wrong for ~1 in 5 tracks in a test):",
+  "por_nicho": {
+   "legal": 0.192,
+   "tec": 0.411,
+   "dj": 0.236,
+   "educacion": 0.258,
+   "creativo": 0.37,
+   "musica": 0.147
+  }
+ },
+ "musica/expressive-courage.mp3": {
+  "tags": [
+   "transitions",
+   "impacts",
+   "ui",
+   "keyboard",
+   "foley",
+   "water",
+   "nature",
+   "chimes"
+  ],
+  "resumen": "45.00 s busy, 6.0 onsets/s, loudness range 4 LU. Music (AudioSet Music 0.88). Unvalidated hints - genre: techno music (z +3.8), tech house music (z +3.7); mood (wrong for ~1 in 5 tracks in a test): en",
+  "por_nicho": {
+   "legal": 0.219,
+   "tec": 0.376,
+   "dj": 0.367,
+   "educacion": 0.276,
+   "creativo": 0.252,
+   "musica": 0.171
+  }
+ },
+ "musica/feeling-happy.mp3": {
+  "tags": [
+   "transitions",
+   "impacts",
+   "ui",
+   "keyboard",
+   "foley",
+   "water",
+   "nature",
+   "chimes"
+  ],
+  "resumen": "45.00 s busy, 5.6 onsets/s, loudness range 3 LU. Music (AudioSet Music 0.86). Unvalidated hints - genre: cheerful ukulele music (z +3.6), jazz music (z +3.6); mood (wrong for ~1 in 5 tracks in a test)",
+  "por_nicho": {
+   "legal": 0.261,
+   "tec": 0.39,
+   "dj": 0.095,
+   "educacion": 0.363,
+   "creativo": 0.461,
+   "musica": 0.186
+  }
+ },
+ "musica/gear.mp3": {
+  "tags": [
+   "transitions",
+   "impacts",
+   "ui",
+   "keyboard",
+   "foley",
+   "water",
+   "nature",
+   "chimes"
+  ],
+  "resumen": "45.00 s busy, 2.4 onsets/s, loudness range 6 LU. Music (AudioSet Music 0.86). Unvalidated hints - genre: synthwave music (z +3.3), techno music (z +3.1); mood (wrong for ~1 in 5 tracks in a test): fut",
+  "por_nicho": {
+   "legal": 0.271,
+   "tec": 0.393,
+   "dj": 0.362,
+   "educacion": 0.313,
+   "creativo": 0.232,
+   "musica": 0.24
+  }
+ },
+ "musica/house-fest.mp3": {
+  "tags": [
+   "transitions",
+   "impacts",
+   "ui",
+   "keyboard",
+   "foley",
+   "water",
+   "nature",
+   "chimes"
+  ],
+  "resumen": "45.00 s busy, 7.8 onsets/s, loudness range 1 LU. Music (AudioSet Music 0.90). Unvalidated hints - genre: techno music (z +4.5), tech house music (z +3.7); mood (wrong for ~1 in 5 tracks in a test): fu",
+  "por_nicho": {
+   "legal": 0.048,
+   "tec": 0.198,
+   "dj": 0.296,
+   "educacion": 0.098,
+   "creativo": 0.128,
+   "musica": 0.042
+  }
+ },
+ "musica/infinity.mp3": {
+  "tags": [
+   "transitions",
+   "impacts",
+   "ui",
+   "keyboard",
+   "foley",
+   "water",
+   "nature",
+   "chimes"
+  ],
+  "resumen": "45.00 s busy, 3.0 onsets/s, loudness range 3 LU. Music (AudioSet Music 0.85). Unvalidated hints - genre: ambient synth pad music (z +2.8), inspirational corporate background music (z +2.6); mood (wron",
+  "por_nicho": {
+   "legal": 0.247,
+   "tec": 0.311,
+   "dj": 0.111,
+   "educacion": 0.336,
+   "creativo": 0.267,
+   "musica": 0.221
+  }
+ },
+ "musica/it-s-love.mp3": {
+  "tags": [
+   "transitions",
+   "impacts",
+   "ui",
+   "keyboard",
+   "foley",
+   "water",
+   "nature",
+   "chimes"
+  ],
+  "resumen": "45.00 s busy, 5.7 onsets/s, loudness range 6 LU. Music (AudioSet Music 0.91). Unvalidated hints - genre: inspirational corporate background music (z +3.6), upbeat corporate pop music (z +3.1); mood (w",
+  "por_nicho": {
+   "legal": 0.343,
+   "tec": 0.45,
+   "dj": 0.214,
+   "educacion": 0.383,
+   "creativo": 0.281,
+   "musica": 0.272
+  }
+ },
+ "musica/karma.mp3": {
+  "tags": [
+   "transitions",
+   "impacts",
+   "ui",
+   "keyboard",
+   "foley",
+   "water",
+   "nature",
+   "chimes"
+  ],
+  "resumen": "45.00 s busy, 5.4 onsets/s, loudness range 1 LU. Music (AudioSet Music 0.62). Unvalidated hints - genre: techno music (z +4.4), drum and bass music (z +3.2); mood (wrong for ~1 in 5 tracks in a test):",
+  "por_nicho": {
+   "legal": 0.101,
+   "tec": 0.291,
+   "dj": 0.286,
+   "educacion": 0.162,
+   "creativo": 0.177,
+   "musica": 0.032
+  }
+ },
+ "musica/pop-track-03.mp3": {
+  "tags": [
+   "transitions",
+   "impacts",
+   "ui",
+   "keyboard",
+   "foley",
+   "water",
+   "nature",
+   "chimes"
+  ],
+  "resumen": "45.00 s busy, 6.0 onsets/s, loudness range 3 LU. Music (AudioSet Music 0.91). Unvalidated hints - genre: upbeat corporate pop music (z +3.4), inspirational corporate background music (z +3.3); mood (w",
+  "por_nicho": {
+   "legal": 0.264,
+   "tec": 0.472,
+   "dj": 0.206,
+   "educacion": 0.359,
+   "creativo": 0.454,
+   "musica": 0.151
+  }
+ },
+ "musica/pop.mp3": {
+  "tags": [
+   "transitions",
+   "impacts",
+   "ui",
+   "keyboard",
+   "foley",
+   "water",
+   "nature",
+   "chimes"
+  ],
+  "resumen": "45.00 s busy, 4.8 onsets/s, loudness range 6 LU. Music (AudioSet Music 0.87). Unvalidated hints - genre: drum and bass music (z +3.4), techno music (z +3.3); mood (wrong for ~1 in 5 tracks in a test):",
+  "por_nicho": {
+   "legal": 0.233,
+   "tec": 0.361,
+   "dj": 0.412,
+   "educacion": 0.299,
+   "creativo": 0.286,
+   "musica": 0.217
+  }
+ },
+ "musica/possible-dreams.mp3": {
+  "tags": [
+   "transitions",
+   "impacts",
+   "ui",
+   "keyboard",
+   "foley",
+   "water",
+   "nature",
+   "chimes"
+  ],
+  "resumen": "45.00 s busy, 2.0 onsets/s, loudness range 5 LU. Music (AudioSet Music 0.81). Unvalidated hints - genre: solo piano music (z +3.1); mood (wrong for ~1 in 5 tracks in a test): sad and melancholic music",
+  "por_nicho": {
+   "legal": 0.427,
+   "tec": 0.31,
+   "dj": 0.116,
+   "educacion": 0.3,
+   "creativo": 0.305,
+   "musica": 0.421
+  }
+ },
+ "musica/romantic-getaway.mp3": {
+  "tags": [
+   "transitions",
+   "impacts",
+   "ui",
+   "keyboard",
+   "foley",
+   "water",
+   "nature",
+   "chimes"
+  ],
+  "resumen": "45.00 s busy, 2.7 onsets/s, loudness range 4 LU. Music (AudioSet Music 0.86). Unvalidated hints - genre: uplifting orchestral film score (z +2.9), inspirational corporate background music (z +2.8); mo",
+  "por_nicho": {
+   "legal": 0.352,
+   "tec": 0.34,
+   "dj": 0.075,
+   "educacion": 0.256,
+   "creativo": 0.254,
+   "musica": 0.3
+  }
+ },
+ "musica/savana.mp3": {
+  "tags": [
+   "transitions",
+   "impacts",
+   "ui",
+   "keyboard",
+   "foley",
+   "water",
+   "nature",
+   "chimes"
+  ],
+  "resumen": "45.00 s busy, 5.9 onsets/s, loudness range 1 LU. Music (AudioSet Music 0.83). Unvalidated hints - genre: techno music (z +3.8), synthwave music (z +3.2); mood (wrong for ~1 in 5 tracks in a test): ene",
+  "por_nicho": {
+   "legal": 0.196,
+   "tec": 0.335,
+   "dj": 0.368,
+   "educacion": 0.313,
+   "creativo": 0.205,
+   "musica": 0.166
+  }
+ },
+ "musica/skyline.mp3": {
+  "tags": [
+   "transitions",
+   "impacts",
+   "ui",
+   "keyboard",
+   "foley",
+   "water",
+   "nature",
+   "chimes"
+  ],
+  "resumen": "45.00 s busy, 1.6 onsets/s, loudness range 3 LU. Music (AudioSet Music 0.83). Unvalidated hints - genre: uplifting orchestral film score (z +3.1), classical string quartet (z +2.9); mood (wrong for ~1",
+  "por_nicho": {
+   "legal": 0.402,
+   "tec": 0.294,
+   "dj": 0.087,
+   "educacion": 0.233,
+   "creativo": 0.261,
+   "musica": 0.336
+  }
+ },
+ "musica/smile.mp3": {
+  "tags": [
+   "transitions",
+   "impacts",
+   "ui",
+   "keyboard",
+   "foley",
+   "water",
+   "nature",
+   "chimes"
+  ],
+  "resumen": "45.00 s busy, 5.0 onsets/s, loudness range 5 LU. Music (AudioSet Music 0.71). Unvalidated hints - genre: cheerful ukulele music (z +3.6), funk music (z +2.7); mood (wrong for ~1 in 5 tracks in a test)",
+  "por_nicho": {
+   "legal": 0.09,
+   "tec": 0.219,
+   "dj": 0.032,
+   "educacion": 0.279,
+   "creativo": 0.279,
+   "musica": 0.019
+  }
+ },
+ "musica/special-days.mp3": {
+  "tags": [
+   "transitions",
+   "impacts",
+   "ui",
+   "keyboard",
+   "foley",
+   "water",
+   "nature",
+   "chimes"
+  ],
+  "resumen": "45.00 s 65 separate events, loudness range 7 LU. Music (AudioSet Music 0.75). Unvalidated hints - genre: classical string quartet (z +3.5), uplifting orchestral film score (z +3.1); mood (wrong for ~1",
+  "por_nicho": {
+   "legal": 0.336,
+   "tec": 0.22,
+   "dj": 0.032,
+   "educacion": 0.275,
+   "creativo": 0.215,
+   "musica": 0.26
+  }
+ },
+ "musica/summer-dream.mp3": {
+  "tags": [
+   "transitions",
+   "impacts",
+   "ui",
+   "keyboard",
+   "foley",
+   "water",
+   "nature",
+   "chimes"
+  ],
+  "resumen": "45.00 s busy, 5.3 onsets/s, loudness range 2 LU. Music (AudioSet Music 0.94). Unvalidated hints - genre: techno music (z +4.3), drum and bass music (z +3.6); mood (wrong for ~1 in 5 tracks in a test):",
+  "por_nicho": {
+   "legal": 0.011,
+   "tec": 0.199,
+   "dj": 0.391,
+   "educacion": 0.055,
+   "creativo": 0.116,
+   "musica": -0.013
+  }
+ },
+ "musica/summer-fun.mp3": {
+  "tags": [
+   "transitions",
+   "impacts",
+   "ui",
+   "keyboard",
+   "foley",
+   "water",
+   "nature",
+   "chimes"
+  ],
+  "resumen": "45.00 s busy, 5.6 onsets/s, loudness range 3 LU. Music (AudioSet Music 0.83). Unvalidated hints - genre: acoustic guitar music (z +3.8), jazz music (z +3.4); mood (wrong for ~1 in 5 tracks in a test):",
+  "por_nicho": {
+   "legal": 0.239,
+   "tec": 0.335,
+   "dj": 0.084,
+   "educacion": 0.484,
+   "creativo": 0.35,
+   "musica": 0.235
+  }
+ },
+ "musica/talent-in-the-air.mp3": {
+  "tags": [
+   "transitions",
+   "impacts",
+   "ui",
+   "keyboard",
+   "foley",
+   "water",
+   "nature",
+   "chimes"
+  ],
+  "resumen": "45.00 s busy, 6.0 onsets/s, loudness range 5 LU. Music (AudioSet Music 0.88). Unvalidated hints - genre: tech house music (z +3.9), techno music (z +3.8); mood (wrong for ~1 in 5 tracks in a test): en",
+  "por_nicho": {
+   "legal": 0.229,
+   "tec": 0.393,
+   "dj": 0.337,
+   "educacion": 0.273,
+   "creativo": 0.298,
+   "musica": 0.17
+  }
+ },
+ "musica/tears-of-joy.mp3": {
+  "tags": [
+   "transitions",
+   "impacts",
+   "ui",
+   "keyboard",
+   "foley",
+   "water",
+   "nature",
+   "chimes"
+  ],
+  "resumen": "45.00 s busy, 4.6 onsets/s, loudness range 1 LU. Music (AudioSet Music 0.92). Unvalidated hints - genre: upbeat corporate pop music (z +3.7), indie pop music (z +3.1); mood (wrong for ~1 in 5 tracks i",
+  "por_nicho": {
+   "legal": 0.174,
+   "tec": 0.356,
+   "dj": 0.145,
+   "educacion": 0.422,
+   "creativo": 0.255,
+   "musica": 0.186
+  }
+ },
+ "musica/uplifting-bass.mp3": {
+  "tags": [
+   "transitions",
+   "impacts",
+   "ui",
+   "keyboard",
+   "foley",
+   "water",
+   "nature",
+   "chimes"
+  ],
+  "resumen": "45.00 s busy, 4.0 onsets/s, loudness range 1 LU. Music (AudioSet Music 0.86). Unvalidated hints - genre: ambient synth pad music (z +3.4), synthwave music (z +3.3); mood (wrong for ~1 in 5 tracks in a",
+  "por_nicho": {
+   "legal": 0.214,
+   "tec": 0.396,
+   "dj": 0.205,
+   "educacion": 0.315,
+   "creativo": 0.259,
+   "musica": 0.221
+  }
+ },
+ "musica/wind-leaves.mp3": {
+  "tags": [
+   "transitions",
+   "impacts",
+   "ui",
+   "keyboard",
+   "foley",
+   "water",
+   "nature",
+   "chimes"
+  ],
+  "resumen": "45.00 s busy, 3.2 onsets/s, loudness range 5 LU. Music (AudioSet Music 0.88). Unvalidated hints - genre: indie pop music (z +3.1), classical string quartet (z +2.7); mood (wrong for ~1 in 5 tracks in ",
+  "por_nicho": {
+   "legal": 0.234,
+   "tec": 0.236,
+   "dj": 0.012,
+   "educacion": 0.233,
+   "creativo": 0.185,
+   "musica": 0.174
+  }
+ },
+ "_ejemplo_crudo": {
+  "describe": {
+   "path": "/tmp/clip.wav",
+   "start": null,
+   "end": null,
+   "duration": 45.0,
+   "measurements": {
+    "duration": 45.0,
+    "peak_dbfs": 0.0,
+    "true_peak_dbtp": 0.3,
+    "rms_dbfs": -10.6,
+    "lufs": -8.9,
+    "lra_lu": 0.7,
+    "attack_ms": 123.0,
+    "brightness_hz": 3959,
+    "bandwidth_hz": 20480,
+    "noise_floor_dbfs": -15.1,
+    "flatness": 0.0043,
+    "harmonic_ratio": 0.867,
+    "f0_hz": 65.4,
+    "onset_count": 227,
+    "onsets_per_s": 5.04,
+    "width": "mono",
+    "digital_silence_frac": 0.0001
+   },
+   "shape": "busy, 5.0 onsets/s, loudness range 1 LU",
+   "top_tags": [
+    {
+     "term": "an uplifter sweep",
+     "category": "transitions",
+     "z": 2.12,
+     "cosine": 0.23,
+     "verdict": "weak"
+    },
+    {
+     "term": "a squishy wet squelch",
+     "category": "foley",
+     "z": 1.65,
+     "cosine": 0.126,
+     "verdict": "no match"
+    },
+    {
+     "term": "a big braam",
+     "category": "impacts",
+     "z": 1.51,
+     "cosine": 0.163,
+     "verdict": "no match"
+    },
+    {
+     "term": "a downlifter falling sweep",
+     "category": "transitions",
+     "z": 1.45,
+     "cosine": 0.156,
+     "verdict": "no match"
+    },
+    {
+     "term": "an electrical hum",
+     "category": "ambience",
+     "z": 1.39,
+     "cosine": 0.092,
+     "verdict": "no match"
+    },
+    {
+     "term": "a vacuum cleaner",
+     "category": "everyday",
+     "z": 1.19,
+     "cosine": 0.091,
+     "verdict": "no match"
+    },
+    {
+     "term": "a phone vibration buzz",
+     "category": "ui",
+     "z": 1.18,
+     "cosine": 0.093,
+     "verdict": "no match"
+    },
+    {
+     "term": "a police siren",
+     "category": "everyday",
+     "z": 1.08,
+     "cosine": 0.058,
+     "verdict": "no match"
+    }
+   ],
+   "music_hints": [
+    {
+     "term": "techno music",
+     "category": "music_genre",
+     "z": 3.85,
+     "cosine": 0.381
+    },
+    {
+     "term": "dubstep music",
+     "category": "music_genre",
+     "z": 3.72,
+     "cosine": 0.384
+    },
+    {
+     "term": "synthwave music",
+     "category": "music_genre",
+     "z": 3.53,
+     "cosine": 0.382
+    },
+    {
+     "term": "chiptune video game music",
+     "category": "music_genre",
+     "z": 3.4,
+     "cosine": 0.366
+    },
+    {
+     "term": "future bass music",
+     "category": "music_genre",
+     "z": 3.11,
+     "cosine": 0.361
+    },
+    {
+     "term": "energetic and driving music",
+     "category": "music_mood",
+     "z": 3.02,
+     "cosine": 0.315
+    },
+    {
+     "term": "futuristic music",
+     "category": "music_mood",
+     "z": 2.97,
+     "cosine": 0.345
+    },
+    {
+     "term": "drum and bass music",
+     "category": "music_genre",
+     "z": 2.97,
+     "cosine": 0.275
+    }
+   ],
+   "tags": {
+    "transitions": [
+     {
+      "term": "an uplifter sweep",
+      "z": 2.12,
+      "cosine": 0.23
+     },
+     {
+      "term": "a downlifter falling sweep",
+      "z": 1.45,
+      "cosine": 0.156
+     },
+     {
+      "term": "a rising riser building tension",
+      "z": 0.84,
+      "cosine": 0.115
+     }
+    ],
+    "impacts": [
+     {
+      "term": "a big braam",
+      "z": 1.51,
+      "cosine": 0.163
+     },
+     {
+      "term": "a punchy impact hit",
+      "z": 0.55,
+      "cosine": -0.009
+     },
+     {
+      "term": "a sub bass drop",
+      "z": 0.09,
+      "cosine": 0.014
+     }
+    ],
+    "ui": [
+     {
+      "term": "a phone vibration buzz",
+      "z": 1.18,
+      "cosine": 0.093
+     },
+     {
+      "term": "an error buzz",
+      "z": 0.69,
+      "cosine": 0.061
+     },
+     {
+      "term": "a digital glitch",
+      "z": 0.62,
+      "cosine": 0.104
+     }
+    ],
+    "keyboard": [
+     {
+      "term": "an enter key press",
+      "z": -0.61,
+      "cosine": 0.027
+     },
+     {
+      "term": "a keyboard typing fast",
+      "z": -0.91,
+      "cosine": -0.051
+     },
+     {
+      "term": "a laptop keyboard typing",
+      "z": -1.13,
+      "cosine": -0.058
+     }
+    ],
+    "foley": [
+     {
+      "term": "a squishy wet squelch",
+      "z": 1.65,
+      "cosine": 0.126
+     },
+     {
+      "term": "a rubber stretch",
+      "z": 0.78,
+      "cosine": 0.072
+     },
+     {
+      "term": "footsteps on gravel",
+      "z": 0.65,
+      "cosine": -0.019
+     }
+    ],
+    "water": [
+     {
+      "term": "bubbles underwater",
+      "z": 0.42,
+      "cosine": 0.033
+     },
+     {
+      "term": "a stream flowing",
+      "z": 0.41,
+      "cosine": 0.07
+     },
+     {
+      "term": "a waterfall",
+      "z": 0.27,
+      "cosine": 0.062
+     }
+    ],
+    "nature": [
+     {
+      "term": "footsteps on grass",
+      "z": 0.88,
+      "cosine": 0.042
+     },
+     {
+      "term": "insects buzzing",
+      "z": 0.64,
+      "cosine": 0.054
+     },
+     {
+      "term": "walking through dry leaves",
+      "z": 0.46,
+      "cosine": 0.03
+     }
+    ],
+    "chimes": [
+     {
+      "term": "a music box melody",
+      "z": -0.23,
+      "cosine": 0.028
+     },
+     {
+      "term": "a wine glass ring",
+      "z": -0.53,
+      "cosine": -0.07
+     },
+     {
+      "term": "wind chimes",
+      "z": -0.54,
+      "cosine": -0.021
+     }
+    ],
+    "ambience": [
+     {
+      "term": "an electrical hum",
+      "z": 1.39,
+      "cosine": 0.092
+     },
+     {
+      "term": "birds singing in the morning",
+      "z": 0.85,
+      "cosine": 0.016
+     },
+     {
+      "term": "a city street with traffic",
+      "z": 0.72,
+      "cosine": -0.011
+     }
+    ],
+    "everyday": [
+     {
+      "term": "a vacuum cleaner",
+      "z": 1.19,
+      "cosine": 0.091
+     },
+     {
+      "term": "a police siren",
+      "z": 1.08,
+      "cosine": 0.058
+     },
+     {
+      "term": "a power drill",
+      "z": 1.03,
+      "cosine": 0.066
+     }
+    ],
+    "music_genre": [
+     {
+      "term": "techno music",
+      "z": 3.85,
+      "cosine": 0.381
+     },
+     {
+      "term": "dubstep music",
+      "z": 3.72,
+      "cosine": 0.384
+     },
+     {
+      "term": "synthwave music",
+      "z": 3.53,
+      "cosine": 0.382
+     }
+    ],
+    "music_mood": [
+     {
+      "term": "energetic and driving music",
+      "z": 3.02,
+      "cosine": 0.315
+     },
+     {
+      "term": "futuristic music",
+      "z": 2.97,
+      "cosine": 0.345
+     },
+     {
+      "term": "confident and cool music",
+      "z": 2.83,
+      "cosine": 0.327
+     }
+    ],
+    "instruments": [
+     {
+      "term": "a synthesizer lead",
+      "z": 2.5,
+      "cosine": 0.285
+     },
+     {
+      "term": "brass section",
+      "z": 0.93,
+      "cosine": 0.109
+     },
+     {
+      "term": "a vocal chop",
+      "z": 0.71,
+      "cosine": 0.143
+     }
+    ],
+    "voice": [
+     {
+      "term": "a man shouting",
+      "z": 0.92,
+      "cosine": -0.04
+     },
+     {
+      "term": "a man speaking",
+      "z": 0.51,
+      "cosine": -0.074
+     },
+     {
+      "term": "singing vocals",
+      "z": 0.51,
+      "cosine": 0.034
+     }
+    ],
+    "quality": [
+     {
+      "term": "a harsh sound",
+      "z": 1.39,
+      "cosine": 0.143
+     },
+     {
+      "term": "a long sound",
+      "z": 1.28,
+      "cosine": 0.18
+     },
+     {
+      "term": "a thin sound",
+      "z": 0.91,
+      "cosine": 0.067
+     }
+    ],
+    "production": [
+     {
+      "term": "a distorted clipped recording",
+      "z": 0.98,
+      "cosine": 0.083
+     },
+     {
+      "term": "a cheap synthesized beep",
+      "z": 0.94,
+      "cosine": 0.07
+     },
+     {
+      "term": "a square wave chiptune blip",
+      "z": 0.89,
+      "cosine": 0.088
+     }
+    ]
+   },
+   "audioset": [
+    {
+     "label": "Music",
+     "p": 0.824
+    },
+    {
+     "label": "Electronic music",
+     "p": 0.3
+    },
+    {
+     "label": "Electronic dance music",
+     "p": 0.258
+    },
+    {
+     "label": "Trance music",
+     "p": 0.22
+    },
+    {
+     "label": "Dubstep",
+     "p": 0.181
+    }
+   ],
+   "character": [],
+   "distinct_windows": [
+    {
+     "start": 0.0,
+     "end": 10.0,
+     "top_tag": {
+      "term": "an uplifter sweep",
+      "category": "transitions",
+      "z": 2.02,
+      "cosine": 0.193,
+      "verdict": "weak"
+     },
+     "audioset": [
+      {
+       "label": "Music",
+       "p": 0.824
+      },
+      {
+       "label": "Electronic music",
+       "p": 0.238
+      },
+      {
+       "label": "Trance music",
+       "p": 0.197
+      }
+     ]
+    },
+    {
+     "start": 15.0,
+     "end": 25.0,
+     "top_tag": {
+      "term": "a squishy wet squelch",
+      "category": "foley",
+      "z": 2.39,
+      "cosine": 0.184,
+      "verdict": "weak"
+     },
+     "audioset": [
+      {
+       "label": "Music",
+       "p": 0.685
+      },
+      {
+       "label": "Electronic music",
+       "p": 0.228
+      },
+      {
+       "label": "Techno",
+       "p": 0.147
+      }
+     ]
+    }
+   ],
+   "summary": "45.00 s busy, 5.0 onsets/s, loudness range 1 LU. Music (AudioSet Music 0.82). Unvalidated hints - genre: techno music (z +3.8), dubstep music (z +3.7); mood (wrong for ~1 in 5 tracks in a test): energetic and driving music (z +3.0), futuristic music (z +2.9). Sounds most like: an uplifter sweep (z +2.1), a squishy wet squelch (z +1.6), a big braam (z +1.5) [weak reading]. Other readings: an electrical hum (ambience, z +1.3), a vacuum cleaner (everyday, z +1.1). AudioSet: Music 0.82, Electronic music 0.30, Electronic dance music 0.26. peak 0.0 dBFS, -8.9 LUFS, brightness 4.0 kHz, bandwidth 20.5 kHz, mono. Windows that read differently: 0:00.00-0:10.00 an uplifter sweep (z +2.0; AudioSet Music 0.82); 0:15.00-0:25.00 a squishy wet squelch (z +2.3; AudioSet Music 0.69)."
+  },
+  "match": {
+   "summary": "clip.wav: 'calm elegant orchestral or piano background music, serious, trustworthy and premium, for a law firm' -> no match (unvalidated: music / instrument / voice description) (z -0.1; would rank #153 among 322 vocabulary descriptions; cosine 0.03). It sounds most like: 'techno music' (z +3.8), 'dubstep music' (z +3.7), 'synthwave music' (z +3.5), 'chiptune video game music' (z +3.4).",
+   "path": "/tmp/clip.wav",
+   "start": null,
+   "end": null,
+   "peak_dbfs": 0.0,
+   "query": "calm elegant orchestral or piano background music, serious, trustworthy and premium, for a law firm",
+   "cosine": 0.028,
+   "z": -0.01,
+   "percentile": 52.8,
+   "rank_in_vocab": 153,
+   "p_vs_alts": null,
+   "verdict": "no match",
+   "validated": false,
+   "results": [
+    {
+     "query": "calm elegant orchestral or piano background music, serious, trustworthy and premium, for a law firm",
+     "cosine": 0.028,
+     "z": -0.01,
+     "percentile": 52.8,
+     "rank_in_vocab": 153,
+     "vocab_size": 322,
+     "verdict": "no match",
+     "validated": false,
+     "p_vs_alts": null
+    }
+   ],
+   "closest_vocab": [
+    {
+     "term": "techno music",
+     "category": "music_genre",
+     "z": 3.85,
+     "cosine": 0.381
+    },
+    {
+     "term": "dubstep music",
+     "category": "music_genre",
+     "z": 3.72,
+     "cosine": 0.384
+    },
+    {
+     "term": "synthwave music",
+     "category": "music_genre",
+     "z": 3.53,
+     "cosine": 0.382
+    },
+    {
+     "term": "chiptune video game music",
+     "category": "music_genre",
+     "z": 3.4,
+     "cosine": 0.366
+    }
+   ],
+   "verdict_thresholds_z": {
+    "strong": 3.0,
+    "plausible": 2.5,
+    "weak": 2.0
+   },
+   "verdict_evidence": {
+    "strong": {
+     "z": ">= 3",
+     "lr": 1289,
+     "precision_library": 0.98,
+     "precision_even_odds": 1.0,
+     "lr_strict": 51,
+     "precision_library_strict": 0.61,
+     "recall_at_or_above": 0.51
+    },
+    "plausible": {
+     "z": "2.5 - 3",
+     "lr": 21,
+     "precision_library": 0.41,
+     "precision_even_odds": 0.95,
+     "lr_strict": 9.1,
+     "precision_library_strict": 0.22,
+     "recall_at_or_above": 0.63
+    },
+    "weak": {
+     "z": "2 - 2.5",
+     "lr": 12,
+     "precision_library": 0.28,
+     "precision_even_odds": 0.92,
+     "lr_strict": 6.6,
+     "precision_library_strict": 0.17,
+     "recall_at_or_above": 0.76
+    },
+    "no match": {
+     "z": "< 2",
+     "lr": 0.25,
+     "precision_library": 0.008,
+     "precision_even_odds": 0.2,
+     "lr_strict": 0.25,
+     "precision_library_strict": 0.008
+    }
+   }
+  }
+ }
+}
