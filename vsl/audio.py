@@ -285,7 +285,7 @@ def mezcla(voz, eventos, dur, estilo, ruta, niveles=None):
 
 
 def _master(mix, ruta, objetivo=-14.0):
-    """Volumen de web: -14 LUFS integrados con limitador suave y techo de -1 dBTP (earshot, 18 nov)."""
+    """Volumen de web: -14 LUFS integrados con limitador suave y techo de -2 dB por muestra (earshot, 18 nov)."""
     mix = mix.astype(np.float64)
     try:
         import pyloudnorm as pyln
@@ -294,7 +294,7 @@ def _master(mix, ruta, objetivo=-14.0):
         actual = 20 * np.log10(np.sqrt(np.mean(mix ** 2)) + 1e-9) + 3.0  # aproximación por RMS
     if np.isfinite(actual):
         mix *= 10 ** ((objetivo - actual) / 20)
-    techo = 10 ** (-1.0 / 20)
+    techo = 10 ** (-2.0 / 20)  # -2 dB de muestra: al comprimir a AAC el pico real sube ~1 dB (earshot marcaba true_peak)
     mix = np.where(np.abs(mix) > 0.7 * techo, np.sign(mix) * (0.7 * techo + (techo - 0.7 * techo) * np.tanh((np.abs(mix) - 0.7 * techo) / (techo - 0.7 * techo))), mix)
     sf.write(ruta, mix.astype(np.float32), SR)
     return ruta

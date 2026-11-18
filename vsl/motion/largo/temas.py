@@ -58,13 +58,32 @@ COLORES = [
 
 # Directores exclusivos de abogados (18 nov): 5 mundos visuales del derecho, cada uno con su paleta, tipografía y música.
 DIR_LEGAL = {
-    6: dict(nombre='Despacho', pal=_pal('#120d09', '#c39548', '#5a2e1f', '#e6c27a', '#1d150f', ink='#f4ece0', mut='#b5a796', sobre='#1a1208'), grad='none', ft=None, musica='musica/tears-of-joy.mp3'),
-    7: dict(nombre='Expediente', pal=_pal('#111214', '#b3262c', '#c9a46a', '#e0524b', '#1b1c20', ink='#f2efe9', mut='#a7a49d', sobre='#ffffff'), grad='none', ft=None, musica='musica/wind-leaves.mp3'),
+    6: dict(nombre='Despacho', pal=_pal('#120d09', '#c39548', '#5a2e1f', '#e6c27a', '#1d150f', ink='#f4ece0', mut='#b5a796', sobre='#1a1208'), grad='none', ft=None, musica='musica/special-days.mp3'),
+    7: dict(nombre='Expediente', pal=_pal('#111214', '#b3262c', '#c9a46a', '#e0524b', '#1b1c20', ink='#f2efe9', mut='#a7a49d', sobre='#ffffff'), grad='none', ft=None, musica='musica/it-s-love.mp3'),
     # 18 nov: a Christian no le gustó la serifa del Tribunal; Código y Legal digital descartados → Cine y Keynote
-    8: dict(nombre='Tribunal', pal=_pal('#0c0c0e', '#c9a654', '#e8e3d8', '#ecd08a', '#17171a', ink='#f5f2ea', mut='#aaa59a', sobre='#16120a'), grad='none', ft=None, musica='musica/expressive-courage.mp3'),
+    8: dict(nombre='Tribunal', pal=_pal('#0c0c0e', '#c9a654', '#e8e3d8', '#ecd08a', '#17171a', ink='#f5f2ea', mut='#aaa59a', sobre='#16120a'), grad='none', ft=None, musica='musica/romantic-getaway.mp3'),
     9: dict(nombre='Cine', pal=_pal('#0a0a0b', '#d4b06a', '#8a6a3a', '#f0d79a', '#141416', ink='#f7f3ea', mut='#b9b2a4', sobre='#16120a'), grad='none', ft=None, musica='musica/possible-dreams.mp3'),
     10: dict(nombre='Keynote', pal=_pal('#000000', '#c9a654', '#5b6b8a', '#f2d48c', '#0e0e10', ink='#ffffff', mut='#9a9aa2', sobre='#14100a'), grad='none', ft=None, musica='musica/skyline.mp3'),
 }
+
+
+# Música elegida ESCUCHÁNDOLA (Christian, 18 nov: "la música tiene que coincidir con el video, es lo primordial").
+# earshot calificó cada pista contra la descripción de cada nicho (vsl/sonidos/musica.py → musica/escuchada.json).
+import json as _json, os as _os
+_NICHO = {'legal': 'legal', 'tec': 'tec', 'gen': 'educacion', 'dj': 'dj'}
+try:
+    _ESC = _json.load(open(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), '..', 'musica', 'escuchada.json')))
+    _ESC.pop('_ejemplo_crudo', None)
+except Exception:
+    _ESC = {}
+
+
+def musica_para(fam, n, respaldo):
+    """La n-ésima pista que mejor coincide con el nicho de la familia (n empieza en 0). Solo pistas con parecido ≥ 0.3."""
+    nicho = _NICHO.get(fam)
+    orden = sorted(((v['por_nicho'].get(nicho, 0), k) for k, v in _ESC.items() if nicho and isinstance(v, dict) and 'por_nicho' in v), reverse=True)
+    buenas = [k for sc, k in orden if sc >= 0.3]
+    return buenas[n % len(buenas)] if buenas else respaldo
 
 
 def estilo(clave):
@@ -80,6 +99,7 @@ def estilo(clave):
         e = estilo('t-%s-%d' % (fam, k)); e['dir'] = k; e['fam'] = fam if fam in FAMILIAS else 'gen'
         if len(resto) > 1 and resto[1].isdigit():  # color extra: 'd3-tec-2'
             col = COLORES[(int(resto[1]) - 1) % len(COLORES)]; e['pal'] = dict(col['pal']); e['grad'] = col['grad']; e['color'] = col['nombre']
+            e['musica'] = musica_para(e['fam'], int(resto[1]), e.get('musica'))  # cada color suena distinto
         return e
     if not clave.startswith('t-'):
         return None
@@ -91,5 +111,6 @@ def estilo(clave):
         n = 0
     v = fam['variantes'][n % len(fam['variantes'])]
     e = dict(COMUN); e.update(fam['base']); e.update({k: x for k, x in v.items() if k != 'nombre'})
+    fk = next((k for k, f in FAMILIAS.items() if f is fam), 'gen'); e['musica'] = musica_para(fk, n, e.get('musica'))
     e['var'] = n % len(fam['variantes']) + 1  # cada variante cambia además el orden de composiciones y transiciones
     return e
