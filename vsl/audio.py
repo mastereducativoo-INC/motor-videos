@@ -258,12 +258,38 @@ def mezcla(voz, eventos, dur, estilo, ruta, niveles=None):
         niv[int(a * SR):int(b * SR)] = g
     niv = np.convolve(niv, np.ones(int(SR * 0.5)) / int(SR * 0.5), mode='same').astype(np.float32)
     mix = v + m * duck * fade * niv * 0.6
-    for s, tipo in eventos:
+    # 18 nov (earshot): demasiados golpes por segundo → los grandes se quedan, los chicos van 6 dB más bajos y no se amontonan
+    GRANDES = {'golpe', 'mazo', 'sello', 'venta', 'riser', 'monedas', 'ding'}
+    ultimo = -9.0
+    for s, tipo in sorted(eventos):
+        grande = tipo in GRANDES
+        if not grande and s - ultimo < 0.35:
+            continue
         x = sfx(tipo)
         p = int(s * SR)
         if 0 <= p < n:
             k = min(len(x), n - p)
-            mix[p:p + k] += x[:k] * 0.6
-    mix /= max(1.0, np.max(np.abs(mix)) / 0.95)
-    sf.write(ruta, mix, SR)
+            mix[p:p + k] += x[:k] * (0.6 if grande else 0.3)
+            if tipo in ('golpe', 'mazo'):  # graves en los impactos (earshot: "thin bottom")
+                q = min(int(SR * 0.3), n - p)
+                t = np.arange(q) / SR
+                mix[p:p + q] += (np.sin(2 * np.pi * 52 * t) * np.exp(-t * 14) * 0.22).astype(np.float32)
+        if not grande:
+            ultimo = s
+    return _master(mix, ruta)
+
+
+def _master(mix, ruta, objetivo=-14.0):
+    """Volumen de web: -14 LUFS integrados con limitador suave y techo de -1 dBTP (earshot, 18 nov)."""
+    mix = mix.astype(np.float64)
+    try:
+        import pyloudnorm as pyln
+        actual = pyln.Meter(SR).integrated_loudness(mix)
+    except Exception:
+        actual = 20 * np.log10(np.sqrt(np.mean(mix ** 2)) + 1e-9) + 3.0  # aproximación por RMS
+    if np.isfinite(actual):
+        mix *= 10 ** ((objetivo - actual) / 20)
+    techo = 10 ** (-1.0 / 20)
+    mix = np.where(np.abs(mix) > 0.7 * techo, np.sign(mix) * (0.7 * techo + (techo - 0.7 * techo) * np.tanh((np.abs(mix) - 0.7 * techo) / (techo - 0.7 * techo))), mix)
+    sf.write(ruta, mix.astype(np.float32), SR)
     return ruta

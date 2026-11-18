@@ -9,8 +9,8 @@ def escuchar(video):
     except Exception:
         return {'ok': False, 'error': (r.stderr or '')[-300:]}
     txt = json.dumps(o, ensure_ascii=False)
-    fixes = o.get('fixes') or o.get('fix_first') or o.get('fix') or []
-    return {'ok': True, 'veredicto': o.get('verdict') or o.get('summary') or '', 'arreglos': fixes[:6] if isinstance(fixes, list) else fixes, 'crudo': txt[:4000]}
+    acc = [{'peso': a.get('weight'), 'que': a.get('metric'), 'arreglo': a.get('action')} for a in (o.get('actions') or []) if isinstance(a, dict)]
+    return {'ok': True, 'veredicto': o.get('verdict') or '', 'puntaje': o.get('score'), 'en_rango': f"{o.get('in_range')} de {o.get('scored')}", 'arreglos': acc[:6], 'crudo': txt[:4000]}
 
 
 if __name__ == '__main__':
