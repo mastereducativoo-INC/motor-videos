@@ -138,7 +138,7 @@ function disco(c, o) {
 function foto(c, k, o = {}) {
   if (!tiene(k)) return null;
   // desenfocada: es ambiente (profundidad de campo) y así no compite con el texto ni con letras que traiga la foto
-  const f = $(`<div class="foto" style="background-image:url('${IM[k].src}');filter:blur(9px) saturate(.85)"></div>`); c.cam.insertBefore(f, c.cam.firstChild);
+  const f = $(`<div class="foto" style="background-image:url('${IM[k].src}');filter:blur(22px) saturate(.9) brightness(.85)"></div>`); c.cam.insertBefore(f, c.cam.firstChild);
   const v = $(`<div class="velo${o.centro ? ' c' : ''}"></div>`); f.after(v);
   const dx = (o.dir || 1) * 50;
   c.tl.fromTo(f, {scale: 1.14, x: -dx}, {scale: 1.02, x: dx, duration: c.D + 1, ease: 'none'}, 0);
