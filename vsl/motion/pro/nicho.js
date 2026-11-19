@@ -307,7 +307,7 @@ const TOD = {
     const L = PR.cont || [], n = L.length, W = Math.min(230, 1760 / Math.max(1, n)), x0 = 960 - n * W / 2;
     L.forEach((ct, j) => { const at = .5 + j * .18, b = caja(c, 'c' + j, x0 + j * W + 6, 260, W - 12, 400, {sh: .35}), nm = div(c, `left:${x0 + j * W}px;top:690px;width:${W}px;text-align:center;font:700 19px/1.2 var(--fb);color:${P.ink}`, esc(ct.corto || ct.titulo));
       if (b) c.tl.from(b, {y: 300, opacity: 0, duration: .5, ease: 'back.out(1.4)'}, at); c.tl.from(nm, {opacity: 0, duration: .3}, at + .3); c.fx(at, 'tick'); });
-    const v = div(c, `left:0;right:0;top:800px;text-align:center`, `<div class="K c" style="justify-content:center">Valor de referencia</div><div class="num oro" style="font-size:150px;margin-top:6px">${money(valorTot())}</div>`); c.tl.from(v, {opacity: 0, y: 40, duration: .6, ease: 'expo.out'}, .5 + n * .18); c.fx(.6 + n * .18, 'monedas'); },
+    const v = div(c, `left:560px;width:800px;top:800px;text-align:center`, `<div class="K c" style="justify-content:center;font-size:22px">Valor de referencia</div><div class="num oro" style="font-size:150px;margin-top:6px">${money(valorTot())}</div>`); c.tl.from(v, {opacity: 0, y: 40, duration: .6, ease: 'expo.out'}, .5 + n * .18); c.fx(.6 + n * .18, 'monedas'); },
   anillo: (c) => { // las herramientas en círculo alrededor del valor
     texto(c, {x: 160, y: 40, w: 1600, c: 1, t: c.sc.t, size: 80, maxH: 96, at: .1});
     const L = PR.cont || [], n = L.length, cx = 960, cy = 610, R = 330, s = 190;
