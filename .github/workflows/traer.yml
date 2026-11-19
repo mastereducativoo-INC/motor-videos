@@ -1,0 +1,26 @@
+name: traer
+# Descarga archivos públicos (logo, video) y los deja como artefacto para usarlos en otro lado.
+on:
+  workflow_dispatch:
+    inputs:
+      urls:
+        description: 'Direcciones separadas por espacio'
+        required: true
+jobs:
+  traer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar
+        env:
+          URLS: ${{ inputs.urls }}
+        run: |
+          mkdir -p traidos
+          for u in $URLS; do
+            f="traidos/$(basename "${u%%\?*}")"
+            curl -fsSL -A "Mozilla/5.0" -o "$f" "$u" && ls -la "$f"
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: traidos
+          path: traidos
+          retention-days: 3
