@@ -165,7 +165,7 @@ S.gracias = (c) => {
     const at = c.cue(w, .12 + .8 * j / filas.length);
     tl.from(f, {x: -50, autoAlpha: 0, duration: .6, ease: 'power3.out'}, at); draw(tl, f.querySelectorAll('circle,path'), at + .1, .45); c.fx(at + .15, 'tick');
   });
-  // REGLA M8 (Christian, 19 nov): aparecen TODOS los mockups del curso (uno por módulo); el logo va aparte, nunca ocupa el lugar de un mockup
+  // REGLA M9 (Christian, 19 nov): aparecen TODOS los mockups del curso (uno por módulo); el logo va aparte, nunca ocupa el lugar de un mockup
   const ks = (PR.cimgs || Array.from({length: 12}, (_, q) => 'm' + (q + 1))).filter((k) => IM[k] && IM[k].ok);
   const fan = $('<div class="fan" style="left:990px;top:0;width:820px;height:1080px"></div>'); cam.appendChild(fan);
   fan.appendChild($('<div class="halo" style="left:10px;top:150px;width:800px;height:800px"></div>'));
@@ -444,11 +444,20 @@ function orbita(cam, tl, sc, cue) {
   const T0 = 1.1, n = L.length  /* Christian, 18 nov 2:02 p.m.: las herramientas giran durante TODA la escena del pack, no solo al final */, G = {cx: 960, cy: 540, rx: 520, ry: 160, s: 190};
   // se mide cuando el pack ya está quieto y visible (antes la escena está oculta y no tiene medidas)
   const medir = () => { const r = pk.getBoundingClientRect(), c = cam.getBoundingClientRect(), k = c.width / 1920 || 1; if (!r.width) return;
-    const w = r.width / k, h = r.height / k; G.cx = (r.left - c.left) / k + w / 2; G.cy = (r.top - c.top) / k + h * .58; G.rx = Math.max(320, w * .86); G.ry = Math.max(120, h * .42); G.s = Math.max(130, Math.min(220, h * .3)); };
+    const w = r.width / k, h = r.height / k; G.cx = (r.left - c.left) / k + w / 2; G.cy = (r.top - c.top) / k + h * .58; G.rx = Math.max(320, w * .86); G.ry = Math.max(120, h * .42); G.s = Math.max(130, Math.min(220, h * .3));
+    // LEY T5: la órbita nunca cruza los textos. Se miden los textos de la escena y el giro se encoge para no llegar a ellos;
+    // si aun así una herramienta pisaría un texto, en ese momento se vuelve invisible (pon() la apaga).
+    G.tx = [...cam.querySelectorAll('h1,h2,h3,h4,.T,.P,.K,.chip,.fila,.btn,.bt,.ej')].filter((e) => !e.contains(pk) && !it.some((d) => d.contains(e)))
+      .map((e) => e.getBoundingClientRect()).filter((q) => q.width * q.height > 40)
+      .map((q) => ({l: (q.left - c.left) / k - 24, r: (q.right - c.left) / k + 24, t: (q.top - c.top) / k - 18, b: (q.bottom - c.top) / k + 18}));
+    for (const q of G.tx) if (q.b > G.cy - G.ry - G.s && q.t < G.cy + G.ry + G.s) {
+      if (q.r < G.cx) G.rx = Math.max(140, Math.min(G.rx, G.cx - q.r - G.s * .5)); else if (q.l > G.cx) G.rx = Math.max(140, Math.min(G.rx, q.l - G.cx - G.s * .5)); } };
   const it = L.map((k) => { const d = document.createElement('div'); d.className = 'abs'; d.style.cssText = 'left:0;top:0;display:flex;align-items:center;justify-content:center;opacity:0'; d.innerHTML = img(k, 'max-width:100%;max-height:100%;filter:drop-shadow(0 14px 18px rgba(0,0,0,.55))'); cam.appendChild(d); return d; });
   const st = {a: 0, o: 0}, pon = () => it.forEach((d, j) => { const an = st.a + j * Math.PI * 2 / n, z = Math.sin(an), s = .6 + .4 * (z + 1) / 2;
     d.style.width = d.style.height = G.s + 'px'; d.style.margin = -G.s / 2 + 'px 0 0 ' + -G.s / 2 + 'px';
-    d.style.transform = `translate(${G.cx + Math.cos(an) * G.rx}px,${G.cy + z * G.ry}px) scale(${s})`; d.style.zIndex = z > 0 ? 40 : 20; d.style.opacity = st.o * (.6 + .4 * (z + 1) / 2); });
+    const x = G.cx + Math.cos(an) * G.rx, y = G.cy + z * G.ry, m = G.s * s / 2;
+    const pisa = (G.tx || []).some((q) => x + m > q.l && x - m < q.r && y + m > q.t && y - m < q.b);
+    d.style.transform = `translate(${x}px,${y}px) scale(${s})`; d.style.zIndex = z > 0 ? 40 : 20; d.style.opacity = pisa ? 0 : st.o * (.6 + .4 * (z + 1) / 2); });
   tl.call(medir, null, T0 - .05); tl.to(st, {o: 1, duration: .6, onUpdate: pon}, T0); tl.to(st, {a: Math.PI * 2 * Math.max(.6, (sc.dur - T0) / 9), duration: Math.max(1, sc.dur - T0 + .4), ease: 'none', onUpdate: () => { medir(); pon(); }}, T0);  // se mide siempre: el pack puede seguir moviéndose
 }
 // LEY T5 (Christian, 19 nov): ningún texto encima de una imagen ni imagen encima de un texto. Antes de grabar se mide cada escena
