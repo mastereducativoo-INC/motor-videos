@@ -137,7 +137,8 @@ function disco(c, o) {
 // fondo de foto real a pantalla completa (director 5); es un fondo, no una imagen encima del texto
 function foto(c, k, o = {}) {
   if (!tiene(k)) return null;
-  const f = $(`<div class="foto" style="background-image:url('${IM[k].src}')"></div>`); c.cam.insertBefore(f, c.cam.firstChild);
+  // desenfocada: es ambiente (profundidad de campo) y así no compite con el texto ni con letras que traiga la foto
+  const f = $(`<div class="foto" style="background-image:url('${IM[k].src}');filter:blur(9px) saturate(.85)"></div>`); c.cam.insertBefore(f, c.cam.firstChild);
   const v = $(`<div class="velo${o.centro ? ' c' : ''}"></div>`); f.after(v);
   const dx = (o.dir || 1) * 50;
   c.tl.fromTo(f, {scale: 1.14, x: -dx}, {scale: 1.02, x: dx, duration: c.D + 1, ease: 'none'}, 0);
