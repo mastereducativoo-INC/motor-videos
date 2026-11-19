@@ -6,6 +6,8 @@ on:
       urls:
         description: 'Direcciones separadas por espacio'
         required: true
+permissions:
+  contents: write
 jobs:
   traer:
     runs-on: ubuntu-latest
@@ -19,8 +21,10 @@ jobs:
             f="traidos/$(basename "${u%%\?*}")"
             curl -fsSL -A "Mozilla/5.0" -o "$f" "$u" && ls -la "$f"
           done
-      - uses: actions/upload-artifact@v4
-        with:
-          name: traidos
-          path: traidos
-          retention-days: 3
+      - name: Guardar en la rama traidos (temporal)
+        run: |
+          cd traidos
+          git init -q -b traidos
+          git config user.name bot; git config user.email bot@users.noreply.github.com
+          git add -A && git commit -qm "traidos $(date -u +%FT%TZ)"
+          git push -fq "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" traidos
