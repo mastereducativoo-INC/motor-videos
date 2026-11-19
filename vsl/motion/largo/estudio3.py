@@ -106,7 +106,8 @@ def armar(r, bajar):
         src = os.path.join(d, a) if os.path.exists(os.path.join(d, a)) else None
         if src and not os.path.exists(os.path.join(d, b)):
             shutil.copy(src, os.path.join(d, b))
-    for k in ('m2', 'm3', 'm4', 'consola'):
+    # 19 nov (regla M8): ya NO se copia m1 en m2–m4 (salían mockups repetidos); los que faltan los pide la Fábrica al Laboratorio
+    for k in ('consola',):
         copia('m1.png', CURSO[k])
     if 'prop1' not in tiene:  # objeto del nicho opcional: si no hay, no se dibuja nada
         Image.new('RGBA', (8, 8), (0, 0, 0, 0)).save(os.path.join(carpeta, 'prop1.png'))

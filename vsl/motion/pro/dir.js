@@ -3,7 +3,22 @@
 // Cada director registra PRO.D[n][escena]; lo que no defina cae en la escena base de pro.js.
 (() => {
 const {D, V, E, P, PR, IM, $, esc, pal, rgba, norm, money, rnd, fit, img, OK, ICO, texto, objeto, draw, sube, salta, flota, onda, cuenta} = window.PRO;
-const N = () => window.PRO.N(), FAM = E.fam || 'gen', TEC = FAM === 'tec';
+const N = () => window.PRO.N(), FAM = E.fam || 'gen', TEC = FAM === 'tec', LEGAL = FAM === 'legal';
+// ---- objetos del nicho (19 nov): los estilos aprobados se reutilizan en otros nichos sin objetos del derecho (mazo, balanza) ----
+const CHESS = /ajedrez|chess/.test(norm((PR.nicho || '') + ' ' + (PR.curso || '') + ' ' + (PR.oferta || '')));
+const BASE_P = '<rect x="22" y="104" width="56" height="12" rx="4"/><rect x="14" y="116" width="72" height="16" rx="5"/>', CUERPO = '<path d="M36 60h28l8 44H28z"/>';
+const PIEZA = {
+  peon: `<circle cx="50" cy="36" r="17"/><path d="M38 52h24l4 8H34z"/>${CUERPO}${BASE_P}`,
+  torre: `<path d="M24 22h12v10h8V22h12v10h8V22h12v28H24z"/><path d="M30 50h40l-4 10H34z"/>${CUERPO}${BASE_P}`,
+  alfil: `<circle cx="50" cy="10" r="6"/><path d="M50 16c-16 10-20 24-14 36h28c6-12 2-26-14-36z"/><path d="M34 52h32l-2 8H36z"/>${CUERPO}${BASE_P}`,
+  caballo: `<path d="M30 104c0-22 8-32 16-42-10 2-18-1-22-8 9-7 13-16 22-27 5-7 11-11 19-11 9 0 17 8 18 20 2 16 0 38-6 68z"/>${BASE_P}`,
+  reina: `<circle cx="26" cy="20" r="6"/><circle cx="50" cy="12" r="7"/><circle cx="74" cy="20" r="6"/><path d="M24 28l10 26h32l10-26-14 12-12-20-12 20z"/>${CUERPO}${BASE_P}`,
+  rey: `<rect x="46" y="2" width="8" height="26" rx="2"/><rect x="38" y="10" width="24" height="8" rx="2"/><path d="M30 32h40l-6 22H36z"/>${CUERPO}${BASE_P}`,
+};
+const pieza = (k, h, col, st = '') => `<svg viewBox="0 0 100 140" width="${Math.round(h * 100 / 140)}" height="${h}" style="overflow:visible;${st}" fill="${col}">${PIEZA[k] || PIEZA.peon}</svg>`;
+const emblemaNicho = (h, col) => CHESS ? pieza('rey', h, col) : (IM.logo && IM.logo.ok ? img('logo', `max-height:${h}px;max-width:${Math.round(h * 1.5)}px`) : pieza('torre', h, col));
+// el sonido del mazo es solo de derecho: en otros nichos suena un golpe neutro
+if (!LEGAL) { const _push = window.SFX.push.bind(window.SFX); window.SFX.push = (...a) => _push(...a.map((x) => (Array.isArray(x) && x[1] === 'mazo' ? [x[0], 'golpe'] : x))); }
 const camino = () => (PR.camino || ['Aprender', 'Practicar', 'Aplicar', 'Cobrar']).slice(0, 6), YA = () => Math.min(camino().length - 1, PR.camino_ya || 2);
 const tool = (c) => { const i = c.sc.i || 0, ct = (PR.cont || [])[i] || {}; return {i, ct, t: ct.titulo || c.sc.demoT || '', s: c.sc.s || ct.sub || '', pts: (c.sc.puntos || []).slice(0, 4), et: (PR.etiqueta || 'Herramienta') + ' ' + (i + 1) + ' de ' + (N() || i + 1)}; };
 const precio = () => { const val = +PR.valor || 0, pre = +PR.precio || 0; return {val, pre, desc: val ? Math.round((1 - pre / val) * 100) : 0}; };
@@ -384,7 +399,7 @@ D[5] = {
 // ============ 6–10 · DIRECTORES DE ABOGADOS (18 nov) ============
 // Cinco mundos del derecho. Lo aprendido en Programación va desde el inicio: logo y TODOS los mockups reales, nombres cuando se dicen,
 // "ya lo tienes / te falta" claro, desbloqueo sin recuadros, valor contra precio.
-const MODS = () => Array.from({length: 12}, (_, i) => 'm' + (i + 1)).filter((k) => IM[k] && IM[k].ok);
+const MODS = () => (PR.cimgs || Array.from({length: 12}, (_, i) => 'm' + (i + 1))).filter((k) => IM[k] && IM[k].ok);  // solo mockups reales (19 nov)
 const cuandoDice = (c, w, def) => (w ? Math.max(.5, c.cue(String(w).split(/\s+/).pop(), def) - .15) : .5 + def * c.vz);
 const firma = (w = 420, h = 110) => `<svg width="${w}" height="${h}" viewBox="0 0 420 110" style="overflow:visible"><path class="fi" d="M8 78c30-50 52-58 60-40s-14 44 4 40 30-62 46-58-6 54 10 52 24-40 40-36-4 30 14 30 28-26 44-24 6 22 22 20 40-14 66-20 44-4 60-8" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></svg>`;
 const sello = (txt, color, d = 230) => `<div class="se" style="width:${d}px;height:${d}px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 35% 30%,${rgba(color, .95)},${rgba(color, .75)} 60%,${rgba('#000000', .35)});box-shadow:0 18px 30px rgba(0,0,0,.45),inset 0 -8px 18px rgba(0,0,0,.35)"><div style="width:76%;height:76%;border-radius:50%;border:3px dashed ${rgba('#ffffff', .55)};display:flex;align-items:center;justify-content:center;text-align:center;font:900 ${Math.round(d / 8)}px/1.05 Montserrat;color:#fff;letter-spacing:.06em;text-transform:uppercase">${esc(txt)}</div></div>`;
@@ -429,7 +444,7 @@ const felicitaL = {
     c.tl.from(h.querySelector('.lg'), {y: -500, rotation: -20, duration: .8, ease: 'back.out(1.3)'}, .9); c.fx(1, 'whoosh'); golpe(c, h.querySelector('.sl'), tp + .2, 2.2); c.fx(tp + .5, 'venta'); },
   8: (c) => { fondoL[8](c); const tp = Math.max(1.4, c.cue('felicid', .2));
     const ped = $(`<div class="abs" style="left:610px;top:120px;width:700px;height:520px;display:flex;align-items:flex-end;justify-content:center"><div class="halo" style="position:absolute;inset:-80px"></div>${img(IM.logo && IM.logo.ok ? 'logo' : 'm1', 'position:relative;max-width:100%;max-height:100%;filter:drop-shadow(0 30px 40px rgba(0,0,0,.6))')}</div>`); c.cam.appendChild(ped);
-    const mazo = $(`<svg class="abs" style="left:1420px;top:380px;overflow:visible" width="320" height="260" viewBox="0 0 320 260"><g class="mz" style="transform-origin:300px 230px"><rect x="20" y="40" width="190" height="80" rx="18" fill="#5a3a22" stroke="${P.a}" stroke-width="6"/><rect x="100" y="110" width="22" height="150" rx="10" fill="#4a2f1b" transform="rotate(-50 111 185)"/></g><rect x="40" y="226" width="250" height="26" rx="10" fill="#3a2616" stroke="${P.a}" stroke-width="4"/></svg>`); c.cam.appendChild(mazo);
+    const mazo = LEGAL ? $(`<svg class="abs" style="left:1420px;top:380px;overflow:visible" width="320" height="260" viewBox="0 0 320 260"><g class="mz" style="transform-origin:300px 230px"><rect x="20" y="40" width="190" height="80" rx="18" fill="#5a3a22" stroke="${P.a}" stroke-width="6"/><rect x="100" y="110" width="22" height="150" rx="10" fill="#4a2f1b" transform="rotate(-50 111 185)"/></g><rect x="40" y="226" width="250" height="26" rx="10" fill="#3a2616" stroke="${P.a}" stroke-width="4"/></svg>`) : $(`<div class="abs" style="left:1440px;top:250px;width:300px;height:380px;display:flex;align-items:flex-end;justify-content:center"><div class="mz" style="transform-origin:50% 100%;filter:drop-shadow(0 30px 34px rgba(0,0,0,.6))">${emblemaNicho(340, P.a)}</div></div>`); c.cam.appendChild(mazo);
     const onda = $(`<div class="abs" style="left:1490px;top:600px;width:40px;height:40px;margin:-20px;border-radius:50%;border:4px solid ${P.a}"></div>`); c.cam.appendChild(onda);
     texto(c, {x: 160, y: 700, w: 1600, t: c.sc.t, s: c.sc.s, size: 104, maxH: 240, at: .4, c: 1});
     c.tl.from(ped, {y: 120, opacity: 0, duration: 1, ease: 'expo.out'}, .2);
@@ -776,7 +791,8 @@ Object.assign(D[8], {
     c.tl.from(n2, {y: 600, duration: .8, ease: 'expo.out'}, t2 - .6);
     const fl = $(`<svg class="abs" style="left:0;top:0;overflow:visible" width="1920" height="1080"><path d="M880 640C920 470 950 330 995 305" fill="none" stroke="${P.a}" stroke-width="6" stroke-dasharray="2 14" stroke-linecap="round"/><path class="pf" d="M976 296l22 8-14 20" fill="none" stroke="${P.a}" stroke-width="6" stroke-linecap="round"/></svg>`); c.cam.appendChild(fl); c.tl.from(fl, {opacity: 0, duration: .5}, t2);
     c.tl.to(n2, {borderTopColor: P.a, duration: .4}, t2 + .2); c.tl.to(n2.querySelector('.et'), {color: P.a, duration: .4}, t2 + .2); c.tl.to(n2.querySelector('.cd'), {color: P.c, rotation: -12, y: -6, duration: .35, ease: 'back.out(2)'}, t2 + .2); c.tl.to(n2.querySelector('.cd'), {opacity: 0, duration: .3}, t2 + .9); c.fx(t2 + .2, 'click');
-    const sig = [['consultas', 'Hacer consultas', 'c0'], ['cotizar', 'Cotizar con seguridad', 'c1'], ['seguimiento', 'Dar seguimiento', 'c8']];
+    const sig = LEGAL ? [['consultas', 'Hacer consultas', 'c0'], ['cotizar', 'Cotizar con seguridad', 'c1'], ['seguimiento', 'Dar seguimiento', 'c8']]
+      : camino().slice(YA()).slice(0, 3).map((t, j) => [String(t).split(/\s+/).pop(), String(t), 'c' + j]);  // otros nichos: lo que le falta según su propio camino
     sig.forEach(([w, tx, k], j) => { const r = $(`<div style="display:flex;align-items:center;gap:22px;padding:14px 20px;border:2px solid ${rgba(P.a, .5)};background:${rgba('#000000', .3)}"><div style="width:120px;height:120px;flex:none;display:flex;align-items:center;justify-content:center">${IM[k] && IM[k].ok ? img(k, 'max-width:100%;max-height:100%') : ''}</div><div style="font:800 40px Montserrat;color:${P.ink}">${tx}</div></div>`); n2.querySelector('.ls').appendChild(r);
       const at = Math.max(t2 + .6 + j * .45, c.cue(w, .6 + j * .1) - .1); c.tl.from(r, {x: 120, opacity: 0, duration: .5, ease: 'expo.out'}, at); c.tl.fromTo(r, {borderColor: P.c}, {borderColor: rgba(P.a, .5), duration: .8}, at + .3); }); },
   precio: (c) => { fondoL[8](c); const {val, pre, desc} = precio(), tD = Math.max(1.2, c.cue('noventa', .3) - .1), tP = Math.max(tD + 1.2, c.cue('doce', .75)); texto(c, {x: 160, y: 50, w: 1600, k: c.sc.k || 'Precio exclusivo', size: 60, at: .2, c: 1});
@@ -821,4 +837,69 @@ const puesta = {
 };
 [1, 2, 3, 4, 5].forEach((d) => BASES.forEach((n) => { if (!D[d][n]) D[d][n] = (c) => puesta[d](c, window.PRO.S[n] ? n : 'generico'); }));
 [6, 7, 8, 9, 10].forEach((d) => [...BASES, 'escalera', 'precio', 'multitud'].forEach((n) => { if (!D[d][n]) D[d][n] = (c) => { fondoL[d](c); const h = c.cam.lastChild; if (d === 7) { h.style.filter = 'brightness(.28)'; } if (d === 9 && h) h.style.filter = 'blur(10px) brightness(.45)'; window.PRO.S[window.PRO.S[n] ? n : 'generico'](c); }; }));
+
+// ============ 11 · TABLERO (exclusivo de Ajedrez, 19 nov) ============
+// Diseño nuevo del nicho (regla V1): todo pasa sobre un tablero en perspectiva; las piezas cuentan la historia
+// (el rey cae en "compra confirmada", los mockups entran con salto de caballo, el peón avanza y corona en "siguiente nivel").
+const fondo11 = (c) => {
+  c.cam.appendChild($(`<div class="abs" style="inset:0;background:radial-gradient(1500px 820px at 50% -5%,#2c2318 0%,${P.bg} 64%)"></div>`));
+  const cas = Array.from({length: 64}, (_, j) => `<i style="display:block;background:${((j % 8) + Math.floor(j / 8)) % 2 ? rgba(P.ink, .085) : rgba(P.a, .16)}"></i>`).join('');
+  const tb = $(`<div class="abs" style="left:110px;top:600px;width:1700px;height:1700px;transform-origin:50% 0;transform:perspective(1500px) rotateX(66deg);display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);border:6px solid ${rgba(P.a, .55)};box-shadow:0 0 140px ${rgba(P.a, .18)}">${cas}</div>`);
+  c.cam.appendChild(tb);
+  c.cam.appendChild($(`<div class="abs" style="left:0;right:0;top:560px;bottom:0;background:linear-gradient(180deg,${P.bg} 0%,transparent 22%,transparent 75%,${rgba('#000000', .55)} 100%)"></div>`));
+  c.tl.fromTo(tb, {opacity: 0, y: 70}, {opacity: 1, y: 0, duration: 1.1, ease: 'expo.out'}, 0);
+  // dos piezas grandes y lejanas, en penumbra, que se mueven despacio (profundidad)
+  const pz = [['torre', 120, 300], ['caballo', 1640, 330]].map(([k, x, h]) => { const e = $(`<div class="abs" style="left:${x}px;top:${560 - h * .55}px;opacity:.16;filter:blur(1px)">${pieza(k, h, P.ink)}</div>`); c.cam.appendChild(e); return e; });
+  c.tl.fromTo(pz, {x: (j) => (j ? 40 : -40)}, {x: (j) => (j ? -30 : 30), duration: c.D + .5, ease: 'none'}, 0);
+  return tb;
+};
+const dirCasilla = (c, x, y, s) => { const d = $(`<div class="abs" style="left:${x - s / 2}px;top:${y - s * .22}px;width:${s}px;height:${s * .44}px;border-radius:50%;background:radial-gradient(closest-side,${rgba(P.a, .55)},${rgba(P.a, 0)})"></div>`); c.cam.appendChild(d); return d; };
+D[11] = {
+  felicita: (c) => { fondo11(c); const tp = Math.max(1.5, c.cue('felicid', .25));
+    const lg = IM.logo && IM.logo.ok ? 'logo' : (MODS()[0] || 'pack');
+    const lo = $(`<div class="abs" style="left:560px;top:120px;width:800px;height:400px;display:flex;align-items:flex-end;justify-content:center">${img(lg, 'max-width:100%;max-height:100%;filter:drop-shadow(0 30px 40px rgba(0,0,0,.6))')}</div>`); c.cam.appendChild(lo);
+    const rey = $(`<div class="abs" style="left:1420px;top:200px;width:240px;height:330px;display:flex;align-items:flex-end;justify-content:center"><div class="rk" style="transform-origin:50% 100%;filter:drop-shadow(0 26px 26px rgba(0,0,0,.6))">${pieza('rey', 320, P.ink)}</div></div>`); c.cam.appendChild(rey);
+    const et = $(`<div class="abs ctr" style="left:0;right:0;top:44px;font:800 26px Montserrat;letter-spacing:.42em;color:${P.a}">JUGADA GANADORA</div>`); c.cam.appendChild(et);
+    texto(c, {x: 160, y: 600, w: 1600, c: 1, t: c.sc.t, s: c.sc.s, size: 112, maxH: 150, at: .5});
+    c.tl.from(rey, {y: -340, opacity: 0, duration: .8, ease: 'bounce.out'}, .15); c.fx(.6, 'golpe');
+    c.tl.to(rey.querySelector('.rk'), {rotation: 84, duration: .5, ease: 'power3.in'}, tp - .45); c.fx(tp, 'golpe');
+    c.tl.from(lo, {y: 120, opacity: 0, scale: .8, duration: 1, ease: 'back.out(1.4)'}, tp - .1); c.fx(tp + .1, 'venta');
+    c.tl.from(et, {opacity: 0, letterSpacing: '.9em', duration: .9, ease: 'power3.out'}, tp); },
+  gracias: (c) => { fondo11(c); const ks = MODS(), n = ks.length, mods = PR.mods || [];
+    texto(c, {x: 160, y: 46, w: 1600, c: 1, k: c.sc.k || PR.curso, t: c.sc.t, size: 84, maxH: 110, at: .2});
+    if (!n) return;
+    const W = Math.min(330, 1680 / n), H = n > 6 ? 250 : n > 4 ? 310 : 380, x0 = 960 - (W * n) / 2, base = 760;
+    ks.forEach((k, j) => { const nom = mods[j] || '', cx = x0 + j * W + W / 2;
+      dirCasilla(c, cx, base, W * .9);
+      const it = $(`<div class="abs" style="left:${x0 + j * W}px;top:${base - H}px;width:${W}px;height:${H}px;display:flex;align-items:flex-end;justify-content:center">${img(k, `max-height:${H}px;max-width:${W - 26}px;filter:drop-shadow(0 26px 30px rgba(0,0,0,.65))`)}</div>`); c.cam.appendChild(it);
+      const nm = $(`<div class="abs ctr" style="left:${x0 + j * W + 8}px;top:${base + 40}px;width:${W - 16}px;font:800 ${n > 6 ? 19 : 23}px/1.25 Montserrat;color:${P.ink}">${esc(nom)}</div>`); c.cam.appendChild(nm);
+      const at = cuandoDice(c, nom, .14 + .55 * j / Math.max(1, n));
+      // salto de caballo: entra en arco desde un costado y cae en su casilla
+      c.tl.fromTo(it, {x: (j % 2 ? 1 : -1) * 240, y: -300, rotation: (j % 2 ? 1 : -1) * 18, opacity: 0}, {x: 0, y: 0, rotation: 0, opacity: 1, duration: .8, ease: 'power3.out'}, at);
+      c.tl.from(nm, {opacity: 0, y: 16, duration: .4}, at + .5); c.fx(at + .7, 'pop'); }); },
+  escalera: (c) => { fondo11(c); const cm = camino(), ya = YA(), n = cm.length, tf = Math.max(1.8, c.cue(norm(c.sc.voz || '').includes('falta') ? 'falta' : 'siguiente', .45));
+    texto(c, {x: 160, y: 46, w: 1600, c: 1, t: c.sc.t, size: 88, maxH: 110, at: .3});
+    const W = Math.min(300, 1560 / n), x0 = 960 - (W * n) / 2, Y = 560, X = (j) => x0 + j * W;
+    const cs = cm.map((t, j) => { const e = $(`<div class="abs" style="left:${X(j) + 10}px;top:${Y}px;width:${W - 20}px;height:${W - 20}px;border-radius:16px;display:flex;align-items:flex-end;justify-content:center;padding:18px;text-align:center;font:800 ${W > 240 ? 30 : 24}px/1.2 Montserrat;color:${j < ya ? P.sobre : P.mut};background:${j < ya ? P.a : rgba(P.ink, .05)};border:3px ${j < ya ? 'solid' : 'dashed'} ${j < ya ? P.a : rgba(P.ink, .3)}">${esc(t)}</div>`); c.cam.appendChild(e); c.tl.from(e, {y: 70, opacity: 0, duration: .5, ease: 'expo.out'}, .5 + j * .12); return e; });
+    const pw = $(`<div class="abs" style="left:0;top:${Y - 236}px;width:${W}px;height:226px;display:flex;justify-content:center;align-items:flex-end">${pieza('peon', 210, P.c, 'filter:drop-shadow(0 18px 20px rgba(0,0,0,.6))')}</div>`); c.cam.appendChild(pw);
+    c.tl.set(pw, {x: X(0)}, 0); c.tl.from(pw, {opacity: 0, y: -90, duration: .5, ease: 'back.out(1.6)'}, .8);
+    for (let j = 1; j < ya; j++) { const at = 1.1 + j * .5; c.tl.to(pw, {x: X(j), duration: .36, ease: 'power2.inOut'}, at); c.tl.to(pw, {y: -46, duration: .18, yoyo: true, repeat: 1, ease: 'sine.out'}, at); c.fx(at + .3, 'click'); }
+    if (ya) { const lab = $(`<div class="abs ctr" style="left:${X(0)}px;top:${Y + W + 4}px;width:${W * ya}px"><span class="chip lleno" style="font-size:24px">${sobre(PAL)}Ya lo tienes</span></div>`); c.cam.appendChild(lab); c.tl.from(lab, {opacity: 0, y: 20, duration: .4}, 1.3); }
+    for (let j = ya; j < n; j++) { const at = tf + (j - ya) * .55; c.tl.to(pw, {x: X(j), duration: .38, ease: 'power2.inOut'}, at); c.tl.to(pw, {y: -46, duration: .19, yoyo: true, repeat: 1}, at);
+      c.tl.to(cs[j], {backgroundColor: rgba(P.a, .22), borderColor: P.a, color: P.ink, duration: .3}, at + .3); c.fx(at + .3, 'click'); }
+    const tq = tf + (n - ya) * .55 + .25, q = $(`<div class="abs" style="left:0;top:${Y - 260}px;width:${W}px;height:250px;display:flex;justify-content:center;align-items:flex-end;opacity:0">${pieza('reina', 240, P.a, 'filter:drop-shadow(0 0 30px ' + rgba(P.a, .6) + ')')}</div>`); c.cam.appendChild(q);
+    c.tl.set(q, {x: X(n - 1)}, 0); c.tl.to(pw, {opacity: 0, scale: .5, duration: .3}, tq); c.tl.fromTo(q, {opacity: 0, scale: .4}, {opacity: 1, scale: 1, duration: .6, ease: 'back.out(2)'}, tq); c.fx(tq, 'golpe');
+    if (n > ya) { const lab2 = $(`<div class="abs ctr" style="left:${X(ya)}px;top:${Y + W + 4}px;width:${W * (n - ya)}px"><span class="chip" style="font-size:24px">Tu siguiente nivel: coronar</span></div>`); c.cam.appendChild(lab2); c.tl.from(lab2, {opacity: 0, y: 20, duration: .4}, tf); } },
+  tool2: (c) => { fondo11(c); const {i, t, s, pts, et} = tool(c), k = 'c' + i;
+    texto(c, {x: 130, y: 130, w: 760, k: et, t, s, size: 74, maxH: 240, at: .15});
+    const L = $(`<div class="abs" style="left:134px;top:560px;width:740px"></div>`); c.cam.appendChild(L); puntos(c, L, pts, {fs: 36, gap: 18});
+    dirCasilla(c, 1340, 820, 760);
+    const im = $(`<div class="abs" style="left:960px;top:150px;width:760px;height:680px;display:flex;align-items:flex-end;justify-content:center">${img(k, 'max-width:100%;max-height:100%;filter:drop-shadow(0 34px 40px rgba(0,0,0,.65))')}</div>`); c.cam.appendChild(im);
+    // la jugada: puntos que marcan el movimiento hacia la herramienta y una pieza que la "corona"
+    const pz = $(`<div class="abs" style="left:1700px;top:600px;width:150px;height:220px;display:flex;align-items:flex-end;justify-content:center">${pieza(['caballo', 'alfil', 'torre', 'reina'][i % 4], 200, P.a, 'filter:drop-shadow(0 16px 18px rgba(0,0,0,.6))')}</div>`); c.cam.appendChild(pz);
+    c.tl.from(im, {y: 160, opacity: 0, scale: .85, duration: .9, ease: 'expo.out'}, .25); c.fx(.3, 'whoosh');
+    c.tl.from(pz, {x: 140, opacity: 0, duration: .6, ease: 'power3.out'}, .7); c.tl.to(pz, {y: -24, duration: .3, yoyo: true, repeat: 1}, 1.3); c.fx(1.45, 'click');
+    flota(c.tl, im, c.D, {at: 1.3, d: 2.8}); },
+};
+['multitud', 'porque', 'revela', 'todas', 'precio', 'exclusiva', 'inversion', 'garantia', 'cta2', 'generico', 'recorrido'].forEach((n) => { if (!D[11][n]) D[11][n] = (c) => { fondo11(c); (window.PRO.S[n] || window.PRO.S.generico)(c); }; });
 })();

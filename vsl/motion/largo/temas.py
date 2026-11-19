@@ -53,7 +53,16 @@ COLORES = [
     dict(nombre='Medianoche y cian', pal=_pal('#061018', '#22b8e0', '#f2b24a', '#7fe3ff', '#0d1b26', ink='#eef7fb', mut='#98adb8', sobre='#03141c'), grad='radial-gradient(1200px 800px at 80% 0%,#0c3046 0%,#061018 62%)'),
     dict(nombre='Grafito y coral', pal=_pal('#0f0f12', '#f2665a', '#3b82f6', '#ffb199', '#19191d', ink='#f5f2f1', mut='#b0a9a7', sobre='#ffffff'), grad='radial-gradient(1000px 700px at 15% 100%,#3a1a17 0%,#0f0f12 62%)'),
     dict(nombre='Índigo y magenta', pal=_pal('#0b0b1a', '#6366f1', '#ec4899', '#a5b4fc', '#15152b', ink='#f1f1fb', mut='#a5a6c0', sobre='#ffffff'), grad='radial-gradient(1200px 800px at 80% 0%,#23234f 0%,#0b0b1a 62%)'),
+    # 19 nov: colores para adaptar los estilos aprobados a nichos clásicos (ajedrez, oficios, educación)
+    dict(nombre='Azul real y marfil', pal=_pal('#0a1022', '#c9a654', '#e8e1d0', '#f0d79a', '#131b33', ink='#f5f1e8', mut='#a9b0c4', sobre='#14100a'), grad='radial-gradient(1200px 800px at 80% 0%,#1a2650 0%,#0a1022 62%)'),
+    dict(nombre='Nogal y marfil', pal=_pal('#120d09', '#d2b07a', '#efe6d2', '#f0d79a', '#1d150f', ink='#f6efe2', mut='#b8a994', sobre='#1a1208'), grad='radial-gradient(1200px 800px at 80% 0%,#2e2015 0%,#120d09 62%)'),
 ]
+
+# Estilos EXCLUSIVOS de un producto (regla V1, 19 nov): el 3er diseño de cada producto lo crea Claude para su nicho.
+# 'd11-gen' = director 11. Paleta, música y tipografía propias; el código de las escenas vive en vsl/motion/pro/dir.js.
+DIR_PRODUCTO = {
+    11: dict(nombre='Tablero', prod='ajedrez', pal=_pal('#0c0a08', '#d4b06a', '#efe6d2', '#f0d79a', '#17130e', ink='#f6f1e6', mut='#b8ad99', sobre='#14100a'), grad='none', ft=None, musica='musica/expressive-courage.mp3'),
+}
 
 
 # Directores exclusivos de abogados (18 nov): 5 mundos visuales del derecho, cada uno con su paleta, tipografía y música.
@@ -93,8 +102,13 @@ def estilo(clave):
         # 'd3-legal' = director 3 (otra interpretación visual de todas las escenas) con la familia legal
         resto = clave[clave.index('-') + 1:].split('-'); fam = resto[0]
         num = ''.join(ch for ch in clave[1:3] if ch.isdigit()); k = int(num)
-        if k in DIR_LEGAL:  # 'd6-legal' … 'd10-legal'
-            L = DIR_LEGAL[k]; e = estilo('t-legal-1'); e['dir'] = k; e['fam'] = 'legal'; e['pal'] = dict(L['pal']); e['grad'] = L['grad']; e['musica'] = L['musica']; e['dirFt'] = L['ft']; e['color'] = L['nombre']
+        if k in DIR_LEGAL or k in DIR_PRODUCTO:  # 'd6-legal' … 'd10-legal', 'd11-gen' …
+            # 19 nov: el Tribunal (d8, aprobado) se reutiliza en otros nichos: la familia ya NO se fuerza a 'legal',
+            # así dir.js cambia los objetos del derecho (mazo, balanza) por los del nicho.
+            L = DIR_LEGAL.get(k) or DIR_PRODUCTO[k]; fam2 = fam if fam in FAMILIAS else 'gen'
+            e = estilo('t-%s-1' % fam2); e['dir'] = k; e['fam'] = fam2; e['pal'] = dict(L['pal']); e['grad'] = L['grad']; e['musica'] = L['musica']; e['dirFt'] = L['ft']; e['color'] = L['nombre']
+            if len(resto) > 1 and resto[1].isdigit():  # color de adaptación al nicho: 'd8-gen-8'
+                col = COLORES[(int(resto[1]) - 1) % len(COLORES)]; e['pal'] = dict(col['pal']); e['grad'] = col['grad']; e['color'] = L['nombre'] + ' · ' + col['nombre']
             return e
         e = estilo('t-%s-%d' % (fam, k)); e['dir'] = k; e['fam'] = fam if fam in FAMILIAS else 'gen'
         if len(resto) > 1 and resto[1].isdigit():  # color extra: 'd3-tec-2'

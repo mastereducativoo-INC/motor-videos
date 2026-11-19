@@ -165,14 +165,17 @@ S.gracias = (c) => {
     const at = c.cue(w, .12 + .8 * j / filas.length);
     tl.from(f, {x: -50, autoAlpha: 0, duration: .6, ease: 'power3.out'}, at); draw(tl, f.querySelectorAll('circle,path'), at + .1, .45); c.fx(at + .15, 'tick');
   });
-  const ks = (PR.cimgs || ['m1', 'm2', 'm3', 'm4']).filter((k) => IM[k] && IM[k].ok), alto = ks.filter((k) => IM[k].h > IM[k].w * 1.05), ancho = ks.filter((k) => !alto.includes(k));
+  // REGLA M8 (Christian, 19 nov): aparecen TODOS los mockups del curso (uno por módulo); el logo va aparte, nunca ocupa el lugar de un mockup
+  const ks = (PR.cimgs || Array.from({length: 12}, (_, q) => 'm' + (q + 1))).filter((k) => IM[k] && IM[k].ok);
   const fan = $('<div class="fan" style="left:990px;top:0;width:820px;height:1080px"></div>'); cam.appendChild(fan);
   fan.appendChild($('<div class="halo" style="left:10px;top:150px;width:800px;height:800px"></div>'));
-  const hayLogo = ancho.length && alto.length, libros = alto.length ? alto : ancho, H = alto.length ? 470 : 330, mid = (libros.length - 1) / 2, sep = Math.min(236, 560 / Math.max(1, libros.length - 1));
-  if (hayLogo) { const l = $(img(ancho[0], 'left:230px;top:70px;width:360px')); fan.appendChild(l); tl.from(l, {y: -80, autoAlpha: 0, scale: .7, duration: .9, ease: 'back.out(1.5)'}, .3); }
+  const hayLogo = IM.logo && IM.logo.ok, libros = ks, nL = libros.length, dos = nL > 5, fila1 = dos ? Math.ceil(nL / 2) : nL;
+  const H = dos ? 300 : nL > 3 ? 400 : 470;
+  if (hayLogo) { const l = $(img('logo', 'left:230px;top:40px;width:360px;max-height:230px;object-fit:contain')); fan.appendChild(l); tl.from(l, {y: -80, autoAlpha: 0, scale: .7, duration: .9, ease: 'back.out(1.5)'}, .3); }
   libros.forEach((k, j) => {
-    const wd = H * IM[k].w / IM[k].h, o = j - mid;
-    const b = $(img(k, `left:${410 - wd / 2 + o * sep}px;top:${(hayLogo ? 330 : 250) + Math.abs(o) * 34}px;height:${H}px;z-index:${10 - Math.abs(o)}`)); fan.appendChild(b);
+    const enFila = j < fila1 ? fila1 : nL - fila1, jj = j < fila1 ? j : j - fila1, midF = (enFila - 1) / 2, o = jj - midF, sep = Math.min(dos ? 200 : 236, 620 / Math.max(1, enFila - 1));
+    const wd = H * IM[k].w / IM[k].h, top0 = dos ? (j < fila1 ? (hayLogo ? 280 : 200) : (hayLogo ? 640 : 580)) : (hayLogo ? 330 : 250);
+    const b = $(img(k, `left:${410 - wd / 2 + o * sep}px;top:${top0 + Math.abs(o) * 22}px;height:${H}px;z-index:${(j < fila1 ? 10 : 20) - Math.abs(o)}`)); fan.appendChild(b);
     // cada mockup entra cuando se nombra su módulo (corrección de Christian, 17 nov): uno por uno hasta que estén todos
     const cuando = filas[j] && libros.length > 1 ? Math.max(.4 + j * .14, c.cue(filas[j][1], .12 + .8 * j / filas.length) - .15) : .4 + j * .14;
     tl.fromTo(b, {y: 420, rotation: 0, autoAlpha: 0, scale: .7}, {y: 0, rotation: o * 8, autoAlpha: 1, scale: 1, duration: 1.05, ease: 'back.out(1.3)', transformOrigin: '50% 100%'}, cuando); c.fx(cuando + .3, 'pop');
@@ -448,6 +451,36 @@ function orbita(cam, tl, sc, cue) {
     d.style.transform = `translate(${G.cx + Math.cos(an) * G.rx}px,${G.cy + z * G.ry}px) scale(${s})`; d.style.zIndex = z > 0 ? 40 : 20; d.style.opacity = st.o * (.6 + .4 * (z + 1) / 2); });
   tl.call(medir, null, T0 - .05); tl.to(st, {o: 1, duration: .6, onUpdate: pon}, T0); tl.to(st, {a: Math.PI * 2 * Math.max(.6, (sc.dur - T0) / 9), duration: Math.max(1, sc.dur - T0 + .4), ease: 'none', onUpdate: () => { medir(); pon(); }}, T0);  // se mide siempre: el pack puede seguir moviéndose
 }
+// LEY T5 (Christian, 19 nov): ningún texto encima de una imagen ni imagen encima de un texto. Antes de grabar se mide cada escena
+// en dos momentos; si una imagen pisa un texto, la imagen se achica y se aparta del texto (propiedades CSS scale/translate, que se
+// suman a las animaciones de GSAP sin romperlas). Lo que no se pueda separar lo marca después la revisión de calidad (qa.py).
+function desencimar() {
+  const R = (e) => e.getBoundingClientRect(), area = (r) => Math.max(0, r.width) * Math.max(0, r.height);
+  const inter = (a, b) => Math.max(0, Math.min(a.right, b.right) - Math.max(a.left, b.left)) * Math.max(0, Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top));
+  const op = (e) => { let o = 1; for (let x = e; x && x !== document.body; x = x.parentElement) { const s = getComputedStyle(x); if (s.display === 'none' || s.visibility === 'hidden') return 0; o *= +s.opacity; } return o; };
+  const log = [];
+  V.escenas.forEach((sc, i) => { const el = sc.el; if (!el) return;
+    for (const f of [.6, .93]) {
+      window.__seek(sc.t0 + sc.vd * f);
+      const textos = [...el.querySelectorAll('h1,h2,h3,h4,.T,.P,.K,.chip,.fila,.btn,.bt,.ej')].filter((e) => op(e) > .6 && area(R(e)) > 40);
+      const imgs = [...el.querySelectorAll('img')].filter((e) => op(e) > .6 && area(R(e)) > 400 && area(R(e)) < 1920 * 1080 * .42);
+      for (const im of imgs) for (const tx of textos) {
+        if (tx.contains(im) || im.contains(tx)) continue;
+        let n = 0, ri = R(im); const rt = R(tx);
+        while (n < 7 && area(ri) > 0 && inter(rt, ri) / Math.min(area(rt), area(ri)) > .1) {
+          const cx = (ri.left + ri.right) / 2, tcx = (rt.left + rt.right) / 2, cy = (ri.top + ri.bottom) / 2, tcy = (rt.top + rt.bottom) / 2;
+          const [dx0, dy0] = String(im.style.translate || '0px 0px').split(' ').map((v) => parseFloat(v) || 0);
+          const horiz = Math.abs(cx - tcx) / Math.max(1, rt.width + ri.width) >= Math.abs(cy - tcy) / Math.max(1, rt.height + ri.height);
+          const dx = horiz ? Math.sign(cx - tcx || 1) * 46 : 0, dy = horiz ? 0 : Math.sign(cy - tcy || 1) * 34;
+          im.style.translate = `${dx0 + dx}px ${dy0 + dy}px`; im.style.scale = String((parseFloat(im.style.scale) || 1) * .88);
+          ri = R(im); n++;
+        }
+        if (n) log.push(i + 1);
+      }
+    }
+  });
+  window.__desencimado = [...new Set(log)];
+}
 // ================= FONDO, TRANSICIONES Y MONTAJE =================
 function montar() {
   const B = document.body, bg = $('<div id="bg"><div class="luz"></div><div class="luz b"></div></div>'), ESC = $('<div id="esc"></div>'), FX = $('<div id="fx"></div>');
@@ -490,6 +523,7 @@ function montar() {
     if (i % 4 === 0) sfx(t - .2, 'whoosh');  // 18 nov: no un sonido en cada corte
   });
   window.__seek = (t) => { M.time(Math.max(0, t), false); amb(t); window.PRO.alSeek.forEach((f) => f(t)); };
+  try { desencimar(); } catch (e) { console.error(e); }
   window.__seek(0); window.__listo = true;
 }
 const fu = [E.dir ? E.dirFt || 'Montserrat' : E.ft || 'Montserrat', E.fb || 'Montserrat', 'Montserrat'].concat(E.dir ? ['JetBrains'] : []);
