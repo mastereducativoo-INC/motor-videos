@@ -33,6 +33,7 @@ const $ = (html) => { const d = document.createElement('div'); d.innerHTML = htm
 const norm = (s) => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 const pal = (s) => String(s || '').split('*').map((seg, j) => seg.split(/\s+/).filter(Boolean).map((w) => `<span class="w${j % 2 ? ' k' : ''}"><span class="wi">${esc(w)}</span></span>`).join(' ')).join(' ');
 window.SFX = []; const sfx = (t, n) => window.SFX.push([Math.max(0, +(+t).toFixed(2)), n]);
+const cap = (s) => { s = String(s || '').trim(); return s.charAt(0).toUpperCase() + s.slice(1); };
 const fmt = (n) => Math.round(n).toLocaleString('en-US');
 const OK = '<svg viewBox="0 0 50 50"><circle cx="25" cy="25" r="22" fill="none" stroke="currentColor" stroke-width="4"/><path d="M14 26l7 7 15-16" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const NO = '<svg viewBox="0 0 50 50" width="58" height="58"><circle cx="25" cy="25" r="22" fill="none" stroke="currentColor" stroke-width="4"/><path d="M16 16l18 18M34 16L16 34" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></svg>';
@@ -97,7 +98,7 @@ function puntos(c, items, o) {
   (o.en || c.cam).appendChild(b);
   items.forEach((it, j) => {
     const lab = DIR === 2 ? 'A' + (j + 1) : DIR === 3 ? String(j + 1).padStart(2, '0') : DIR === 5 ? '' : String(j + 1);
-    const f = $(`<div class="fila" style="font-size:${o.size || 44}px">${DIR === 5 ? `<span style="flex:0 0 46px;height:2px;background:var(--a);margin-top:4px"></span>` : `<span class="n">${lab}</span>`}<span>${esc(it)}</span></div>`);
+    const f = $(`<div class="fila" style="font-size:${o.size || 44}px">${DIR === 5 ? `<span style="flex:0 0 46px;height:2px;background:var(--a);margin-top:4px"></span>` : `<span class="n">${lab}</span>`}<span>${esc(cap(it))}</span></div>`);
     if (DIR === 1) f.style.cssText += ';padding:16px 24px;border-radius:14px;background:rgba(255,255,255,.05);border:2px solid var(--line)';
     if (DIR === 4) f.style.cssText += ';background:#111;color:#fff;padding:16px 22px;font-family:Archivo;font-weight:800;text-transform:uppercase';
     b.appendChild(f);
@@ -187,12 +188,34 @@ S.k_gancho = (c) => {
 };
 
 // 2. El problema: lo que hoy le frena (cada cosa se tacha cuando se nombra)
+// Si la página trae recortes (sección "Olvídate de…": personas frustradas), cada problema va con su imagen.
+function tarjetasDolor(c, items, y0) {
+  const L = recortes().slice(0, Math.min(4, items.length)), n = L.length, wcol = 1680 / n, col = DIR === 4 ? 'var(--a)' : 'var(--b)';
+  L.forEach((k, j) => {
+    const x = 120 + j * wcol, it = items[j] || '', t = c.cue(it.split(/\s+/).slice(0, 2).join(' '), .3 + j * .16, .5 + j * .3);
+    if (DIR === 3) ventana(c, {x: x + 14, y: y0 - 30, w: wcol - 28, h: 660, titulo: 'ERROR ' + (j + 1), at: t - .1});
+    objeto(c, k, {x: x + 30, y: y0, w: wcol - 60, h: 400, at: t, halo: false, sfx: false, dir: j % 2 ? 1 : -1, st: 'filter:saturate(.75)'});
+    const l = $(`<div class="abs ctr" style="left:${x + 16}px;top:${y0 + 430}px;width:${wcol - 32}px;display:flex;justify-content:center;align-items:center;gap:12px;font-family:var(--fb);font-weight:700;font-size:34px;line-height:1.15;color:${DIR === 4 ? '#fff' : 'var(--ink)'};${DIR === 4 ? 'background:#111;padding:14px 16px' : DIR === 3 ? 'font-family:JetBrains;font-size:30px' : ''}"><span style="color:${col};flex:0 0 46px;display:flex">${NO.replace('width="58" height="58"', 'width="46" height="46"')}</span><span style="position:relative">${esc(cap(it))}<i style="position:absolute;left:0;right:0;top:52%;height:4px;background:${col};transform-origin:0 50%"></i></span></div>`);
+    c.cam.appendChild(l);
+    c.tl.from(l, {autoAlpha: 0, y: 30, duration: .5, ease: 'expo.out'}, t + .2);
+    c.tl.from(l.querySelector('i'), {scaleX: 0, duration: .45, ease: 'power2.inOut'}, t + .8);
+    c.fx(t, DIR === 3 ? 'click' : 'pop'); c.fx(t + .8, 'click');
+  });
+}
 S.k_dolor = (c) => {
   const {sc} = c, items = (sc.items || []).slice(0, 4);
+  if (recortes().length >= 2 && items.length >= 2) {
+    if (DIR === 4) cartel(c, 1);
+    if (DIR === 5) { foto(c, fotos()[1] || fotos()[0], {dir: -1}); c.cam.appendChild($('<div class="abs franjas" style="inset:0"></div>')); }
+    if (DIR === 2) disco(c, {x: 1500, y: -300, s: 700, lab: '', desde: 600});
+    texto(c, {x: 120, y: DIR === 5 ? 110 : 70, w: 1680, c: 1, k: sc.k, t: sc.t, size: DIR === 4 ? 120 : 84, maxH: 220});
+    tarjetasDolor(c, items, 350);
+    return;
+  }
   const lista = (x, y, w, size) => {
     const b = $(`<div class="abs" style="left:${x}px;top:${y}px;width:${w}px;display:flex;flex-direction:column;gap:26px"></div>`); c.cam.appendChild(b);
     items.forEach((it, j) => {
-      const col = DIR === 4 ? 'var(--a)' : 'var(--b)', f = $(`<div class="fila" style="font-size:${size}px;color:var(--ink)"><span style="color:${col};flex:0 0 58px">${NO}</span><span class="tx" style="position:relative">${esc(it)}<i style="position:absolute;left:0;right:0;top:54%;height:5px;background:${col};transform-origin:0 50%"></i></span></div>`);
+      const col = DIR === 4 ? 'var(--a)' : 'var(--b)', f = $(`<div class="fila" style="font-size:${size}px;color:var(--ink)"><span style="color:${col};flex:0 0 58px">${NO}</span><span class="tx" style="position:relative">${esc(cap(it))}<i style="position:absolute;left:0;right:0;top:54%;height:5px;background:${col};transform-origin:0 50%"></i></span></div>`);
       if (DIR === 3) f.style.cssText += ';background:#1f141a;border:2px solid #4a2230;border-radius:12px;padding:18px 24px;font-family:JetBrains;font-size:' + (size - 6) + 'px';
       if (DIR === 4) f.style.cssText += ';background:#111;color:#fff;padding:16px 22px;font-family:Archivo;font-weight:800;text-transform:uppercase';
       b.appendChild(f);
@@ -249,20 +272,32 @@ S.k_mod = (c) => {
   puntos(c, items, {x: tx, y: 560, w: 980, size: 40, gap: 20, maxH: 400});
 };
 
-// 5. Lo que va a poder hacer: 4 logros con su imagen
+// 5. Lo que va a poder hacer: los logros con su check, junto al curso
 S.k_logros = (c) => {
-  const {sc} = c, L = recortes().slice(0, 4), labs = (sc.items && sc.items.length ? sc.items : PR.logros || []).slice(0, L.length);
-  if (DIR === 4) cartel(c, 1);
+  const {sc} = c, labs = (sc.items && sc.items.length ? sc.items : PR.logros || []).slice(0, 4), M = mods();
+  if (DIR === 4) cartel(c, 2);
   if (DIR === 5) { foto(c, fotos()[4] || fotos()[0], {centro: 1}); c.cam.appendChild($('<div class="abs franjas" style="inset:0"></div>')); }
-  texto(c, {x: 120, y: DIR === 5 ? 110 : 80, w: 1680, c: 1, k: sc.k, t: sc.t, size: DIR === 4 ? 120 : 84, maxH: 220});
-  const n = L.length || 1, wcol = 1680 / n;
-  L.forEach((k, j) => {
-    const x = 120 + j * wcol, cuando = c.cue((labs[j] || '').split(/\s+/)[0], .28 + j * .16, .5 + j * .3);
-    if (DIR === 3) { const w = ventana(c, {x: x + 14, y: 340, w: wcol - 28, h: 620, titulo: 'FX ' + (j + 1), at: cuando - .1}); }
-    objeto(c, k, {x: x + 30, y: 370, w: wcol - 60, h: 420, at: cuando, halo: DIR !== 3, sfx: false, dir: j % 2 ? 1 : -1});
-    const l = $(`<div class="abs ctr chip" style="left:${x + 20}px;top:820px;width:${wcol - 40}px;justify-content:center;font-size:36px">${esc(labs[j] || '')}</div>`);
-    c.cam.appendChild(l); c.tl.from(l, {autoAlpha: 0, y: 30, duration: .5, ease: 'expo.out'}, cuando + .25); c.fx(cuando, DIR === 3 ? 'click' : 'pop');
+  if (DIR === 3) { const w = ventana(c, {x: 80, y: 70, w: 1760, h: 940, titulo: 'NUEVAS HABILIDADES', der: labs.length + ' DESBLOQUEADAS'}); c.tl.from(w, {autoAlpha: 0}, 0); }
+  if (DIR === 2) disco(c, {x: 1060, y: 160, s: 780, lab: '', desde: 600});
+  const der = DIR === 2 || DIR === 4;
+  texto(c, {x: der ? 120 : 840, y: 120, w: 960, k: sc.k, t: sc.t, size: DIR === 4 ? 116 : 84, maxH: 260});
+  const b = $(`<div class="abs" style="left:${der ? 120 : 840}px;top:430px;width:960px;display:flex;flex-direction:column;gap:22px"></div>`); c.cam.appendChild(b);
+  labs.forEach((it, j) => {
+    const f = $(`<div class="fila" style="font-size:44px;align-items:center"><span style="flex:0 0 60px;width:60px;height:60px;color:${DIR === 4 ? 'var(--a)' : 'var(--a)'};display:flex">${OK}</span><span>${esc(cap(it))}</span></div>`);
+    if (DIR === 1) f.style.cssText += ';padding:14px 22px;border-radius:14px;background:rgba(255,255,255,.05);border:2px solid var(--line)';
+    if (DIR === 3) f.style.cssText += ';padding:14px 20px;border-radius:10px;background:#04140f;border:2px solid #0f3b2e;font-size:38px';
+    if (DIR === 4) f.style.cssText += ';background:#111;color:#fff;padding:14px 20px;font-family:Archivo;font-weight:800;text-transform:uppercase';
+    b.appendChild(f);
+    const t = c.cue(it.split(/\s+/)[0], .28 + j * .16, .6 + j * .3);
+    c.tl.from(f, {autoAlpha: 0, x: der ? -60 : 60, duration: .55, ease: 'expo.out'}, t);
+    c.tl.from(f.querySelector('svg'), {scale: 0, rotation: -90, transformOrigin: '50% 50%', duration: .45, ease: 'back.out(2)'}, t + .1);
+    c.fx(t, DIR === 3 ? 'click' : 'pop');
   });
+  let fs = 44, n = 0; while (b.offsetHeight > 540 && fs > 30 && n++ < 20) { fs *= .94; b.querySelectorAll('.fila').forEach((x) => { x.style.fontSize = fs + 'px'; }); }
+  // el curso al lado: el logo con los módulos detrás
+  const cx = der ? 1150 : 120;
+  M.slice(0, 4).forEach((k, j) => objeto(c, k, {x: cx + 10 + j * 165, y: 470 + Math.abs(j - 1.5) * 24, w: 250, h: 345, at: .3 + j * .12, halo: false, sfx: false, rot: (j - 1.5) * 5, dir: der ? 1 : -1}));
+  objeto(c, 'logo', {x: cx + 70, y: 110, w: 560, h: 320, at: .2, halo: DIR !== 3});
 };
 
 // 6. Hasta dónde llega: fotos reales del ambiente (montaje)
