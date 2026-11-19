@@ -16,7 +16,7 @@ from playwright.async_api import async_playwright
 FPS, SR = 30, audio.SR
 TIPO = {'felicita': 'felicita', 'titulo': 'texto', 'numero': 'gancho', 'curso': 'acceso', 'camino': 'ruta', 'producto': 'producto', 'tool': 'elemento', 'demo': 'elemento', 'rafaga': 'gancho',
         'rejilla': 'elemento', 'carrusel': 'elemento', 'valor': 'valor', 'precio': 'precio', 'garantia': 'garantia', 'compara': 'texto', 'historia': 'texto', 'etapas': 'etapas', 'lista': 'texto', 'cta': 'cta', 'gracias': 'felicita', 'escalera': 'ruta', 'tool2': 'elemento', 'todas': 'valor', 'etapas2': 'etapas', 'alumnos': 'texto', 'porque': 'desbloqueo', 'inversion': 'valor', 'exclusiva': 'texto', 'revela': 'producto', 'recorrido': 'ruta', 'multitud': 'texto', 'cta2': 'cta'}
-MIN = {'rafaga': 5.5, 'carrusel': 9, 'valor': 7, 'precio': 6, 'garantia': 5.5, 'camino': 6, 'compara': 8, 'rejilla': 6, 'demo': 5, 'tool': 4.2, 'curso': 5, 'etapas': 6, 'gracias': 6.5, 'escalera': 10, 'tool2': 4.8, 'todas': 8, 'etapas2': 8, 'alumnos': 6.5, 'porque': 6, 'inversion': 7, 'exclusiva': 6, 'revela': 6, 'recorrido': 9, 'multitud': 7, 'cta2': 6}
+MIN = {'k_gancho': 4, 'k_dolor': 6, 'k_curso': 5.5, 'k_mod': 6, 'k_logros': 6, 'k_escena': 5, 'k_cert': 4.5, 'k_alumnos': 6, 'k_garantia': 6, 'k_cta': 6, 'rafaga': 5.5, 'carrusel': 9, 'valor': 7, 'precio': 6, 'garantia': 5.5, 'camino': 6, 'compara': 8, 'rejilla': 6, 'demo': 5, 'tool': 4.2, 'curso': 5, 'etapas': 6, 'gracias': 6.5, 'escalera': 10, 'tool2': 4.8, 'todas': 8, 'etapas2': 8, 'alumnos': 6.5, 'porque': 6, 'inversion': 7, 'exclusiva': 6, 'revela': 6, 'recorrido': 9, 'multitud': 7, 'cta2': 6}
 CACHE = os.path.join(AQUI, 'build', 'voz'); os.makedirs(CACHE, exist_ok=True)
 SALIDA = os.path.join(os.path.dirname(AQUI), 'salida-largo'); os.makedirs(SALIDA, exist_ok=True)
 
@@ -72,10 +72,10 @@ def preparar(v):
         # 18 nov (Christian): la escena siguiente entra en cuanto termina la voz; la animación tiene a lo más 0.9 s extra
         voz_s = len(a) / SR
         vd = max(voz_s + 0.28 / r, min(MIN.get(sc['c'], 2.4) / r, voz_s + 0.9 / r), sc.get('seg', 0))
-        sc['t0'] = round(t, 3); sc['vd'] = round(vd, 3); sc['vz'] = round(len(a) / SR, 3); sc['dur'] = round(vd + (5.0 if sc['c'] in ('cta', 'cta2') else 0), 3)
+        sc['t0'] = round(t, 3); sc['vd'] = round(vd, 3); sc['vz'] = round(len(a) / SR, 3); sc['dur'] = round(vd + (5.0 if sc['c'] in ('cta', 'cta2', 'k_cta') else 0), 3)
         pista.append((t + 0.22, a))
-        if sc['c'] in ('precio', 'cta', 'cta2'): niv.append((t, t + sc['dur'], 1.15))
-        if sc['c'] == 'garantia': niv.append((t, t + sc['dur'], 0.8))
+        if sc['c'] in ('precio', 'cta', 'cta2', 'k_cta'): niv.append((t, t + sc['dur'], 1.15))
+        if sc['c'] in ('garantia', 'k_garantia'): niv.append((t, t + sc['dur'], 0.8))
         t += sc['dur']
     v['dur'] = round(t, 3)
     voz = np.zeros(int(t * SR) + SR, np.float32)
@@ -83,7 +83,9 @@ def preparar(v):
         p = int(t0 * SR); voz[p:p + len(a)] += a[:len(voz) - p]
     html = os.path.join(AQUI, 'build', v['id'] + '.html')
     datos = json.dumps({k: v[k] for k in ('id', 'titulo', 'estilo', 'escenas', 'dur', 'prod', 'assets', 'assets2') if k in v}, ensure_ascii=False).replace('</', '<\\/')
-    if E.get('motor') == 'pro':  # motor nuevo (vsl/motion/pro): GSAP + escenas sincronizadas con la voz
+    if E.get('motor') == 'mkt':  # video del producto principal (Marketplace): vsl/motion/mkt
+        cab, pie = '<link rel="stylesheet" href="../../mkt/mkt.css">', '<script src="../../pro/lib/gsap.min.js"></script><script src="../../mkt/mkt.js"></script>'
+    elif E.get('motor') == 'pro':  # motor nuevo (vsl/motion/pro): GSAP + escenas sincronizadas con la voz
         cab, pie = '<link rel="stylesheet" href="../../pro/pro.css">', '<script src="../../pro/lib/gsap.min.js"></script><script src="../../pro/pro.js"></script>' + ('<link rel="stylesheet" href="../../pro/dir.css"><script src="../../pro/lib/three.min.js"></script><script src="../../pro/dir.js"></script><script src="../../pro/nicho.js"></script>' if E.get('dir') else '')
     else:
         cab, pie = '<link rel="stylesheet" href="../motor.css">', '<script src="../motor.js"></script>'

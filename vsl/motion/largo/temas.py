@@ -107,6 +107,11 @@ def musica_para(fam, n, respaldo):
 def estilo(clave):
     """'t-legal-1' -> estilo completo del motor, o None si la clave no es un tema."""
     clave = str(clave or '')
+    if clave[:2] == 'mk' and clave[2:3].isdigit():
+        # 19 nov: video de venta del producto PRINCIPAL (Marketplace). Motor vsl/motion/mkt, 5 directores (mk1..mk5).
+        k = max(1, min(5, int(clave[2]))); fam = clave.split('-')[1] if '-' in clave else 'gen'
+        mus = {1: 'musica/house-fest.mp3', 2: 'musica/gear.mp3', 3: 'musica/deep-techno.mp3', 4: 'musica/uplifting-bass.mp3', 5: 'musica/b-o-r-n.mp3'}[k] if fam == 'dj' else musica_para(fam if fam in FAMILIAS else 'gen', k - 1, 'musica/savana.mp3')
+        return dict(COMUN, motor='mkt', mk=k, tema=False, musica=mus, nombre=['Club', 'Vinilo', 'Cabina', 'Cartel', 'Cine'][k - 1])
     if len(clave) > 3 and clave[0] == 'd' and clave[1].isdigit() and (clave[2] == '-' or (clave[2].isdigit() and clave[3] == '-')):
         # 'd3-legal' = director 3 (otra interpretación visual de todas las escenas) con la familia legal
         resto = clave[clave.index('-') + 1:].split('-'); fam = resto[0]

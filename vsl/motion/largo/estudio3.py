@@ -138,7 +138,7 @@ def armar(r, bajar):
     E.update(ritmo=float(st.get('ritmo') or 1.1), voz=st.get('voz') or 'em_alex', set=5)
     if str(st.get('musica') or '').startswith('!'):  # música elegida en una corrección ("no me gusta la música"): manda sobre el tema
         E['musica'] = st['musica'][1:]
-    elif st.get('musica') and not E.get('tema'):  # en los temas por nicho la música la decide el tema
+    elif st.get('musica') and not E.get('tema') and E.get('motor') != 'mkt':  # Marketplace: la música la decide el director  # en los temas por nicho la música la decide el tema
         E['musica'] = st['musica']
     if E.get('tema'):
         E['cinta'] = (prod.get('oferta') or '').upper()
@@ -147,6 +147,8 @@ def armar(r, bajar):
               dias=int(_num(prod.get('garantia_dias')) or 7), unidad=prod.get('unidad') or 'herramientas', etiqueta=prod.get('etiqueta') or 'Herramienta',
               mods=[m for m in prod.get('mods') or [] if m] or None, logro=prod.get('logro'), cimgs=[f'm{i}' for i in range(1, 13) if f'm{i}' in tiene] or None, vida=bool(prod.get('acceso_vida')) if 'acceso_vida' in prod else None, camino=prod.get('camino') or None, cont=cont or None)
     PR = {k: v for k, v in PR.items() if v is False or v not in (None, '', [])}
+    if E.get('motor') == 'mkt':  # Marketplace: el motor usa los datos del curso tal cual (módulos con sus puntos, logros, alumnos, testimonios)
+        PR = {k: prod.get(k) for k in ('curso', 'curso_corto', 'alumnos', 'rating', 'dias', 'mods', 'logros', 'testimonios') if prod.get(k) not in (None, '', [])}
     v = dict(id=r['id'], titulo=r.get('titulo') or r['id'], estilo=E, escenas=escenas, prod=PR,
              assets='../../assets/est/%s/' % r['id'], assets2='../../assets/est/%s-curso/' % r['id'],
              pronuncia=prod.get('pronuncia') or [])
