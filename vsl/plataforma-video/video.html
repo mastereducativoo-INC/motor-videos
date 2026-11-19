@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Sora:wght@400;500;600;700&display=swap">
+<style>
+*{box-sizing:border-box;margin:0}
+html,body{width:1920px;height:1080px;overflow:hidden;background:#060508}
+body{font-family:'Montserrat',sans-serif;color:#f6efe2}
+#st{position:relative;width:1920px;height:1080px;overflow:hidden;isolation:isolate}
+/* fondo */
+.fondo{position:absolute;inset:0;z-index:-3;background:radial-gradient(1200px 700px at 30% 40%,#16101e 0%,#060508 70%)}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);z-index:-2;will-change:transform}
+.b1{width:900px;height:700px;left:-120px;top:120px;background:rgba(242,195,91,.16)}
+.b2{width:800px;height:700px;right:-160px;top:-180px;background:rgba(124,58,237,.16)}
+.b3{width:700px;height:500px;right:120px;bottom:-260px;background:rgba(242,195,91,.10)}
+.grano{position:absolute;inset:0;z-index:5;pointer-events:none;opacity:.06;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.polvo{position:absolute;inset:0;z-index:-1;pointer-events:none}
+.polvo i{position:absolute;width:4px;height:4px;border-radius:50%;background:#ffe3a1;box-shadow:0 0 10px 3px rgba(255,214,140,.55)}
+.vineta{position:absolute;inset:0;z-index:4;pointer-events:none;background:radial-gradient(120% 100% at 50% 50%,transparent 60%,rgba(0,0,0,.55))}
+/* intro / cierre */
+.centro{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;text-align:center;gap:26px}
+.logo{font-weight:800;font-size:34px;letter-spacing:.55em;color:#f6efe2;padding-left:.55em;white-space:nowrap}
+.logo i{font-style:normal;color:#f2c35b}
+.linea{height:2px;width:520px;background:linear-gradient(90deg,transparent,#f2c35b,transparent);transform-origin:center}
+.big{font-weight:900;font-size:128px;line-height:.98;letter-spacing:-.045em;background:linear-gradient(180deg,#fffaf0 30%,#e6d3ad);-webkit-background-clip:text;background-clip:text;color:transparent;padding:0 .06em .06em}
+.big span{display:block;white-space:nowrap}
+.sub{font-family:'Sora',sans-serif;font-size:40px;font-weight:500;color:#d9cfbf}
+.chipc{display:inline-flex;align-items:center;gap:14px;padding:14px 26px;border-radius:999px;border:1.5px solid rgba(242,195,91,.45);background:rgba(20,15,8,.6);font-size:28px;font-weight:700;color:#ffe3a1}
+.chipc b{width:12px;height:12px;border-radius:50%;background:#f2c35b;box-shadow:0 0 0 6px rgba(242,195,91,.2)}
+/* celular */
+#tel{position:absolute;left:330px;top:50%;width:470px;height:968px;margin-top:-484px;transform-origin:50% 50%;z-index:2}
+.marco{position:absolute;inset:0;border-radius:72px;background:linear-gradient(145deg,#3a3440,#121016 40%,#2a2530);padding:14px;
+  box-shadow:0 80px 160px -40px rgba(0,0,0,.95),0 0 0 2px rgba(255,255,255,.08),inset 0 0 0 2px rgba(255,255,255,.06),0 0 140px -30px rgba(242,195,91,.35)}
+.pantalla{position:absolute;left:20px;top:20px;width:430px;height:928px;border-radius:58px;overflow:hidden;background:#060508}
+.escala{position:absolute;left:0;top:0;width:390px;height:844px;transform:scale(1.1026);transform-origin:0 0}
+#app{position:absolute;inset:0;width:390px;height:844px;border:0;background:#060508}
+.isla{position:absolute;left:50%;top:30px;width:120px;height:34px;margin-left:-60px;border-radius:20px;background:#000;z-index:30}
+.reflejo{position:absolute;inset:0;border-radius:58px;pointer-events:none;z-index:31;background:linear-gradient(125deg,rgba(255,255,255,.07),transparent 28%)}
+/* capas dentro de la pantalla (en coordenadas de 390x844) */
+.capa{position:absolute;inset:0;z-index:20;opacity:0;pointer-events:none}
+/* drive */
+.drive{background:#fff;color:#1f1f1f;font-family:'Sora',sans-serif;padding-top:52px}
+.drive .dtop{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid #e8e8e8}
+.drive .dtop b{font-size:15px;font-weight:700}
+.drive .ruta{padding:12px 18px;font-size:12px;color:#5f6368}
+.drive .vista{margin:4px 16px 12px;height:150px;border-radius:14px;background:radial-gradient(90% 90% at 50% 30%,#2a2134,#0d0b14);display:grid;place-items:center;position:relative;overflow:hidden}
+.drive .vista img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.9}
+.drive .vista span{position:relative;width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.92);display:grid;place-items:center}
+.drive .fila{display:flex;align-items:center;gap:14px;padding:13px 18px;font-size:14px;font-weight:600;border-bottom:1px solid #f1f1f1}
+.drive .fila i{width:26px;height:22px;border-radius:4px;background:#5f6368;flex:none;position:relative}
+.drive .fila i::before{content:"";position:absolute;left:0;top:-4px;width:12px;height:6px;border-radius:3px 3px 0 0;background:#5f6368}
+.drive .fila small{margin-left:auto;font-size:11px;color:#80868b;font-weight:500}
+.drive .dl{display:flex;gap:10px;padding:14px 18px}
+.drive .dl span{flex:1;text-align:center;padding:11px;border-radius:999px;font-size:13px;font-weight:700;background:#e8f0fe;color:#1a56c4}
+/* inicio del celular */
+.home{background:radial-gradient(120% 80% at 30% 0%,#3b2a5a,#120d1e 60%,#07060a);padding:96px 26px 0}
+.home .rej{display:grid;grid-template-columns:repeat(4,1fr);gap:26px 18px}
+.home .ap{display:grid;justify-items:center;gap:7px;font-family:'Sora',sans-serif;font-size:11px;color:rgba(255,255,255,.85)}
+.home .ap i{width:62px;height:62px;border-radius:16px;display:block;opacity:.85}
+.home .ap.me i{background:none;opacity:1}
+.home .ap.me img{width:62px;height:62px;border-radius:16px;display:block;box-shadow:0 0 0 2px rgba(255,227,161,.7),0 0 30px rgba(242,195,91,.8)}
+/* pago */
+.pago{background:#0c0a08;padding-top:56px;font-family:'Sora',sans-serif}
+.pago img.ban{width:100%;display:block}
+.pago .pf{padding:18px 20px;display:grid;gap:12px}
+.pago .pf .p1{display:flex;justify-content:space-between;align-items:center;font-size:15px;font-weight:700;color:#f6efe2}
+.pago .pf .p1 b{font-family:'Montserrat';font-size:22px;color:#fff}
+.pago .campo{border:1px solid #2c2a26;border-radius:10px;padding:12px 14px;font-size:13px;color:#cfc6b8;background:#14120f}
+.pago .campo small{display:block;font-size:10.5px;color:#8b8478;margin-bottom:2px}
+.pago .btnp{margin-top:6px;height:52px;border-radius:12px;display:grid;place-items:center;font-family:'Montserrat';font-weight:800;font-size:16px;color:#1c1405;background:linear-gradient(180deg,#ffe597,#f2c35b 55%,#d29a30)}
+.pago .seg{font-size:11px;color:#8b8478;text-align:center}
+.ok{background:rgba(6,5,8,.86);backdrop-filter:blur(8px);display:grid;place-content:center;justify-items:center;gap:16px;text-align:center}
+.ok .circ{width:118px;height:118px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,#8ff5d8,#36c9a2);box-shadow:0 0 0 14px rgba(126,236,201,.15),0 0 80px rgba(126,236,201,.6)}
+.ok .circ svg{width:58px;height:58px}
+.ok b{font-size:26px;font-weight:900;color:#fff}
+.ok small{font-family:'Sora';font-size:14px;color:#cfc6b8}
+/* resaltado sobre elementos de la plataforma */
+.marca{position:absolute;z-index:19;border-radius:24px;pointer-events:none;opacity:0;border:2.5px solid #ffe3a1;box-shadow:0 0 0 6px rgba(242,195,91,.18),0 0 40px rgba(242,195,91,.55)}
+.marca.vio{border-color:#e4dbff;box-shadow:0 0 0 6px rgba(143,114,242,.25),0 0 50px rgba(143,114,242,.75)}
+.marca.verde{border-color:#9ff5dc;box-shadow:0 0 0 6px rgba(126,236,201,.2),0 0 50px rgba(126,236,201,.6)}
+.candado{position:absolute;z-index:21;width:84px;height:84px;margin:-42px 0 0 -42px;border-radius:50%;display:grid;place-items:center;opacity:0;
+  background:rgba(10,8,6,.7);border:2px solid #ffe3a1;color:#ffe3a1;box-shadow:0 0 60px rgba(242,195,91,.7)}
+.candado svg{width:40px;height:40px;overflow:visible}
+.chispa{position:absolute;z-index:21;width:7px;height:7px;border-radius:50%;background:#ffe3a1;box-shadow:0 0 12px 3px rgba(255,214,140,.8);opacity:0}
+/* dedo */
+#dedo{position:absolute;z-index:40;width:64px;height:64px;margin:-32px 0 0 -32px;opacity:0;pointer-events:none}
+#dedo .pt{position:absolute;inset:8px;border-radius:50%;background:rgba(255,255,255,.88);box-shadow:0 10px 30px rgba(0,0,0,.6),0 0 0 3px rgba(255,255,255,.25)}
+#dedo .onda{position:absolute;inset:0;border-radius:50%;border:3px solid rgba(255,255,255,.9);opacity:0}
+/* texto de la derecha */
+#der{position:absolute;left:930px;top:0;bottom:0;width:900px;display:grid;align-content:center;gap:34px;z-index:3}
+.paso{display:inline-flex;align-items:center;gap:16px;justify-self:start;padding:12px 24px 12px 12px;border-radius:999px;background:rgba(242,195,91,.10);border:1.5px solid rgba(242,195,91,.4);font-size:30px;font-weight:700;color:#ffe3a1}
+.paso b{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(180deg,#ffe597,#f2c35b 55%,#d29a30);color:#1c1405;font-size:26px;font-weight:900}
+.paso.vio{background:rgba(143,114,242,.14);border-color:rgba(203,188,255,.5);color:#e4dbff}
+.paso.vio b{background:linear-gradient(180deg,#fff,#cbbcff);color:#1a1033}
+.paso.verde{background:rgba(126,236,201,.1);border-color:rgba(126,236,201,.45);color:#b9f7e5}
+.paso.verde b{background:linear-gradient(180deg,#c8fff0,#5ee6c4);color:#04231a}
+#der h2{font-weight:900;font-size:96px;line-height:1;letter-spacing:-.045em;color:#fff8ea;max-width:880px}
+#der ul{list-style:none;padding:0;display:grid;gap:22px}
+#der li{display:flex;align-items:center;gap:22px;font-family:'Sora',sans-serif;font-size:40px;font-weight:600;color:#e9e1d4;line-height:1.2}
+#der li i{flex:none;width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:rgba(242,195,91,.14);border:1.5px solid rgba(242,195,91,.45);color:#ffe3a1}
+#der li i svg{width:28px;height:28px}
+#der .vio li i{background:rgba(143,114,242,.16);border-color:rgba(203,188,255,.5);color:#e4dbff}
+#der .verde li i{background:rgba(126,236,201,.12);border-color:rgba(126,236,201,.5);color:#b9f7e5}
+.flujo{display:flex;align-items:center;gap:18px;flex-wrap:nowrap}
+.flujo span{display:inline-flex;align-items:center;gap:14px;padding:18px 26px;border-radius:22px;background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.12);font-family:'Sora';font-size:32px;font-weight:600;color:#e9e1d4;white-space:nowrap}
+.flujo span.on{background:rgba(126,236,201,.12);border-color:rgba(126,236,201,.6);color:#d8fff2;box-shadow:0 0 40px -10px rgba(126,236,201,.6)}
+.flujo em{font-style:normal;font-size:34px;color:#7d7569}
+</style></head><body>
+<div id="st">
+  <div class="fondo"></div><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+  <div class="polvo" id="polvo"></div>
+
+  <div class="centro" id="intro">
+    <div class="logo" id="iLogo">MASTER <i>EDUCATIVO</i></div>
+    <div class="linea" id="iLinea"></div>
+    <div class="big" id="iBig"><span>Bienvenido a</span><span>Master Educativo</span></div>
+    <div class="sub" id="iSub">Gracias por confiar en nosotros</div>
+    <div class="chipc" id="iChip"><b></b>Así funciona tu plataforma</div>
+  </div>
+
+  <div class="centro" id="fin" style="opacity:0">
+    <img src="/_bv/icono-192.png" id="fIco" style="width:150px;height:150px;border-radius:36px;box-shadow:0 0 0 2px rgba(255,227,161,.6),0 30px 80px -20px #000,0 0 120px rgba(242,195,91,.5)">
+    <div class="big" id="fBig"><span>Disfruta tu curso</span></div>
+    <div class="logo" id="fLogo">MASTER <i>EDUCATIVO</i></div>
+  </div>
+
+  <div id="tel" style="opacity:0">
+    <div class="marco"></div>
+    <div class="pantalla">
+      <div class="escala">
+        <iframe id="app" src="/acceso/"></iframe>
+        <div class="capa drive" id="cDrive">
+          <div class="dtop"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6" fill="none" stroke="#444" stroke-width="2.2" stroke-linecap="round"/></svg><b>Tu curso</b></div>
+          <div class="ruta">Mi unidad › Tu curso</div>
+          <div class="vista"><img src="/_bv/cov/curso.png" alt=""><span><svg width="24" height="24" viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" fill="#1f1f1f"/></svg></span></div>
+          <div class="fila"><i></i>1. Bienvenida<small>Carpeta</small></div>
+          <div class="fila"><i></i>2. Módulo 1<small>Carpeta</small></div>
+          <div class="fila"><i></i>3. Módulo 2<small>Carpeta</small></div>
+          <div class="fila"><i></i>4. Módulo 3<small>Carpeta</small></div>
+          <div class="fila"><i></i>5. Material descargable<small>Carpeta</small></div>
+          <div class="dl"><span>Ver en línea</span><span>Descargar</span></div>
+        </div>
+        <div class="capa home" id="cHome"><div class="rej" id="rej"></div></div>
+        <div class="capa pago" id="cPago">
+          <img class="ban" src="/_bv/banner-complemento.jpg" alt="">
+          <div class="pf"><div class="p1">Complemento<b>$6 USD</b></div>
+            <div class="campo"><small>Correo</small>tucorreo@gmail.com</div>
+            <div class="campo"><small>Tarjeta</small>•••• •••• •••• 4242</div>
+            <div class="btnp" id="bPagar">Comprar ahora</div>
+            <div class="seg">Pago 100 % seguro · Acceso inmediato</div></div>
+        </div>
+        <div class="capa ok" id="cOk"><div class="circ"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="#04231a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><b id="okT">Pago aprobado</b><small id="okS">Se está activando en tu plataforma…</small></div>
+        <div class="marca" id="m1"></div><div class="marca" id="m2"></div><div class="marca" id="m3"></div>
+        <div class="candado" id="cand"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path id="arco" d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <div id="chispas"></div>
+      </div>
+      <div class="isla"></div><div class="reflejo"></div>
+    </div>
+  </div>
+  <div id="dedo"><div class="onda"></div><div class="pt"></div></div>
+
+  <div id="der"></div>
+  <div class="vineta"></div><div class="grano"></div>
+</div>
+<script src="/_bv/escenas.js"></script>
+</body></html>

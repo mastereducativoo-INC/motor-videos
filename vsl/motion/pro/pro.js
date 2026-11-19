@@ -8,7 +8,7 @@ gsap.defaults({lazy: false, overwrite: false}); gsap.config({nullTargetWarn: fal
 const rgba = (hex, a) => { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`; };
 const R = document.documentElement.style;
 Object.entries({bg: P.bg, a: P.a, b: P.b, c: P.c, sup: P.sup, ink: P.ink, mut: P.mut, sobre: P.sobre, aB: rgba(P.a, .5), aS: rgba(P.a, .32), halo: rgba(P.a, .26), luz: rgba(P.b, .34), luz2: rgba(P.a, .1),
-  mutB: rgba(P.mut, .3), inkB: rgba(P.ink, .42), ft: E.dir ? E.dirFt || 'Montserrat' : E.ft || 'Montserrat', fb: E.fb || 'Montserrat', fw: E.dir ? (E.dirFt ? 800 : 900) : E.fw || 800, ls: E.dir ? (E.dirFt ? '-.015em' : '-.035em') : E.ls || '-.02em', kst: !E.dir && /Playfair|Fraunces/.test(E.ft || '') ? 'italic' : 'normal'})
+  mutB: rgba(P.mut, .3), inkB: rgba(P.ink, .42), ft: E.dir ? E.dirFt || 'Montserrat' : E.ft || 'Montserrat', fb: E.fb || 'Montserrat', fw: E.dir ? E.dirFw || (E.dirFt ? 800 : 900) : E.fw || 800, ls: E.dir ? E.dirLs || (E.dirFt ? '-.015em' : '-.035em') : E.ls || '-.02em', kst: !E.dir && /Playfair|Fraunces/.test(E.ft || '') ? 'italic' : 'normal'})
   .forEach(([k, v]) => R.setProperty('--' + k, v));
 let seed = 7 + VAR * 101; const rnd = () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
 const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
@@ -504,7 +504,7 @@ function montar() {
     for (const p of polvo) { const y = ((p.y - t * p.v) % 1180 + 1180) % 1180 - 50; p.e.style.transform = `translate(${p.x + Math.sin(t * p.f + p.ph) * 34}px,${y}px)`; p.e.style.opacity = p.o * (.55 + .45 * Math.sin(t * p.f * 2 + p.ph)); }
   };
   const M = gsap.timeline({paused: true});
-  const TR = ['fundido', 'sube', 'panel', 'zoom', 'barrido', 'lateral'];
+  const TR = E.trs && E.trs.length ? E.trs : ['fundido', 'sube', 'panel', 'zoom', 'barrido', 'lateral'];  // cada diseño por producto trae sus propias transiciones (19 nov)
   const pan = $(`<div class="abs" style="left:-2500px;top:-200px;width:2300px;height:1480px;background:${P.sup};border-right:6px solid ${P.a};border-left:6px solid ${P.a};transform:skewX(-10deg);box-shadow:0 0 120px rgba(0,0,0,.6)"></div>`); FX.appendChild(pan);
   V.escenas.forEach((sc, i) => {
     const el = $('<div class="sc"><div class="cam"></div></div>'); ESC.appendChild(el); sc.el = el;
@@ -518,7 +518,7 @@ function montar() {
     M.add(tl, sc.t0 - ade);
     if (i === 0) { el.style.visibility = 'visible'; M.from(el, {opacity: 0, duration: .5}, 0); return; }
     const pv = V.escenas[i - 1].el, t = sc.t0, tool = sc.c === 'tool2' && V.escenas[i - 1].c === 'tool2';
-    const tr = tool ? (i % 2 ? 'lateral' : 'sube') : TR[(i + VAR * 2) % TR.length];
+    const tr = tool && !E.trs ? (i % 2 ? 'lateral' : 'sube') : TR[(i + VAR * 2) % TR.length];
     let on = t - .02, off = t + .02;
     if (tr === 'fundido') { on = t - .1; off = t + .22; M.to(pv, {opacity: 0, scale: 1.06, filter: 'blur(16px)', duration: .28, ease: 'power2.in'}, t - .2); M.from(el, {opacity: 0, scale: .96, filter: 'blur(16px)', duration: .38, ease: 'power2.out'}, t - .06); }
     else if (tr === 'sube') { off = t + .1; M.to(pv, {y: -160, opacity: 0, duration: .24, ease: 'power2.in'}, t - .18); M.from(el, {y: 200, opacity: 0, duration: .42, ease: 'expo.out'}, t - .04); }
@@ -535,7 +535,7 @@ function montar() {
   try { desencimar(); } catch (e) { console.error(e); }
   window.__seek(0); window.__listo = true;
 }
-const fu = [E.dir ? E.dirFt || 'Montserrat' : E.ft || 'Montserrat', E.fb || 'Montserrat', 'Montserrat'].concat(E.dir ? ['JetBrains'] : []);
+const fu = [E.dir ? E.dirFt || 'Montserrat' : E.ft || 'Montserrat', E.fb || 'Montserrat', 'Montserrat'].concat(E.dir ? ['JetBrains'] : [], E.fuentes || []);
 Promise.all([...lista.map(([k, s]) => carga(k, s)), ...fu.flatMap((f) => [document.fonts.load(`800 40px ${f}`), document.fonts.load(`italic 800 40px ${f}`), document.fonts.load(`500 40px ${f}`), document.fonts.load(`700 40px ${f}`), document.fonts.load(`900 40px ${f}`)])])
   .then(() => document.fonts.ready).then(montar).catch((e) => { console.error(e); window.__errores = [String(e)]; window.__listo = true; });
 })();

@@ -6,6 +6,18 @@
 @font-face{font-family:Fraunces;src:url(../../fonts/Fraunces.ttf);font-weight:100 900}
 @font-face{font-family:JetBrains;src:url(../../fonts/JetBrainsMono.ttf);font-weight:100 800}
 @font-face{font-family:Manrope;src:url(../../fonts/Manrope.ttf);font-weight:200 800}
+@font-face{font-family:Sora;src:url(../../fonts/Sora.ttf);font-weight:100 900}
+@font-face{font-family:Outfit;src:url(../../fonts/Outfit.ttf);font-weight:100 900}
+@font-face{font-family:DMSerif;src:url(../../fonts/DMSerifDisplay.ttf);font-weight:100 900}
+@font-face{font-family:Epilogue;src:url(../../fonts/Epilogue.ttf);font-weight:100 900}
+@font-face{font-family:Unbounded;src:url(../../fonts/Unbounded.ttf);font-weight:100 900}
+@font-face{font-family:BigShoulders;src:url(../../fonts/BigShoulders.ttf);font-weight:100 900}
+@font-face{font-family:Syne;src:url(../../fonts/Syne.ttf);font-weight:100 900}
+@font-face{font-family:Archivo;src:url(../../fonts/Archivo.ttf);font-weight:100 900}
+@font-face{font-family:Bricolage;src:url(../../fonts/Bricolage.ttf);font-weight:100 900}
+@font-face{font-family:Oswald;src:url(../../fonts/Oswald.ttf);font-weight:100 900}
+@font-face{font-family:Instrument;src:url(../../fonts/InstrumentSerif.ttf);font-weight:100 900}
+@font-face{font-family:DMSans;src:url(../../fonts/DMSans.ttf);font-weight:100 900}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{width:1920px;height:1080px;overflow:hidden;background:var(--bg);color:var(--ink);font-family:var(--fb),sans-serif;-webkit-font-smoothing:antialiased}
 #bg,#esc,#fx,#top{position:absolute;inset:0;overflow:hidden}

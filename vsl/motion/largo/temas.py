@@ -62,6 +62,15 @@ COLORES = [
 # 'd11-gen' = director 11. Paleta, música y tipografía propias; el código de las escenas vive en vsl/motion/pro/dir.js.
 DIR_PRODUCTO = {
     11: dict(nombre='Tablero', prod='ajedrez', pal=_pal('#0c0a08', '#d4b06a', '#efe6d2', '#f0d79a', '#17130e', ink='#f6f1e6', mut='#b8ad99', sobre='#14100a'), grad='none', ft=None, musica='musica/expressive-courage.mp3'),
+    # 19 nov (regla V1, 2.ª versión): 9 diseños TODOS distintos por producto. Ajedrez: 11 Tablero + estos 8 (código en vsl/motion/pro/nicho.js).
+    12: dict(nombre='Reloj', prod='ajedrez', pal=_pal('#efe8da', '#7a2333', '#c9a66b', '#a83a4a', '#f8f3ea', ink='#231a14', mut='#6e6152', sobre='#ffffff'), grad='none', ft='Fraunces', fw=700, ls='-.02em', trs=['fundido', 'barrido'], musica='musica/possible-dreams.mp3'),
+    13: dict(nombre='Ranking', prod='ajedrez', pal=_pal('#eef1f6', '#e4572e', '#14213d', '#f08a5d', '#ffffff', ink='#14213d', mut='#5c6b82', sobre='#ffffff'), grad='none', ft='Sora', fw=800, ls='-.03em', trs=['lateral', 'sube'], musica='musica/uplifting-bass.mp3'),
+    14: dict(nombre='Pizarra', prod='ajedrez', pal=_pal('#22272b', '#f2c94c', '#8fb3d9', '#f7dc8a', '#2c3237', ink='#f1efe8', mut='#a7adb2', sobre='#1d1f21'), grad='none', ft='DMSerif', fw=400, ls='0em', trs=['fundido', 'zoom'], musica='musica/infinity.mp3'),
+    15: dict(nombre='Mármol', prod='ajedrez', pal=_pal('#f5f2ed', '#9c6b2f', '#2b2b2b', '#c08a45', '#ffffff', ink='#1f1d1a', mut='#77706a', sobre='#ffffff'), grad='none', ft='Playfair', fw=700, ls='-.01em', trs=['fundido'], musica='musica/special-days.mp3'),
+    16: dict(nombre='Planilla', prod='ajedrez', pal=_pal('#f7f4ea', '#c0392b', '#1f3a6b', '#e05a4c', '#fffdf6', ink='#17233b', mut='#5b6476', sobre='#ffffff'), grad='none', ft='Epilogue', fw=800, ls='-.03em', trs=['sube', 'barrido'], musica='musica/talent-in-the-air.mp3'),
+    17: dict(nombre='Blitz', prod='ajedrez', pal=_pal('#121212', '#ff6b1a', '#f5f5f5', '#ffa45c', '#1d1d1d', ink='#fafafa', mut='#a0a0a0', sobre='#121212'), grad='none', ft='BigShoulders', fw=900, ls='0em', trs=['zoom', 'lateral', 'panel'], musica='musica/gear.mp3'),
+    18: dict(nombre='Isométrico', prod='ajedrez', pal=_pal('#1b1d3a', '#e9c46a', '#6c7bd1', '#f4d58d', '#24274a', ink='#f3f1ea', mut='#a5a8c4', sobre='#1b1d3a'), grad='none', ft='Syne', fw=800, ls='-.02em', trs=['zoom', 'sube'], musica='musica/close-up.mp3'),
+    19: dict(nombre='Geométrico', prod='ajedrez', pal=_pal('#f1ece1', '#d1495b', '#00798c', '#edae49', '#ffffff', ink='#1d1d1b', mut='#6b675f', sobre='#ffffff'), grad='none', ft='Archivo', fw=800, ls='-.025em', trs=['barrido', 'panel'], musica='musica/skyline.mp3'),
 }
 
 
@@ -107,6 +116,9 @@ def estilo(clave):
             # así dir.js cambia los objetos del derecho (mazo, balanza) por los del nicho.
             L = DIR_LEGAL.get(k) or DIR_PRODUCTO[k]; fam2 = fam if fam in FAMILIAS else 'gen'
             e = estilo('t-%s-1' % fam2); e['dir'] = k; e['fam'] = fam2; e['pal'] = dict(L['pal']); e['grad'] = L['grad']; e['musica'] = L['musica']; e['dirFt'] = L['ft']; e['color'] = L['nombre']
+            for a, b in (('fw', 'dirFw'), ('ls', 'dirLs'), ('trs', 'trs'), ('fb', 'fb')):  # tipografía y transiciones propias (19 nov)
+                if L.get(a) is not None: e[b] = L[a]
+            if L.get('ft'): e['fuentes'] = [L['ft']]
             if len(resto) > 1 and resto[1].isdigit():  # color de adaptación al nicho: 'd8-gen-8'
                 col = COLORES[(int(resto[1]) - 1) % len(COLORES)]; e['pal'] = dict(col['pal']); e['grad'] = col['grad']; e['color'] = L['nombre'] + ' · ' + col['nombre']
             return e

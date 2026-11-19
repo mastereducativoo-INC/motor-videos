@@ -84,7 +84,7 @@ def preparar(v):
     html = os.path.join(AQUI, 'build', v['id'] + '.html')
     datos = json.dumps({k: v[k] for k in ('id', 'titulo', 'estilo', 'escenas', 'dur', 'prod', 'assets', 'assets2') if k in v}, ensure_ascii=False).replace('</', '<\\/')
     if E.get('motor') == 'pro':  # motor nuevo (vsl/motion/pro): GSAP + escenas sincronizadas con la voz
-        cab, pie = '<link rel="stylesheet" href="../../pro/pro.css">', '<script src="../../pro/lib/gsap.min.js"></script><script src="../../pro/pro.js"></script>' + ('<link rel="stylesheet" href="../../pro/dir.css"><script src="../../pro/lib/three.min.js"></script><script src="../../pro/dir.js"></script>' if E.get('dir') else '')
+        cab, pie = '<link rel="stylesheet" href="../../pro/pro.css">', '<script src="../../pro/lib/gsap.min.js"></script><script src="../../pro/pro.js"></script>' + ('<link rel="stylesheet" href="../../pro/dir.css"><script src="../../pro/lib/three.min.js"></script><script src="../../pro/dir.js"></script><script src="../../pro/nicho.js"></script>' if E.get('dir') else '')
     else:
         cab, pie = '<link rel="stylesheet" href="../motor.css">', '<script src="../motor.js"></script>'
     open(html, 'w').write('<!doctype html><html lang="es"><head><meta charset="utf-8"><title>%s</title>%s</head><body><script>window.V=%s</script>%s</body></html>' % (v['titulo'], cab, datos, pie))

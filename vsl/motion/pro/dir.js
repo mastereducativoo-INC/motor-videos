@@ -904,4 +904,6 @@ D[11] = {
     flota(c.tl, im, c.D, {at: 1.3, d: 2.8}); },
 };
 ['multitud', 'porque', 'revela', 'todas', 'precio', 'exclusiva', 'inversion', 'garantia', 'cta2', 'generico', 'recorrido'].forEach((n) => { if (!D[11][n]) D[11][n] = (c) => { fondo11(c); (window.PRO.S[n] || window.PRO.S.generico)(c); }; });
+// herramientas compartidas con los diseños por producto (nicho.js, 19 nov)
+window.PRO.X = {pieza, PIEZA, CHESS, camino, YA, tool, precio, puntos, PAL, CAN, sobre, MODS, cuandoDice, cursor, emblemaNicho, fondo11};
 })();
