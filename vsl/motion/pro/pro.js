@@ -445,7 +445,7 @@ function orbita(cam, tl, sc, cue) {
   // se mide cuando el pack ya está quieto y visible (antes la escena está oculta y no tiene medidas)
   const medir = () => { const r = pk.getBoundingClientRect(), c = cam.getBoundingClientRect(), k = c.width / 1920 || 1; if (!r.width) return;
     const w = r.width / k, h = r.height / k; G.cx = (r.left - c.left) / k + w / 2; G.cy = (r.top - c.top) / k + h * .58; G.rx = Math.max(320, w * .86); G.ry = Math.max(120, h * .42); G.s = Math.max(130, Math.min(220, h * .3));
-    // LEY T5: la órbita nunca cruza los textos. Se miden los textos de la escena y el giro se encoge para no llegar a ellos;
+    // LEY T6: la órbita nunca cruza los textos. Se miden los textos de la escena y el giro se encoge para no llegar a ellos;
     // si aun así una herramienta pisaría un texto, en ese momento se vuelve invisible (pon() la apaga).
     G.tx = [...cam.querySelectorAll('h1,h2,h3,h4,.T,.P,.K,.chip,.fila,.btn,.bt,.ej')].filter((e) => !e.contains(pk) && !it.some((d) => d.contains(e)))
       .map((e) => e.getBoundingClientRect()).filter((q) => q.width * q.height > 40)
@@ -460,7 +460,7 @@ function orbita(cam, tl, sc, cue) {
     d.style.transform = `translate(${x}px,${y}px) scale(${s})`; d.style.zIndex = z > 0 ? 40 : 20; d.style.opacity = pisa ? 0 : st.o * (.6 + .4 * (z + 1) / 2); });
   tl.call(medir, null, T0 - .05); tl.to(st, {o: 1, duration: .6, onUpdate: pon}, T0); tl.to(st, {a: Math.PI * 2 * Math.max(.6, (sc.dur - T0) / 9), duration: Math.max(1, sc.dur - T0 + .4), ease: 'none', onUpdate: () => { medir(); pon(); }}, T0);  // se mide siempre: el pack puede seguir moviéndose
 }
-// LEY T5 (Christian, 19 nov): ningún texto encima de una imagen ni imagen encima de un texto. Antes de grabar se mide cada escena
+// LEY T6 (Christian, 19 nov): ningún texto encima de una imagen ni imagen encima de un texto. Antes de grabar se mide cada escena
 // en dos momentos; si una imagen pisa un texto, la imagen se achica y se aparta del texto (propiedades CSS scale/translate, que se
 // suman a las animaciones de GSAP sin romperlas). Lo que no se pueda separar lo marca después la revisión de calidad (qa.py).
 function desencimar() {
