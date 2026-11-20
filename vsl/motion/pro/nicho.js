@@ -6,7 +6,12 @@
 (() => {
 const PRO = window.PRO, X = PRO.X; if (!X) return;
 const {D, S, E, P, PR, IM, $, esc, pal, rgba, norm, money, rnd, fit, img, OK, ICO, texto, objeto, draw, sube, salta, flota, onda, cuenta} = PRO;
-const {pieza, camino, YA, tool, precio, puntos, PAL, sobre, MODS, cuandoDice} = X;
+const {camino, YA, tool, precio, puntos, PAL, sobre, MODS, cuandoDice, CHESS} = X;
+// Estos diseños nacieron en Ajedrez y ahora son la biblioteca automática de TODOS los productos (19 nov): fuera de ajedrez
+// ninguna pieza de ajedrez. El peón pasa a ser una persona (alumno) y el rey/la reina, un trofeo del color del diseño.
+const PERSONA = '<circle cx="50" cy="38" r="24"/><path d="M8 140c0-34 18-62 42-62s42 28 42 62z"/>';
+const TROFEO = '<path d="M22 14h56v26c0 22-12 38-28 40-16-2-28-18-28-40z"/><path d="M22 22H6v8c0 14 8 22 18 22M78 22h16v8c0 14-8 22-18 22" fill="none" stroke="currentColor" stroke-width="7"/><rect x="43" y="78" width="14" height="26"/><rect x="26" y="104" width="48" height="12" rx="3"/><rect x="18" y="118" width="64" height="18" rx="4"/>';
+const pieza = CHESS ? X.pieza : (k, h, col, st = '') => `<svg viewBox="0 0 100 140" width="${Math.round(h * 100 / 140)}" height="${h}" style="overflow:visible;color:${col};${st}" fill="${col}">${k === 'peon' ? PERSONA : TROFEO}</svg>`;
 const N = () => PRO.N();
 const CLARO = () => { const n = parseInt(P.bg.slice(1), 16); return ((n >> 16) * .3 + ((n >> 8) & 255) * .59 + (n & 255) * .11) > 150; };
 const SOMBRA = (a) => `drop-shadow(0 ${CLARO() ? 22 : 30}px ${CLARO() ? 26 : 36}px rgba(0,0,0,${CLARO() ? a * .5 : a}))`;
@@ -83,8 +88,8 @@ const FEL = {
     const lo = caja(c, IM.logo && IM.logo.ok ? 'logo' : 'pack', 600, 100, 720, 420); if (lo) c.tl.from(lo, {opacity: 0, y: 30, duration: .9, ease: 'power3.out'}, .5);
     const pl = div(c, `left:810px;top:540px;width:300px;height:42px;background:${P.a};color:${P.sobre};font:700 18px/42px Montserrat;letter-spacing:.3em;text-align:center`, 'CONFIRMADA'); c.tl.from(pl, {scaleX: 0, duration: .5, ease: 'expo.out'}, 1);
     texto(c, {x: 160, y: 650, w: 1600, c: 1, t: c.sc.t, s: c.sc.s, size: 104, maxH: 130, at: .8}); },
-  resultado: (c) => { // marcador de partida "1–0" (ganaste) y el logo en la hoja
-    const r = div(c, `left:150px;top:110px;width:760px`, `<div style="font:700 26px JetBrains,monospace;letter-spacing:.3em;color:${P.a}">RESULTADO</div><div class="num" style="font:800 300px/1 JetBrains,monospace;color:${P.ink};margin-top:10px">1–0</div>`);
+  resultado: (c) => { // marcador de partida "1–0" (ganaste; fuera de ajedrez "100%") y el logo en la hoja
+    const r = div(c, `left:150px;top:110px;width:760px`, `<div style="font:700 26px JetBrains,monospace;letter-spacing:.3em;color:${P.a}">RESULTADO</div><div class="num" style="font:800 300px/1 JetBrains,monospace;color:${P.ink};margin-top:10px">${CHESS ? '1–0' : '100%'}</div>`);
     c.tl.from(r.children, {y: 40, opacity: 0, duration: .7, ease: 'expo.out', stagger: .15}, .2); c.fx(.6, 'golpe');
     const h = div(c, `left:1060px;top:110px;width:700px;height:620px;background:${P.sup};box-shadow:0 30px 60px rgba(0,0,0,.14);transform:rotate(2deg)`); c.tl.from(h, {y: 400, rotation: 12, opacity: 0, duration: .9, ease: 'expo.out'}, .3);
     const lo = caja(c, IM.logo && IM.logo.ok ? 'logo' : 'pack', 1100, 160, 620, 520); if (lo) c.tl.from(lo, {opacity: 0, scale: .8, duration: .7, ease: 'back.out(1.5)'}, .9);

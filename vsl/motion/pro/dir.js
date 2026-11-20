@@ -16,7 +16,7 @@ const PIEZA = {
   rey: `<rect x="46" y="2" width="8" height="26" rx="2"/><rect x="38" y="10" width="24" height="8" rx="2"/><path d="M30 32h40l-6 22H36z"/>${CUERPO}${BASE_P}`,
 };
 const pieza = (k, h, col, st = '') => `<svg viewBox="0 0 100 140" width="${Math.round(h * 100 / 140)}" height="${h}" style="overflow:visible;${st}" fill="${col}">${PIEZA[k] || PIEZA.peon}</svg>`;
-const emblemaNicho = (h, col) => CHESS ? pieza('rey', h, col) : (IM.logo && IM.logo.ok ? img('logo', `max-height:${h}px;max-width:${Math.round(h * 1.5)}px`) : pieza('torre', h, col));
+const emblemaNicho = (h, col) => CHESS ? pieza('rey', h, col) : (IM.logo && IM.logo.ok ? img('logo', `max-height:${h}px;max-width:${Math.round(h * 1.5)}px`) : `<svg viewBox="0 0 100 100" width="${h}" height="${h}" fill="${col}"><path d="M50 4l13 30 32 3-24 21 7 32-28-17-28 17 7-32L5 37l32-3z"/></svg>`);  // sin logo: estrella (nunca una pieza de ajedrez fuera de ajedrez)
 // el sonido del mazo es solo de derecho: en otros nichos suena un golpe neutro
 if (!LEGAL) { const _push = window.SFX.push.bind(window.SFX); window.SFX.push = (...a) => _push(...a.map((x) => (Array.isArray(x) && x[1] === 'mazo' ? [x[0], 'golpe'] : x))); }
 const camino = () => (PR.camino || ['Aprender', 'Practicar', 'Aplicar', 'Cobrar']).slice(0, 6), YA = () => Math.min(camino().length - 1, PR.camino_ya || 2);

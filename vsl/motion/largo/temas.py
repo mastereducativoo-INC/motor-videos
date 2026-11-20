@@ -80,7 +80,7 @@ DIR_LEGAL = {
     7: dict(nombre='Expediente', pal=_pal('#111214', '#b3262c', '#c9a46a', '#e0524b', '#1b1c20', ink='#f2efe9', mut='#a7a49d', sobre='#ffffff'), grad='none', ft=None, musica='musica/it-s-love.mp3'),
     # 18 nov: a Christian no le gustó la serifa del Tribunal; Código y Legal digital descartados → Cine y Keynote
     8: dict(nombre='Tribunal', pal=_pal('#0c0c0e', '#c9a654', '#e8e3d8', '#ecd08a', '#17171a', ink='#f5f2ea', mut='#aaa59a', sobre='#16120a'), grad='none', ft=None, musica='musica/romantic-getaway.mp3'),
-    9: dict(nombre='Cine', pal=_pal('#0a0a0b', '#d4b06a', '#8a6a3a', '#f0d79a', '#141416', ink='#f7f3ea', mut='#b9b2a4', sobre='#16120a'), grad='none', ft=None, musica='musica/possible-dreams.mp3'),
+    9: dict(nombre='Cine', pal=_pal('#0a0a0b', '#d4b06a', '#8a6a3a', '#f0d79a', '#141416', ink='#f7f3ea', mut='#b9b2a4', sobre='#16120a'), grad='none', ft=None, musica='musica/tears-of-joy.mp3'),  # 19 nov: Cine entra a la biblioteca automática; su música ya no repite la de Reloj (d12)
     10: dict(nombre='Keynote', pal=_pal('#000000', '#c9a654', '#5b6b8a', '#f2d48c', '#0e0e10', ink='#ffffff', mut='#9a9aa2', sobre='#14100a'), grad='none', ft=None, musica='musica/skyline.mp3'),
 }
 
