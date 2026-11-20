@@ -16,6 +16,11 @@ const PIEZA = {
   rey: `<rect x="46" y="2" width="8" height="26" rx="2"/><rect x="38" y="10" width="24" height="8" rx="2"/><path d="M30 32h40l-6 22H36z"/>${CUERPO}${BASE_P}`,
 };
 const pieza = (k, h, col, st = '') => `<svg viewBox="0 0 100 140" width="${Math.round(h * 100 / 140)}" height="${h}" style="overflow:visible;${st}" fill="${col}">${PIEZA[k] || PIEZA.peon}</svg>`;
+// Fuera de ajedrez (Christian 19 nov 20:18: los diseños aprobados —Tablero incluido— van en todos los productos): ninguna pieza de ajedrez.
+// El peón es una persona (alumno) y las demás piezas, un trofeo del color del diseño.
+const PERSONA = '<circle cx="50" cy="38" r="24"/><path d="M8 140c0-34 18-62 42-62s42 28 42 62z"/>';
+const TROFEO = '<path d="M22 14h56v26c0 22-12 38-28 40-16-2-28-18-28-40z"/><path d="M22 22H6v8c0 14 8 22 18 22M78 22h16v8c0 14-8 22-18 22" fill="none" stroke="currentColor" stroke-width="7"/><rect x="43" y="78" width="14" height="26"/><rect x="26" y="104" width="48" height="12" rx="3"/><rect x="18" y="118" width="64" height="18" rx="4"/>';
+const piezaN = (k, h, col, st = '') => CHESS ? pieza(k, h, col, st) : `<svg viewBox="0 0 100 140" width="${Math.round(h * 100 / 140)}" height="${h}" style="overflow:visible;color:${col};${st}" fill="${col}">${k === 'peon' ? PERSONA : TROFEO}</svg>`;
 const emblemaNicho = (h, col) => CHESS ? pieza('rey', h, col) : (IM.logo && IM.logo.ok ? img('logo', `max-height:${h}px;max-width:${Math.round(h * 1.5)}px`) : `<svg viewBox="0 0 100 100" width="${h}" height="${h}" fill="${col}"><path d="M50 4l13 30 32 3-24 21 7 32-28-17-28 17 7-32L5 37l32-3z"/></svg>`);  // sin logo: estrella (nunca una pieza de ajedrez fuera de ajedrez)
 // el sonido del mazo es solo de derecho: en otros nichos suena un golpe neutro
 if (!LEGAL) { const _push = window.SFX.push.bind(window.SFX); window.SFX.push = (...a) => _push(...a.map((x) => (Array.isArray(x) && x[1] === 'mazo' ? [x[0], 'golpe'] : x))); }
@@ -851,8 +856,8 @@ const fondo11 = (c) => {
   c.cam.appendChild($(`<div class="abs" style="left:0;right:0;top:560px;bottom:0;background:linear-gradient(180deg,${P.bg} 0%,transparent 22%,transparent 75%,${rgba('#000000', .55)} 100%)"></div>`));
   c.tl.fromTo(tb, {opacity: 0, y: 70}, {opacity: 1, y: 0, duration: 1.1, ease: 'expo.out'}, 0);
   // dos piezas grandes y lejanas, en penumbra, que se mueven despacio (profundidad)
-  const pz = [['torre', 120, 300], ['caballo', 1640, 330]].map(([k, x, h]) => { const e = $(`<div class="abs" style="left:${x}px;top:${560 - h * .55}px;opacity:.16;filter:blur(1px)">${pieza(k, h, P.ink)}</div>`); c.cam.appendChild(e); return e; });
-  c.tl.fromTo(pz, {x: (j) => (j ? 40 : -40)}, {x: (j) => (j ? -30 : 30), duration: c.D + .5, ease: 'none'}, 0);
+  const pz = (CHESS ? [['torre', 120, 300], ['caballo', 1640, 330]] : []).map(([k, x, h]) => { const e = $(`<div class="abs" style="left:${x}px;top:${560 - h * .55}px;opacity:.16;filter:blur(1px)">${pieza(k, h, P.ink)}</div>`); c.cam.appendChild(e); return e; });
+  if (pz.length) c.tl.fromTo(pz, {x: (j) => (j ? 40 : -40)}, {x: (j) => (j ? -30 : 30), duration: c.D + .5, ease: 'none'}, 0);
   return tb;
 };
 const dirCasilla = (c, x, y, s) => { const d = $(`<div class="abs" style="left:${x - s / 2}px;top:${y - s * .22}px;width:${s}px;height:${s * .44}px;border-radius:50%;background:radial-gradient(closest-side,${rgba(P.a, .55)},${rgba(P.a, 0)})"></div>`); c.cam.appendChild(d); return d; };
@@ -860,8 +865,8 @@ D[11] = {
   felicita: (c) => { fondo11(c); const tp = Math.max(1.5, c.cue('felicid', .25));
     const lg = IM.logo && IM.logo.ok ? 'logo' : (MODS()[0] || 'pack');
     const lo = $(`<div class="abs" style="left:560px;top:120px;width:800px;height:400px;display:flex;align-items:flex-end;justify-content:center">${img(lg, 'max-width:100%;max-height:100%;filter:drop-shadow(0 30px 40px rgba(0,0,0,.6))')}</div>`); c.cam.appendChild(lo);
-    const rey = $(`<div class="abs" style="left:1420px;top:200px;width:240px;height:330px;display:flex;align-items:flex-end;justify-content:center"><div class="rk" style="transform-origin:50% 100%;filter:drop-shadow(0 26px 26px rgba(0,0,0,.6))">${pieza('rey', 320, P.ink)}</div></div>`); c.cam.appendChild(rey);
-    const et = $(`<div class="abs ctr" style="left:0;right:0;top:44px;font:800 26px Montserrat;letter-spacing:.42em;color:${P.a}">JUGADA GANADORA</div>`); c.cam.appendChild(et);
+    const rey = $(`<div class="abs" style="left:1420px;top:200px;width:240px;height:330px;display:flex;align-items:flex-end;justify-content:center"><div class="rk" style="transform-origin:50% 100%;filter:drop-shadow(0 26px 26px rgba(0,0,0,.6))">${piezaN('rey', 320, CHESS ? P.ink : P.a)}</div></div>`); c.cam.appendChild(rey);
+    const et = $(`<div class="abs ctr" style="left:0;right:0;top:44px;font:800 26px Montserrat;letter-spacing:.42em;color:${P.a}">${CHESS ? 'JUGADA GANADORA' : 'LOGRO DESBLOQUEADO'}</div>`); c.cam.appendChild(et);
     texto(c, {x: 160, y: 600, w: 1600, c: 1, t: c.sc.t, s: c.sc.s, size: 112, maxH: 150, at: .5});
     c.tl.from(rey, {y: -340, opacity: 0, duration: .8, ease: 'bounce.out'}, .15); c.fx(.6, 'golpe');
     c.tl.to(rey.querySelector('.rk'), {rotation: 84, duration: .5, ease: 'power3.in'}, tp - .45); c.fx(tp, 'golpe');
@@ -883,15 +888,15 @@ D[11] = {
     texto(c, {x: 160, y: 46, w: 1600, c: 1, t: c.sc.t, size: 88, maxH: 110, at: .3});
     const W = Math.min(300, 1560 / n), x0 = 960 - (W * n) / 2, Y = 560, X = (j) => x0 + j * W;
     const cs = cm.map((t, j) => { const e = $(`<div class="abs" style="left:${X(j) + 10}px;top:${Y}px;width:${W - 20}px;height:${W - 20}px;border-radius:16px;display:flex;align-items:flex-end;justify-content:center;padding:18px;text-align:center;font:800 ${W > 240 ? 30 : 24}px/1.2 Montserrat;color:${j < ya ? P.sobre : P.mut};background:${j < ya ? P.a : rgba(P.ink, .05)};border:3px ${j < ya ? 'solid' : 'dashed'} ${j < ya ? P.a : rgba(P.ink, .3)}">${esc(t)}</div>`); c.cam.appendChild(e); c.tl.from(e, {y: 70, opacity: 0, duration: .5, ease: 'expo.out'}, .5 + j * .12); return e; });
-    const pw = $(`<div class="abs" style="left:0;top:${Y - 236}px;width:${W}px;height:226px;display:flex;justify-content:center;align-items:flex-end">${pieza('peon', 210, P.c, 'filter:drop-shadow(0 18px 20px rgba(0,0,0,.6))')}</div>`); c.cam.appendChild(pw);
+    const pw = $(`<div class="abs" style="left:0;top:${Y - 236}px;width:${W}px;height:226px;display:flex;justify-content:center;align-items:flex-end">${piezaN('peon', 210, P.c, 'filter:drop-shadow(0 18px 20px rgba(0,0,0,.6))')}</div>`); c.cam.appendChild(pw);
     c.tl.set(pw, {x: X(0)}, 0); c.tl.from(pw, {opacity: 0, y: -90, duration: .5, ease: 'back.out(1.6)'}, .8);
     for (let j = 1; j < ya; j++) { const at = 1.1 + j * .5; c.tl.to(pw, {x: X(j), duration: .36, ease: 'power2.inOut'}, at); c.tl.to(pw, {y: -46, duration: .18, yoyo: true, repeat: 1, ease: 'sine.out'}, at); c.fx(at + .3, 'click'); }
     if (ya) { const lab = $(`<div class="abs ctr" style="left:${X(0)}px;top:${Y + W + 4}px;width:${W * ya}px"><span class="chip lleno" style="font-size:24px">${sobre(PAL)}Ya lo tienes</span></div>`); c.cam.appendChild(lab); c.tl.from(lab, {opacity: 0, y: 20, duration: .4}, 1.3); }
     for (let j = ya; j < n; j++) { const at = tf + (j - ya) * .55; c.tl.to(pw, {x: X(j), duration: .38, ease: 'power2.inOut'}, at); c.tl.to(pw, {y: -46, duration: .19, yoyo: true, repeat: 1}, at);
       c.tl.to(cs[j], {backgroundColor: rgba(P.a, .22), borderColor: P.a, color: P.ink, duration: .3}, at + .3); c.fx(at + .3, 'click'); }
-    const tq = tf + (n - ya) * .55 + .25, q = $(`<div class="abs" style="left:0;top:${Y - 260}px;width:${W}px;height:250px;display:flex;justify-content:center;align-items:flex-end;opacity:0">${pieza('reina', 240, P.a, 'filter:drop-shadow(0 0 30px ' + rgba(P.a, .6) + ')')}</div>`); c.cam.appendChild(q);
+    const tq = tf + (n - ya) * .55 + .25, q = $(`<div class="abs" style="left:0;top:${Y - 260}px;width:${W}px;height:250px;display:flex;justify-content:center;align-items:flex-end;opacity:0">${piezaN('reina', 240, P.a, 'filter:drop-shadow(0 0 30px ' + rgba(P.a, .6) + ')')}</div>`); c.cam.appendChild(q);
     c.tl.set(q, {x: X(n - 1)}, 0); c.tl.to(pw, {opacity: 0, scale: .5, duration: .3}, tq); c.tl.fromTo(q, {opacity: 0, scale: .4}, {opacity: 1, scale: 1, duration: .6, ease: 'back.out(2)'}, tq); c.fx(tq, 'golpe');
-    if (n > ya) { const lab2 = $(`<div class="abs ctr" style="left:${X(ya)}px;top:${Y + W + 4}px;width:${W * (n - ya)}px"><span class="chip" style="font-size:24px">Tu siguiente nivel: coronar</span></div>`); c.cam.appendChild(lab2); c.tl.from(lab2, {opacity: 0, y: 20, duration: .4}, tf); } },
+    if (n > ya) { const lab2 = $(`<div class="abs ctr" style="left:${X(ya)}px;top:${Y + W + 4}px;width:${W * (n - ya)}px"><span class="chip" style="font-size:24px">${CHESS ? 'Tu siguiente nivel: coronar' : 'Tu siguiente nivel'}</span></div>`); c.cam.appendChild(lab2); c.tl.from(lab2, {opacity: 0, y: 20, duration: .4}, tf); } },
   tool2: (c) => { fondo11(c); const {i, t, s, pts, et} = tool(c), k = 'c' + i;
     texto(c, {x: 130, y: 130, w: 760, k: et, t, s, size: 74, maxH: 240, at: .15});
     const L = $(`<div class="abs" style="left:134px;top:560px;width:740px"></div>`); c.cam.appendChild(L); puntos(c, L, pts, {fs: 36, gap: 18});
@@ -900,7 +905,7 @@ D[11] = {
     // la jugada: puntos que marcan el movimiento hacia la herramienta y una pieza que la "corona"
     const pz = $(`<div class="abs" style="left:1700px;top:600px;width:150px;height:220px;display:flex;align-items:flex-end;justify-content:center">${pieza(['caballo', 'alfil', 'torre', 'reina'][i % 4], 200, P.a, 'filter:drop-shadow(0 16px 18px rgba(0,0,0,.6))')}</div>`); c.cam.appendChild(pz);
     c.tl.from(im, {y: 160, opacity: 0, scale: .85, duration: .9, ease: 'expo.out'}, .25); c.fx(.3, 'whoosh');
-    c.tl.from(pz, {x: 140, opacity: 0, duration: .6, ease: 'power3.out'}, .7); c.tl.to(pz, {y: -24, duration: .3, yoyo: true, repeat: 1}, 1.3); c.fx(1.45, 'click');
+    if (CHESS) { c.tl.from(pz, {x: 140, opacity: 0, duration: .6, ease: 'power3.out'}, .7); c.tl.to(pz, {y: -24, duration: .3, yoyo: true, repeat: 1}, 1.3); c.fx(1.45, 'click'); } else pz.remove();
     flota(c.tl, im, c.D, {at: 1.3, d: 2.8}); },
 };
 ['multitud', 'porque', 'revela', 'todas', 'precio', 'exclusiva', 'inversion', 'garantia', 'cta2', 'generico', 'recorrido'].forEach((n) => { if (!D[11][n]) D[11][n] = (c) => { fondo11(c); (window.PRO.S[n] || window.PRO.S.generico)(c); }; });

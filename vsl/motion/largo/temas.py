@@ -112,6 +112,16 @@ def estilo(clave):
         k = max(1, min(5, int(clave[2]))); fam = clave.split('-')[1] if '-' in clave else 'gen'
         mus = {1: 'musica/house-fest.mp3', 2: 'musica/gear.mp3', 3: 'musica/deep-techno.mp3', 4: 'musica/uplifting-bass.mp3', 5: 'musica/b-o-r-n.mp3'}[k] if fam == 'dj' else musica_para(fam if fam in FAMILIAS else 'gen', k - 1, 'musica/savana.mp3')
         return dict(COMUN, motor='mkt', mk=k, tema=False, musica=mus, nombre=['Club', 'Vinilo', 'Cabina', 'Cartel', 'Cine'][k - 1])
+    if len(clave) > 4 and clave[0] == 'f' and clave[1:3].isdigit() and clave[3] == '-':
+        # 19 nov 20:18 (Christian): el diseño APROBADO de DJ («Morado profundo», f05, motor clásico) se usa en todos los productos.
+        # Fuera de DJ se quita todo lo de audio (vinilo, ondas, ecualizador, disco) y la música se elige para el nicho.
+        from estilo_final import VIDEOS as _FIN
+        fam = clave[4:].split('-')[0]; base = next((v for v in _FIN if v['id'] == clave[:3]), _FIN[4])
+        e = dict(base['estilo']); e['fam'] = fam if fam in FAMILIAS else ('dj' if fam == 'dj' else 'gen'); e['color'] = base['titulo'].split('·')[-1].strip()
+        if fam != 'dj':
+            e['fondo'] = ['halo', 'particulas']; e['deco'] = 'aro' if e.get('deco') in ('disco', 'ondas', 'sol') else e.get('deco')
+            e['musica'] = musica_para(e['fam'], 2, 'musica/it-s-love.mp3'); e['musicaFija'] = True
+        return e
     if len(clave) > 3 and clave[0] == 'd' and clave[1].isdigit() and (clave[2] == '-' or (clave[2].isdigit() and clave[3] == '-')):
         # 'd3-legal' = director 3 (otra interpretación visual de todas las escenas) con la familia legal
         resto = clave[clave.index('-') + 1:].split('-'); fam = resto[0]
