@@ -86,7 +86,7 @@ def preparar(v):
     if E.get('motor') == 'mkt':  # video del producto principal (Marketplace): vsl/motion/mkt
         cab, pie = '<link rel="stylesheet" href="../../mkt/mkt.css">', '<script src="../../pro/lib/gsap.min.js"></script><script src="../../mkt/mkt.js"></script>'
     elif E.get('motor') == 'pro':  # motor nuevo (vsl/motion/pro): GSAP + escenas sincronizadas con la voz
-        cab, pie = '<link rel="stylesheet" href="../../pro/pro.css">', '<script src="../../pro/lib/gsap.min.js"></script><script src="../../pro/pro.js"></script>' + ('<link rel="stylesheet" href="../../pro/dir.css"><script src="../../pro/lib/three.min.js"></script><script src="../../pro/dir.js"></script><script src="../../pro/nicho.js"></script>' if E.get('dir') else '')
+        cab, pie = '<link rel="stylesheet" href="../../pro/pro.css">', '<script src="../../pro/lib/gsap.min.js"></script><script src="../../pro/pro.js"></script>' + ('<link rel="stylesheet" href="../../pro/dir.css"><script src="../../pro/lib/three.min.js"></script><script src="../../pro/dir.js"></script><script src="../../pro/nicho.js"></script><link rel="stylesheet" href="../../pro/kit.css"><script src="../../pro/kit.js"></script>' if E.get('dir') else '')
     else:
         cab, pie = '<link rel="stylesheet" href="../motor.css">', '<script src="../motor.js"></script>'
     open(html, 'w').write('<!doctype html><html lang="es"><head><meta charset="utf-8"><title>%s</title>%s</head><body><script>window.V=%s</script>%s</body></html>' % (v['titulo'], cab, datos, pie))

@@ -34,3 +34,7 @@ Cómo se rehace:
 - `GUION=C` (ya tiene todo): bienvenida, tu curso, instalar, tu biblioteca (todo abierto, «Abrir»), cierre. Sin venta. 0:43.
 - Voz: `python3 voz3.py B` / `C` → `voz_b.json`, `v_b_<escena>.wav`; mezcla: `python3 mezcla.py _b`; render: `GUION=B PORT=8796 ./tramos.sh "1:::mb.mp4"`.
 - En la plataforma: `VIDEOS.parcial` = `video-plataforma-b1.mp4`, `VIDEOS.completo` = `video-plataforma-c1.mp4`.
+
+## 20 nov — el video ya no vende (Christian: «todo el tiempo estamos vende y vende»)
+- Video A: la escena «todo» solo explica que, si quiere todos, la opción especial está en su plataforma arriba de los complementos y que solo aparece si no ha comprado ninguno. Ya no toca «Lo quiero todo» ni muestra «¡Todo desbloqueado!». 1:16. En vivo: `video-plataforma-4.mp4`.
+- Pantalla del video (los 3): sin botones de compra (ni dentro del video ni al terminar). «Omitir video» discreto a los 15 s; si ya lo vio, «Volver» desde el inicio. Al terminar: «¡Listo! Ya sabes cómo funciona tu plataforma», «Entrar a mi plataforma» y «Volver a ver el video».

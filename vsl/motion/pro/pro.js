@@ -433,7 +433,7 @@ S.generico = (c) => { const {sc} = c; texto(c, {x: 210, y: 330, w: 1500, c: 1, k
 ['titulo', 'alumnos', 'historia', 'lista', 'compara'].forEach((k) => { S[k] = S.generico; });
 
 // los "directores" (dir.js) registran aquí otras interpretaciones de cada escena: PRO.D[n][escena]
-window.PRO = {S, D: {}, alSeek: [], alMontar: [], V, E, P, PR, A, A2, IM, VAR, N: () => N, $, esc, pal, rgba, norm, money, rnd, fit, img, OK, ICO, texto, objeto, decor, draw, sube, salta, flota, onda, cuenta};
+window.PRO = {S, D: {}, alSeek: [], alMontar: [], alEscena: [], TRX: {}, precarga: [], V, E, P, PR, A, A2, IM, VAR, N: () => N, $, esc, pal, rgba, norm, money, rnd, fit, img, OK, ICO, texto, objeto, decor, draw, sube, salta, flota, onda, cuenta};
 
 // Regla A7 (18 nov): la primera vez que se muestra el Súper Pack, sus herramientas giran alrededor del mockup principal.
 // Funciona con cualquier director: busca la imagen del pack ya colocada y gira las herramientas a su alrededor.
@@ -522,6 +522,8 @@ function montar() {
     const cue = (w, def, min) => { const v = norm(sc.voz), k = w ? v.indexOf(norm(w)) : -1; const t = k < 0 ? (def == null ? null : .22 + def * vz) : Math.max(.2, .22 + (k / Math.max(1, v.length)) * vz - .12); return t == null ? null : Math.max(t, min || 0); };
     try { ((window.PRO.D[E.dir] || {})[sc.c] || S[sc.c] || S.generico)({sc, i, el, cam: el.firstChild, tl, D: sc.dur, vz, cue, t0: sc.t0 - ade, fx: (t, n) => sfx(sc.t0 - ade + t, n)}); }
     catch (e) { console.error(e); window.__errores = (window.__errores || []).concat(sc.c + ': ' + e.message); }
+    // kit del nicho (20 nov): fondos, elementos y animaciones del nicho sobre cualquier director
+    window.PRO.alEscena.forEach((f) => { try { f({sc, i, el, cam: el.firstChild, tl, D: sc.dur, vz, cue, fx: (t, n) => sfx(sc.t0 - ade + t, n)}); } catch (e) { console.error(e); window.__errores = (window.__errores || []).concat('kit ' + sc.c + ': ' + e.message); } });
     if (sc.c === 'revela' && !V.__orbita) { V.__orbita = 1; try { orbita(el.firstChild, tl, sc, cue); } catch (e) { console.error(e); } }
     tl.fromTo(el.firstChild, {scale: 1}, {scale: 1.03, duration: sc.dur + .6, ease: 'none'}, 0);
     const oro = el.querySelectorAll('.oro,.T .k .wi'); if (oro.length) tl.fromTo(oro, {backgroundPosition: '0% 0'}, {backgroundPosition: '100% 0', duration: 2.6, ease: 'sine.inOut', yoyo: true, repeat: Math.ceil(sc.dur / 2.6) + 1}, .5);
@@ -537,6 +539,7 @@ function montar() {
     else if (tr === 'barrido') { on = t - .2; off = t + .22;  // las dos escenas comparten un borde que cruza la pantalla
       M.fromTo(el, {clipPath: 'inset(0% 100% 0% 0%)'}, {clipPath: 'inset(0% 0% 0% 0%)', duration: .4, ease: 'power2.inOut'}, on); M.set(el, {clipPath: 'none'}, on + .42);
       M.fromTo(pv, {clipPath: 'inset(0% 0% 0% 0%)'}, {clipPath: 'inset(0% 0% 0% 100%)', duration: .4, ease: 'power2.inOut'}, on); }
+    else if (window.PRO.TRX[tr]) { const r = window.PRO.TRX[tr]({M, pv, el, t, FX, i}) || {}; if (r.on != null) on = r.on; if (r.off != null) off = r.off; }
     else { M.fromTo(pan, {x: 0}, {x: 2440, duration: .3, ease: 'power3.in'}, t - .3); M.to(pan, {x: 4900, duration: .34, ease: 'power3.out'}, t + .02); M.set(pan, {x: 0}, t + .42); }
     M.set(el, {visibility: 'visible'}, on); M.set(pv, {visibility: 'hidden'}, off);
     if (i % 4 === 0) sfx(t - .2, 'whoosh');  // 18 nov: no un sonido en cada corte
@@ -547,5 +550,5 @@ function montar() {
 }
 const fu = [E.dir ? E.dirFt || 'Montserrat' : E.ft || 'Montserrat', E.fb || 'Montserrat', 'Montserrat'].concat(E.dir ? ['JetBrains'] : [], E.fuentes || []);
 Promise.all([...lista.map(([k, s]) => carga(k, s)), ...fu.flatMap((f) => [document.fonts.load(`800 40px ${f}`), document.fonts.load(`italic 800 40px ${f}`), document.fonts.load(`500 40px ${f}`), document.fonts.load(`700 40px ${f}`), document.fonts.load(`900 40px ${f}`)])])
-  .then(() => document.fonts.ready).then(montar).catch((e) => { console.error(e); window.__errores = [String(e)]; window.__listo = true; });
+  .then(() => Promise.all((window.PRO.precarga || []).map((f) => f()))).then(() => document.fonts.ready).then(montar).catch((e) => { console.error(e); window.__errores = [String(e)]; window.__listo = true; });
 })();

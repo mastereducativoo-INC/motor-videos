@@ -140,10 +140,16 @@ def armar(r, bajar):
         E['musica'] = st['musica'][1:]
     elif st.get('musica') and not E.get('tema') and not E.get('musicaFija') and E.get('motor') != 'mkt':  # Marketplace: la música la decide el director  # en los temas por nicho la música la decide el tema
         E['musica'] = st['musica']
+    from temas import kit_de
+    kit = kit_de(prod, E)
+    if kit:  # 20 nov: kit del nicho (fondos, elementos, animaciones, letras, colores y música del nicho; ver pro/kit.js)
+        E['kit'], E['kitv'] = kit['nicho'], kit['v']
+        if not str(st.get('musica') or '').startswith('!'):
+            E['musica'] = kit['musica']
     if E.get('tema'):
         E['cinta'] = (prod.get('oferta') or '').upper()
     cont = [dict(titulo=c.get('titulo'), valor=c.get('valor'), corto=c.get('corto') or c.get('titulo')) for c in (prod.get('contenidos') or []) if c.get('titulo')]
-    PR = dict(oferta=prod.get('oferta'), curso=prod.get('curso'), valor=_num(prod.get('valor')), precio=_num(prod.get('precio')), alumnos=_num(prod.get('alumnos')) or 0,
+    PR = dict(nicho=prod.get('nicho'), oferta=prod.get('oferta'), curso=prod.get('curso'), valor=_num(prod.get('valor')), precio=_num(prod.get('precio')), alumnos=_num(prod.get('alumnos')) or 0,
               dias=int(_num(prod.get('garantia_dias')) or 7), unidad=prod.get('unidad') or 'herramientas', etiqueta=prod.get('etiqueta') or 'Herramienta',
               mods=[m for m in prod.get('mods') or [] if m] or None, logro=prod.get('logro'), cimgs=[f'm{i}' for i in range(1, 13) if f'm{i}' in tiene] or None, vida=bool(prod.get('acceso_vida')) if 'acceso_vida' in prod else None, camino=prod.get('camino') or None, cont=cont or None)
     PR = {k: v for k, v in PR.items() if v is False or v not in (None, '', [])}

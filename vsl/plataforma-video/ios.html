@@ -1,0 +1,163 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:M;font-weight:700;src:url(/_f/montserrat/files/montserrat-latin-700-normal.woff2)}
+@font-face{font-family:M;font-weight:800;src:url(/_f/montserrat/files/montserrat-latin-800-normal.woff2)}
+@font-face{font-family:M;font-weight:900;src:url(/_f/montserrat/files/montserrat-latin-900-normal.woff2)}
+@font-face{font-family:I;font-weight:400;src:url(/_f/inter/files/inter-latin-400-normal.woff2)}
+@font-face{font-family:I;font-weight:500;src:url(/_f/inter/files/inter-latin-500-normal.woff2)}
+@font-face{font-family:I;font-weight:600;src:url(/_f/inter/files/inter-latin-600-normal.woff2)}
+*{box-sizing:border-box;margin:0}
+html,body{width:390px;height:600px;overflow:hidden;background:#0a0807}
+#s{position:relative;width:390px;height:600px;overflow:hidden;font-family:I,-apple-system,sans-serif;color:#111}
+.capa{position:absolute;inset:0}
+/* página de fondo (genérica) */
+#pag{background:radial-gradient(420px 300px at 50% 18%,rgba(242,195,91,.22),transparent 70%),linear-gradient(180deg,#120e16,#08070a);color:#f6efe2}
+.top{position:absolute;left:16px;right:16px;top:14px;display:flex;align-items:center;gap:8px}
+.top img{width:30px;height:30px;border-radius:8px}
+.pill{margin-left:auto;display:flex;gap:6px}.pill span{font:700 11px M;padding:8px 11px;border-radius:99px;border:1px solid rgba(255,255,255,.18);color:#f6efe2}.pill span+span{border-color:rgba(242,195,91,.5);color:#ffe3a1}
+.cov{position:absolute;left:95px;top:70px;width:200px;height:200px;border-radius:22px;border:2px solid rgba(255,227,161,.7);background:linear-gradient(160deg,#2a1f3a,#120d18);display:grid;place-content:center;justify-items:center;gap:6px;box-shadow:0 30px 60px -20px rgba(242,180,60,.5)}
+.cov i{font:800 9px M;letter-spacing:.3em;color:#f2c35b;font-style:normal}.cov b{font:900 30px M;color:#fff8ea}
+.tit{position:absolute;left:0;right:0;top:300px;text-align:center;font:900 34px M;color:#fff3dc}
+.btn{position:absolute;left:50px;right:50px;top:360px;height:52px;border-radius:99px;background:#f6efe2;color:#1c1405;display:grid;place-items:center;font:800 15px M}
+.txt{position:absolute;left:40px;right:40px;top:428px;height:10px;border-radius:5px;background:rgba(255,255,255,.08)}
+/* barra de Safari (iOS 26, compacta) */
+#barra{position:absolute;left:10px;right:10px;bottom:16px;height:54px;display:flex;align-items:center;gap:8px}
+.circ{width:50px;height:50px;border-radius:50%;background:rgba(235,235,240,.82);backdrop-filter:blur(8px);display:grid;place-items:center;box-shadow:0 6px 20px -6px rgba(0,0,0,.6)}
+.circ svg{width:22px;height:22px;stroke:#222;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.dir{flex:1;height:50px;border-radius:99px;background:rgba(235,235,240,.82);display:flex;align-items:center;gap:10px;padding:0 14px;box-shadow:0 6px 20px -6px rgba(0,0,0,.6);font:500 14px I;color:#222}
+.dir svg{width:20px;height:20px;stroke:#222;fill:none;stroke-width:2;stroke-linecap:round}
+#hamb{position:relative;width:34px;height:34px;margin-left:-6px;border-radius:50%;display:grid;place-items:center}
+/* menú de ≡ */
+#menu{position:absolute;z-index:6;left:14px;bottom:82px;width:236px;padding:8px;border-radius:26px;background:#f4f4f6;box-shadow:0 20px 50px -10px rgba(0,0,0,.6);transform-origin:20% 100%}
+.mf{display:flex;align-items:center;gap:12px;height:44px;padding:0 12px;border-radius:14px;font:500 15px I;color:#111}
+.mf svg{width:20px;height:20px;stroke:#111;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.mf.sep{border-top:1px solid rgba(0,0,0,.08);border-radius:0}
+/* hoja de compartir */
+#hoja{position:absolute;left:0;right:0;bottom:0;height:560px;background:#fff;border-radius:30px 30px 0 0;box-shadow:0 -20px 60px rgba(0,0,0,.5);padding:18px 16px 0;overflow:hidden}
+.hc{display:flex;gap:12px;align-items:center}.hc img{width:52px;height:52px;border-radius:12px}
+.hc b{display:block;font:600 15px I}.hc small{display:block;font:400 13px I;color:#8a8a8e}
+.op{display:inline-block;margin-top:6px;padding:5px 12px;border-radius:99px;background:#efeff4;font:500 13px I;color:#333}
+.x{position:absolute;right:16px;top:16px;width:34px;height:34px;border-radius:50%;background:#efeff4;display:grid;place-items:center;font:500 18px I;color:#555}
+.fila{display:flex;justify-content:space-between;padding:14px 4px 0;border-top:1px solid #eee;margin-top:14px}
+.av{width:62px;display:grid;justify-items:center;gap:6px;font:400 11px I;color:#333;text-align:center}
+.av span{width:56px;height:56px;border-radius:50%;background:linear-gradient(160deg,#d9d9de,#bfbfc6)}
+.ap span{border-radius:16px}
+.ac span{background:#f2f2f6;display:grid;place-items:center}.ac svg{width:26px;height:26px;stroke:#222;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#lista{margin-top:16px;border-radius:16px;background:#f2f2f6;overflow:hidden}
+.lf{display:flex;align-items:center;gap:12px;height:46px;padding:0 14px;font:400 15.5px I;color:#111;border-bottom:1px solid rgba(0,0,0,.06)}
+.lf svg{width:20px;height:20px;stroke:#111;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+/* agregar a inicio */
+#agr{background:#f2f2f6;padding-top:58px}
+.ah{display:flex;align-items:center;justify-content:space-between;padding:16px}
+.ah .x{position:static;background:#fff}.ah b{font:600 16px I}
+.az{padding:10px 18px;border-radius:99px;background:#0a84ff;color:#fff;font:600 15px I}
+.card{margin:4px 16px;background:#fff;border-radius:14px;display:flex;gap:12px;align-items:center;padding:12px}
+.card img{width:56px;height:56px;border-radius:13px}.card b{display:block;font:500 16px I}.card small{display:block;font:400 13px I;color:#a0a0a5;margin-top:6px}
+.sw{margin:18px 16px 0;background:#fff;border-radius:14px;display:flex;justify-content:space-between;align-items:center;padding:14px;font:400 15.5px I}
+.tg{width:52px;height:32px;border-radius:99px;background:#34c759;position:relative}.tg::after{content:"";position:absolute;right:3px;top:3px;width:26px;height:26px;border-radius:50%;background:#fff}
+.nota{margin:8px 30px;font:400 12.5px I;color:#8a8a8e;line-height:1.4}
+/* inicio */
+#ini{background:radial-gradient(300px 260px at 20% 10%,rgba(124,58,237,.55),transparent 70%),radial-gradient(320px 300px at 90% 90%,rgba(242,195,91,.4),transparent 70%),#151022;display:grid;grid-template-columns:repeat(4,64px);grid-auto-rows:86px;justify-content:center;align-content:start;gap:4px 22px;padding-top:70px}
+.t{width:64px;height:64px;border-radius:16px;background:rgba(255,255,255,.12)}
+.nueva{display:grid;justify-items:center;gap:6px;font:500 12px I;color:#fff}.nueva .nom{text-align:center;line-height:1.2;white-space:nowrap}.nueva img{width:64px;height:64px;border-radius:16px;box-shadow:0 0 0 2px #f2c35b,0 0 30px rgba(242,195,91,.7)}
+.listo{position:absolute;left:50%;bottom:80px;transform:translateX(-50%);padding:12px 20px;border-radius:99px;background:rgba(0,0,0,.55);color:#fff;font:800 16px M;white-space:nowrap}
+/* toque */
+#toque{position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;background:rgba(255,255,255,.55);box-shadow:0 0 0 3px rgba(242,195,91,.95),0 0 26px rgba(242,195,91,.8);pointer-events:none}
+#ola{position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;border:3px solid #f2c35b}
+.marca{background:rgba(242,195,91,.28)!important;box-shadow:inset 0 0 0 2px #f2c35b}
+/* rótulo del paso */
+#rot{position:absolute;left:12px;top:12px;display:flex;align-items:center;gap:8px;padding:8px 14px 8px 8px;border-radius:99px;background:rgba(12,10,8,.86);color:#fff;font:700 14px M;box-shadow:0 10px 30px -8px rgba(0,0,0,.7);z-index:20}
+#rot i{font-style:normal;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:linear-gradient(180deg,#ffe597,#f2c35b);color:#1c1405;font:900 13px M}
+</style></head><body>
+<div id="s">
+ <div class="capa" id="pag">
+  <div class="top"><img src="/acceso/recursos/icono-192.png"><div class="pill"><span>▶ Cómo funciona</span><span>Instalar</span></div></div>
+  <div class="cov"><i>CURSO PRINCIPAL</i><b>TU CURSO</b><i>MASTER EDUCATIVO</i></div>
+  <div class="tit">Tu curso</div><div class="btn">▶ Abrir mi curso</div><div class="txt"></div>
+  <div id="barra"><div class="circ"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></div>
+   <div class="dir"><span id="hamb"><svg viewBox="0 0 24 24"><path d="M5 7h14M5 12h14M5 17h9"/></svg></span><span style="flex:1;text-align:center">alumnos.mastereducativo.com</span><svg viewBox="0 0 24 24"><path d="M19 12a7 7 0 1 1-2-5M19 4v4h-4"/></svg></div>
+   <div class="circ"><svg viewBox="0 0 24 24"><rect x="7" y="7" width="12" height="12" rx="3"/><path d="M5 15V7a2 2 0 0 1 2-2h8"/></svg></div></div>
+  <div id="menu">
+   <div class="mf" id="mComp"><svg viewBox="0 0 24 24"><path d="M12 14V4M8 8l4-4 4 4M8 11H6.5v9h11v-9H16"/></svg>Compartir</div>
+   <div class="mf"><svg viewBox="0 0 24 24"><path d="M7 4h10v16l-5-4-5 4z"/></svg>Agregar a Marcadores</div>
+   <div class="mf"><svg viewBox="0 0 24 24"><path d="M4 6c3-1.3 5.5-1 8 1 2.5-2 5-2.3 8-1v13c-3-1.3-5.5-1-8 1-2.5-2-5-2.3-8-1z"/></svg>Agregar marcador a…</div>
+   <div class="mf sep"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6"/></svg>Buscar en la página</div>
+   <div class="mf"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M16 16l4 4M9 11h4M11 9v4"/></svg>Zoom de la página</div>
+  </div>
+ </div>
+ <div id="hoja">
+  <div class="hc"><img src="/acceso/recursos/icono-192.png"><div><b>Plataforma de alumnos · Master…</b><small>alumnos.mastereducativo.com</small><span class="op">Opciones ›</span></div></div><span class="x">✕</span>
+    <div class="fila"><div class="av ap"><span style="background:linear-gradient(#5ac8fa,#0a84ff)"></span>AirDrop</div><div class="av ap"><span style="background:linear-gradient(#6ee26e,#2fbf2f)"></span>Mensajes</div><div class="av ap"><span style="background:linear-gradient(#60b4ff,#1a73e8)"></span>Mail</div><div class="av ap"><span style="background:linear-gradient(#fff,#f5f5f5);box-shadow:inset 0 10px 0 #ffd60a"></span>Notas</div></div>
+  <div class="fila ac" id="acc"><div class="av"><span><svg viewBox="0 0 24 24"><rect x="8" y="8" width="11" height="12" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg></span>Copiar</div><div class="av"><span><svg viewBox="0 0 24 24"><path d="M7 4h10v16l-5-4-5 4z"/></svg></span>Agregar a Marcadores</div><div class="av"><span><svg viewBox="0 0 24 24"><circle cx="7" cy="13" r="3.5"/><circle cx="17" cy="13" r="3.5"/><path d="M10.5 13h3"/></svg></span>Agregar a Lecturas</div><div class="av" id="verMas"><span><svg viewBox="0 0 24 24" id="flecha"><path d="M6 9l6 6 6-6"/></svg></span><em id="vmTxt" style="font-style:normal">Ver más</em></div></div>
+  <div id="lista">
+   <div class="lf"><svg viewBox="0 0 24 24"><path d="M4 6c3-1.3 5.5-1 8 1 2.5-2 5-2.3 8-1v13c-3-1.3-5.5-1-8 1-2.5-2-5-2.3-8-1z"/></svg>Agregar marcador a…</div>
+   <div class="lf"><svg viewBox="0 0 24 24"><path d="M12 4l2.4 5 5.4.6-4 3.7 1.1 5.3L12 16l-4.9 2.6 1.1-5.3-4-3.7 5.4-.6z"/></svg>Agregar a Favoritos</div>
+   <div class="lf"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6"/></svg>Buscar en la página</div>
+   <div class="lf" id="lIni"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8v8M8 12h8"/></svg>Agregar a Inicio</div>
+  </div>
+ </div>
+ <div class="capa" id="agr">
+  <div class="ah"><span class="x">✕</span><b>Agregar a Inicio</b><span class="az" id="bAgr">Agregar</span></div>
+  <div class="card"><img src="/acceso/recursos/icono-192.png"><div><b>Master Educativo</b><small>https://alumnos.mastereducativo.com</small></div></div>
+  <div class="sw">Abrir como app web<span class="tg"></span></div>
+  <p class="nota">Se agregará un ícono a la pantalla de inicio para acceder más rápido a este sitio web.</p>
+ </div>
+ <div class="capa" id="ini"></div>
+ <div id="ola"></div><div id="toque"></div>
+ <div id="rot"><i>1</i><span>Toca las rayitas ≡</span></div>
+</div>
+<script>
+const $ = (q) => document.querySelector(q);
+const cl = (x) => Math.max(0, Math.min(1, x)), seg = (t, a, b) => cl((t - a) / (b - a)), sm = (x) => x * x * x * (x * (x * 6 - 15) + 10);
+const back = (x) => { const c = 1.7; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
+// la pantalla de inicio
+$('#ini').innerHTML = Array.from({length: 13}, (_, i) => i === 9 ? '<div class="nueva" id="nv"><img src="/acceso/recursos/icono-192.png"><span class="nom">Master<br>Educativo</span></div>' : '<span class="t"></span>').join('') + '<div class="listo" id="ok">¡Listo! Ya tienes la app</div>';
+const P = (sel) => { const r = document.querySelector(sel).getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };
+// guion: [inicio, toque, paso, texto, objetivo]
+const G = [
+  {a: 0, t: 1.7, n: 1, txt: 'Toca las rayitas ≡', obj: '#hamb'},
+  {a: 2.5, t: 3.9, n: 2, txt: 'Toca «Compartir»', obj: '#mComp'},
+  {a: 4.7, t: 6.2, n: 3, txt: 'Toca «Ver más»', obj: '#verMas span'},
+  {a: 7.0, t: 8.6, n: 4, txt: 'Toca «Agregar a Inicio»', obj: '#lIni'},
+  {a: 9.4, t: 10.9, n: 5, txt: 'Toca «Agregar»', obj: '#bAgr'},
+  {a: 11.7, t: 99, n: 0, txt: '', obj: null},
+];
+window.END = 14.6;
+window.render = function (t) {
+  // estados
+  const menuO = sm(seg(t, 1.8, 2.15)) * (1 - sm(seg(t, 4.0, 4.3)));
+  $('#menu').style.opacity = menuO; $('#menu').style.transform = `scale(${.85 + .15 * back(seg(t, 1.8, 2.25))})`;
+  const hoja = sm(seg(t, 4.1, 4.6)), exp = sm(seg(t, 6.3, 6.85));
+  $('#hoja').style.transform = `translateY(${(1 - hoja) * 600 + (1 - exp) * 0}px)`;
+  $('#hoja').style.height = (350 + 200 * exp) + 'px';
+  $('#hoja').style.display = t > 4 && t < 9.6 ? 'block' : 'none';
+  $('#lista').style.opacity = exp; $('#flecha').style.transform = `rotate(${180 * exp}deg)`; $('#vmTxt').textContent = exp > .5 ? 'Ver menos' : 'Ver más';
+  $('#acc').style.display = 'flex';
+  const agr = sm(seg(t, 9.0, 9.5)); $('#agr').style.opacity = agr; $('#agr').style.transform = `translateY(${(1 - agr) * 40}px)`; $('#agr').style.display = agr > 0 && t < 11.9 ? 'block' : 'none';
+  const ini = sm(seg(t, 11.2, 11.7)); $('#ini').style.opacity = ini; $('#ini').style.display = ini > 0 ? 'grid' : 'none';
+  const nv = seg(t, 11.8, 12.4); $('#nv').style.transform = `scale(${nv ? .3 + .7 * back(nv) : .3})`; $('#nv').style.opacity = cl(nv * 2);
+  $('#ok').style.opacity = sm(seg(t, 12.4, 12.8)) * (1 - sm(seg(t, 14.2, 14.6)));
+  $('#pag').style.filter = `brightness(${1 - .35 * hoja})`;
+  // marcas (lo que se toca)
+  $('#hamb').classList.toggle('marca', t > .9 && t < 2.2);
+  $('#mComp').classList.toggle('marca', t > 3.1 && t < 4.2);
+  $('#verMas span').classList.toggle('marca', t > 5.4 && t < 6.4);
+  $('#lIni').classList.toggle('marca', t > 7.8 && t < 9.1);
+  $('#bAgr').style.boxShadow = t > 10.1 && t < 11.2 ? '0 0 0 3px #f2c35b' : 'none';
+  // toque
+  const g = G.find((x, i) => t >= x.a && (!G[i + 1] || t < G[i + 1].a));
+  const tq = $('#toque'), ola = $('#ola');
+  if (g && g.obj) {
+    const [x, y] = P(g.obj), ap = seg(t, g.t - 1, g.t - .6), sal = seg(t, g.t + .35, g.t + .6);
+    const pr = t > g.t - .12 && t < g.t + .15;
+    tq.style.left = x + 'px'; tq.style.top = (y + (1 - sm(ap)) * 40) + 'px';
+    tq.style.opacity = sm(ap) * (1 - sal); tq.style.transform = `scale(${pr ? .8 : 1})`;
+    const o = seg(t, g.t, g.t + .6); ola.style.left = x + 'px'; ola.style.top = y + 'px'; ola.style.opacity = o > 0 && o < 1 ? 1 - o : 0; ola.style.transform = `scale(${1 + o * 1.6})`;
+  } else { tq.style.opacity = 0; ola.style.opacity = 0; }
+  // rótulo
+  const r = $('#rot');
+  if (g && g.n) { r.style.display = 'flex'; r.querySelector('i').textContent = g.n; r.querySelector('span').textContent = g.txt; r.style.opacity = sm(seg(t, g.a, g.a + .3)); }
+  else r.style.display = 'none';
+};
+render(0);
+</script></body></html>

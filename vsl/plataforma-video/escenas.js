@@ -201,18 +201,19 @@
       S[I.complementos].panel = {num: '03', n: 3, p: 'Complementos', h: 'Herramientas extra para tu curso', li: [['capas', 'Acompañan a tu curso', 'herramientas'], ['texto', 'Cada uno con su descripción', 'descripción'], ['eti', 'Precio especial de alumno', 'precio']]};
       S[I.superpack].panel = {num: '04', n: 4, p: 'Súper Pack', c: 'vio', h: 'El siguiente nivel', li: [['corona', 'La versión más completa', 'completa'], ['flecha', 'Para llegar mucho más lejos', 'lejos']]};
       S[I.activa].panel = {num: '05', n: 5, p: 'Uno por uno', c: 'verde', h: 'Compra solo lo que quieras', li: [['toque', 'Tocas «Desbloquear»', 'Tocas'], ['pago', 'Pagas', 'pagas'], ['abre', 'Se activa al instante', 'candado']]};
-      S[I.todo].panel = {num: '★', n: '★', p: 'Mejor opción', h: 'Todo junto, a mejor precio', li: [['capas', 'Todos los complementos + el Súper Pack', 'todos los complementos'], ['eti', 'Una sola compra, mejor precio', 'una sola'], ['abajo', 'Arriba de los complementos', 'justo arriba']],
-        ojo: ['Solo aparece mientras no hayas comprado ninguno por separado', 'Ojo']};
+      S[I.todo].panel = {num: '★', n: '★', p: 'Todo junto', h: 'Si los quieres todos', li: [['capas', 'Todos los complementos + el Súper Pack', 'todos los complementos'], ['eti', 'Una sola compra, mejor precio', 'una sola'], ['abajo', 'En tu plataforma, arriba de los complementos', 'justo arriba']],
+        ojo: ['Solo aparece si no has comprado ninguno por separado', 'Solo aparece']};
       S[I.cierre].panel = Object.assign({h: VR.n === 3 ? 'Todo en un lugar' : 'Tu curso completo, en un lugar'}, fin_);
       T.tdet = cue(I.complementos, 'descripción') + .1; T.thf = cue(I.complementos, 'Y por ser') - .1; T.tsep = cue(I.activa, 'por separado');
       pago();
-      T.tq = cue(I.todo, 'Lo quiero'); T.tofe = T.tq + .55; T.tojo = cue(I.todo, 'Ojo');
-      ZM = [zCurso, zIns, {a: T.ta - .15, b: fin(I.activa) - 1.75, f: F('.gal2 .g2', 0, .5, .45)}, {a: T.tofe - 2.1, b: T.tofe + .35, f: F('.tj-btn')}, zCf];
+      // 20 nov (Christian): el video ya no toca «Lo quiero todo»; solo muestra dónde está la opción en la plataforma
+      T.tesp = cue(I.todo, 'opción especial'); T.tarr = cue(I.todo, 'justo arriba'); T.tojo = cue(I.todo, 'Solo aparece');
+      ZM = [zCurso, zIns, {a: T.ta - .15, b: fin(I.activa) - 1.75, f: F('.gal2 .g2', 0, .5, .45)}, {a: T.tarr - .6, b: fin(I.todo) - 1.9, f: F('.tj', 0, .5, .5)}, zCf];
       DEDO = [dCurso, dIns,
         {k: [{t: T.tdet - 1.1, p: reposo}, {t: T.tdet, p: F('.bp .ver'), tap: T.tdet}], hasta: T.tdet + .7},
         {k: [{t: T.tdes - 1.2, p: reposo}, {t: T.tdes, p: F('.bp .b-oro'), tap: T.tdes}, {t: T.tpag, p: C('#bPagar'), tap: T.tpag}], hasta: T.tpag + .7},
-        {k: [{t: T.tofe - 1.3, p: reposo}, {t: T.tofe, p: F('.tj-btn'), tap: T.tofe}], hasta: T.tofe + .7}, dCf];
-      SFX.push({t: T.tdet, f: 'click', g: .8}, {t: T.tofe, f: 'click', g: .8}, {t: T.tofe + .35, f: 'ding', g: .55});
+        dCf];
+      SFX.push({t: T.tdet, f: 'click', g: .8});
     } else if (G === 'B') {  // compró algo y le falta algo
       S[I.biblioteca].panel = {num: '03', n: 3, p: 'Tu biblioteca', c: 'verde', h: 'Lo que ya es tuyo', li: [['check', 'Todo lo que ya compraste', 'compraste'], ['abre', 'Se abre con su botón «Abrir»', 'Abrir']]};
       S[I.falta].panel = {num: '04', n: 4, p: 'Lo que te falta', h: 'Listo para desbloquear', li: [['texto', 'Cada uno con su descripción', 'descripción'], ['eti', 'Precio especial de alumno', 'precio'], ['corona', 'Y el Súper Pack, si aún no lo tienes', 'Súper Pack']]};
@@ -247,7 +248,7 @@
     for (const Z of ZM) { const tt = Z.a + Z.r + .05, sc = S.findIndex((x, n) => tt >= ini(n) && tt < fin(n) + .3); plataforma(tt, sc); Z.xy = foco(Z.f); Z.E = zLleno(Z); }
     for (let n = 1; n < ZM.length; n++) if (ZM[n - 1].b + ZM[n - 1].r > ZM[n].a) console.error('acercamientos encimados', n);
     estado = null;
-    window.TIEMPOS = {END, oferta: G === 'A' ? +(cue(I.todo, 'aquí mismo') - .3).toFixed(2) : null, S: S.map((x) => ({k: x.k, a: +x.a.toFixed(3), d: x.d})), SFX, ZM: ZM.map((z) => [+z.a.toFixed(2), +z.b.toFixed(2)])};
+    window.TIEMPOS = {END, oferta: null /* 20 nov: ya no hay botón de compra dentro del video */, S: S.map((x) => ({k: x.k, a: +x.a.toFixed(3), d: x.d})), SFX, ZM: ZM.map((z) => [+z.a.toFixed(2), +z.b.toFixed(2)])};
     return window.TIEMPOS;
   };
 
@@ -361,11 +362,7 @@
     }
     if (k === 'todo') {
       poner('nada'); scroll(arriba('.tj') - 150);
-      const to = cue(I.todo, 'oferta especial');
-      marca('#m1', '.tj', 0, eo(seg(t, to - .3, to + .2)) * (1 - seg(t, T.tofe - .2, T.tofe + .1)), '', 6);
-      const o = sm(seg(t, T.tofe + .3, T.tofe + .9)) * (1 - sm(seg(t, T.tojo - .6, T.tojo))); capa('#cOk', o);
-      $('#okT').textContent = '¡Todo desbloqueado!'; $('#okS').textContent = 'Tu curso completo, en un mismo lugar';
-      $('#cOk .circ').style.transform = `scale(${.6 + .4 * back(seg(t, T.tofe + .3, T.tofe + .9))})`;
+      marca('#m1', '.tj', 0, eo(seg(t, T.tesp - .3, T.tesp + .2)) * (1 - seg(t, T.tojo - .5, T.tojo - .2)), '', 6);
       marca('#m2', '.tj', 0, eo(seg(t, T.tojo - .2, T.tojo + .3)) * (1 - seg(t, fin(i) - .4, fin(i) - .1)), '', 6);
       const tj = q('.tj'); if (tj) { const r = tj.getBoundingClientRect(), e = $('#etiq'); e.style.left = r.left + r.width / 2 - e.offsetWidth / 2 + 'px'; e.style.top = r.top - 36 + 'px';
         const x = back(seg(t, T.tojo, T.tojo + .5)); e.style.opacity = cl(x) * (1 - seg(t, fin(i) - .4, fin(i) - .1)); e.style.transform = `scale(${.7 + .3 * x})`; }

@@ -1,0 +1,67 @@
+/* Kit del nicho (Christian, 20 nov 2026): cada video tiene que verse del nicho. Fondos, elementos, animaciones, colores,
+   letras y música del nicho sobre cualquiera de los 9 diseños. Hoy: Mecánica y Dibujo (kit.js). */
+@font-face{font-family:BarlowC;src:url(../../fonts/barlow-condensed-latin-500-normal.woff2);font-weight:500}
+@font-face{font-family:BarlowC;src:url(../../fonts/barlow-condensed-latin-600-normal.woff2);font-weight:600}
+@font-face{font-family:BarlowC;src:url(../../fonts/barlow-condensed-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:BarlowC;src:url(../../fonts/barlow-condensed-latin-800-normal.woff2);font-weight:800 900}
+@font-face{font-family:Rajdhani;src:url(../../fonts/rajdhani-latin-600-normal.woff2);font-weight:500 600}
+@font-face{font-family:Rajdhani;src:url(../../fonts/rajdhani-latin-700-normal.woff2);font-weight:700 900}
+@font-face{font-family:Caveat;src:url(../../fonts/caveat-latin-400-normal.woff2);font-weight:400 500}
+@font-face{font-family:Caveat;src:url(../../fonts/caveat-latin-700-normal.woff2);font-weight:600 900}
+@font-face{font-family:Kalam;src:url(../../fonts/kalam-latin-400-normal.woff2);font-weight:400 500}
+@font-face{font-family:Kalam;src:url(../../fonts/kalam-latin-700-normal.woff2);font-weight:600 900}
+@font-face{font-family:Marker;src:url(../../fonts/permanent-marker-latin-400-normal.woff2);font-weight:100 900}
+@font-face{font-family:Fraunces;src:url(../../fonts/Fraunces-Italic.ttf);font-style:italic;font-weight:100 900}
+@font-face{font-family:Instrument;src:url(../../fonts/InstrumentSerif-Italic.ttf);font-style:italic;font-weight:100 900}
+
+/* fondo del nicho: reemplaza las luces y el polvo genéricos */
+.kit #bg .luz,.kit #bg>i{display:none!important}
+.kit #bg{background:var(--bg)!important;opacity:1!important}
+.kit #bg:after{display:none!important}
+.kit #bg .kbg{position:absolute;inset:0}
+.kit #bg .kbg>*{position:absolute}
+.kit #bg .vig{inset:0;background:radial-gradient(ellipse 75% 70% at 50% 46%,transparent 45%,var(--vig) 100%);pointer-events:none}
+.kit #top{opacity:.55}
+
+/* letras del nicho en todo el video (también en los textos que los diseños escribían con Montserrat) */
+.kit [style*="Montserrat"],.kit .big,.kit .marq,.kit .call,.kit .call small,.kit .papel,.kit .papel h4,.kit .sello,.kit .cinta,.kit .etq,.kit .rowp,.kit .lin,.kit .app .bar,.kit .app .lado div{font-family:var(--ft),sans-serif!important}
+.kit .P,.kit .fila,.kit .chip,.kit .ped,.kit .btn,.kit .bt{font-family:var(--fb),sans-serif!important}
+.kit .num{font-family:var(--fn),sans-serif!important}
+.kit .T{line-height:1.02}
+.kit .K{font-family:var(--fk),sans-serif!important}
+
+/* MECÁNICA: letras condensadas de taller, subrayado de cinta de seguridad, chips y botones metálicos */
+.kit-mecanica .T{text-transform:uppercase;letter-spacing:.005em!important}
+.kit-mecanica .T .ul{height:.1em;border-radius:3px;background:repeating-linear-gradient(-45deg,var(--a) 0 .22em,#121212 .22em .44em)!important;box-shadow:0 .03em 0 rgba(0,0,0,.4)}
+.kit-mecanica .K{letter-spacing:.24em;font-weight:700}
+.kit-mecanica .K:before,.kit-mecanica .K.c:after{height:6px!important;width:58px!important;background:repeating-linear-gradient(-45deg,var(--a) 0 7px,transparent 7px 14px)!important}
+.kit-mecanica .chip{border-radius:10px;clip-path:polygon(12px 0,100% 0,calc(100% - 12px) 100%,0 100%)}
+.kit-mecanica .btn,.kit-mecanica .bt{border-radius:14px!important;text-transform:uppercase;letter-spacing:.06em}
+.kit-mecanica .vid,.kit-mecanica .papel,.kit-mecanica .app{border-radius:12px!important}
+.kit-mecanica .app{background:linear-gradient(180deg,#1b2129,#12161c)!important;border:3px solid #39424d!important;box-shadow:0 0 0 10px #0b0e12,0 0 0 13px #2b333d,0 60px 140px rgba(0,0,0,.7)!important}
+.kit-mecanica .app .bar{background:linear-gradient(90deg,#0d1116,#18202a)!important;color:var(--c)!important;letter-spacing:.14em;text-transform:uppercase}
+.kit-mecanica .app .bar i{display:none}
+.kit-mecanica .papel{background:linear-gradient(180deg,#f4f1ea,#e4dfd3)!important}
+.kit-mecanica .marq{-webkit-text-stroke:2px var(--mutB)!important;letter-spacing:.02em}
+
+/* DIBUJO: letras de ilustrador, etiquetas a mano, subrayado de lápiz, todo con textura de papel */
+.kit-dibujo .T{letter-spacing:-.012em!important}
+.kit-dibujo .T .k .wi{font-style:italic}
+.kit-dibujo .T .ul{height:.2em;bottom:-.02em;border-radius:0;background:none!important}
+.kit-dibujo .T .ul:before{content:'';position:absolute;inset:0;background:var(--trazo) center/100% 100% no-repeat}
+.kit-dibujo .K{letter-spacing:.02em!important;text-transform:none!important;font-weight:700;font-size:1.65em!important;line-height:1}
+.kit-dibujo .K:before,.kit-dibujo .K.c:after{height:3px!important;border-radius:3px;transform:rotate(-2deg)}
+.kit-dibujo .chip{border-radius:14px 22px 16px 20px;border-width:2.5px}
+.kit-dibujo .btn,.kit-dibujo .bt{border-radius:22px 30px 24px 28px!important}
+.kit-dibujo .vid{border-radius:6px!important}
+.kit-dibujo .app .bar i{display:none}
+.kit-dibujo .app .bar{letter-spacing:.02em}
+.kit-dibujo .papel{background:linear-gradient(180deg,#fdfbf6,#f3eee3)!important}
+.kit-dibujo .marq{-webkit-text-stroke:2px var(--mutB)!important;font-style:italic}
+
+/* elementos del nicho dentro de cada escena */
+.kel{position:absolute;pointer-events:none}
+.kel svg{display:block;overflow:visible}
+.kchispa{position:absolute;width:5px;height:22px;border-radius:4px;background:linear-gradient(180deg,#fff7c2,var(--c) 40%,var(--a));box-shadow:0 0 12px var(--c)}
+.kmiga{position:absolute;width:9px;height:6px;border-radius:40%;background:var(--goma)}
+.kcirc{position:absolute;pointer-events:none;overflow:visible}

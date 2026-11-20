@@ -10,7 +10,7 @@ A = [
  ("complementos","Debajo de tu curso están los complementos: | herramientas extra que lo acompañan. | Cada uno tiene su descripción, | para que sepas exactamente qué incluye. | Y por ser alumno, tienen un precio especial."),
  ("superpack","Al final está el Súper Pack: | el siguiente nivel. | Es la versión más completa, | para quien quiere llevar su aprendizaje mucho más lejos."),
  ("activa","Puedes comprar cada uno por separado. | Tocas «Desbloquear», pagas, | y en cuanto se aprueba tu pago, | se activa aquí mismo: | el candado se abre, | y lo encuentras en tu biblioteca."),
- ("todo","Pero si los quieres todos, hay una opción mejor: | una oferta especial con todos los complementos y el Súper Pack juntos, | en una sola compra, y a un mejor precio. | La tienes justo arriba de los complementos, | o aquí mismo: solo toca «Lo quiero todo». || Ojo: esta oferta solo aparece mientras no hayas comprado ninguno por separado."),
+ ("todo","Y si los quieres todos, también hay una opción especial: | todos los complementos y el Súper Pack juntos, | en una sola compra y a mejor precio. | La encuentras en tu plataforma, justo arriba de los complementos. | Solo aparece mientras no hayas comprado ninguno por separado."),  # 20 nov: sin «toca Lo quiero todo» (Christian: no vender tanto)
  ("cierre","Así tienes tu curso completo, en un mismo lugar. | Y si quieres volver a ver este video, | toca «Cómo funciona», arriba. || Disfruta tu curso, | y otra vez: bienvenido a Máster Educativo."),
 ]
 # B: compró algo y le falta algo (sin la oferta de $19: a ellos ya no les aparece)

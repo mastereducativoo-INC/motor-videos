@@ -155,3 +155,27 @@ def estilo(clave):
     fk = next((k for k, f in FAMILIAS.items() if f is fam), 'gen'); e['musica'] = musica_para(fk, n, e.get('musica'))
     e['var'] = n % len(fam['variantes']) + 1  # cada variante cambia además el orden de composiciones y transiciones
     return e
+
+
+# ---------------- KIT DEL NICHO (Christian, 20 nov 2026) ----------------
+# «la música… que sea relacionada con el nicho, que no sea tan tranquila». Cada uno de los 9 diseños de un nicho con kit
+# lleva su propia pista enérgica del nicho (Mixkit, licencia gratuita). Mecánica: rock de autos y garage. Dibujo: funk creativo.
+# El orden sigue la biblioteca automática (fabrica.js): Tablero, Mesa, Keynote, Pantalla viva, Expediente, Isométrico, Tribunal, Despacho, Cinético.
+KIT_ORDEN = [11, 4, 10, 3, 7, 5, 8, 6, 2]
+KIT_MUSICA = {
+    'mecanica': ['ko', 'sports-rock', 'caught-on-tape', 'rock-the-game', 'im-all-heart', 'how-does-it-feel', 'cold-coffee', 'hooligans', 'oh-my-joe'],
+    'dibujo': ['sounds-good', 'light-it-up-boy', 'funky-martian', 'year-2001', 'dirty-thinkin', 'cherry-on-top', 'simon-says', 'five', 'gimme-that-groove'],
+}
+
+
+def kit_de(prod, E):
+    """Nicho con kit para este producto y diseño: {'nicho', 'v', 'musica'} o None (sin kit: el diseño queda como está)."""
+    import re, unicodedata
+    t = ' '.join(str((prod or {}).get(k) or '') for k in ('nicho', 'curso', 'oferta', 'producto'))
+    t = unicodedata.normalize('NFD', t.lower()); t = ''.join(ch for ch in t if unicodedata.category(ch) != 'Mn')
+    nicho = 'mecanica' if re.search(r'mecanic|automotr|motocicl|\bmotos?\b', t) else 'dibujo' if re.search(r'dibuj|ilustrac|boceto|acuarel', t) else None
+    if not nicho or not E or not E.get('dir'):
+        return None
+    d = int(E.get('dir'))
+    v = KIT_ORDEN.index(d) if d in KIT_ORDEN else 0
+    return dict(nicho=nicho, v=v, musica='musica/%s.mp3' % KIT_MUSICA[nicho][v])
