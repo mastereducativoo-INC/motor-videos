@@ -120,7 +120,7 @@ def estilo(clave):
         e = dict(base['estilo']); e['fam'] = fam if fam in FAMILIAS else ('dj' if fam == 'dj' else 'gen'); e['color'] = base['titulo'].split('·')[-1].strip()
         if fam != 'dj':
             e['fondo'] = ['halo', 'particulas']; e['deco'] = 'aro' if e.get('deco') in ('disco', 'ondas', 'sol') else e.get('deco')
-            e['musica'] = musica_para(e['fam'], 2, 'musica/it-s-love.mp3'); e['musicaFija'] = True
+            e['musica'] = musica_para(e['fam'], 0, 'musica/summer-fun.mp3'); e['musicaFija'] = True
         return e
     if len(clave) > 3 and clave[0] == 'd' and clave[1].isdigit() and (clave[2] == '-' or (clave[2].isdigit() and clave[3] == '-')):
         # 'd3-legal' = director 3 (otra interpretación visual de todas las escenas) con la familia legal
