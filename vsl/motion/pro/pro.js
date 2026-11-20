@@ -445,20 +445,30 @@ function orbita(cam, tl, sc, cue) {
   // se mide cuando el pack ya está quieto y visible (antes la escena está oculta y no tiene medidas)
   const medir = () => { const r = pk.getBoundingClientRect(), c = cam.getBoundingClientRect(), k = c.width / 1920 || 1; if (!r.width) return;
     const w = r.width / k, h = r.height / k; G.cx = (r.left - c.left) / k + w / 2; G.cy = (r.top - c.top) / k + h * .58; G.rx = Math.max(320, w * .86); G.ry = Math.max(120, h * .42); G.s = Math.max(130, Math.min(220, h * .3));
+    // Christian, 19 nov 20:51 (Dibujo, Pantalla viva): «el carrusel está sobrepuesto de la caja… que dé vueltas pero no sobrepuesto».
+    // Se guarda el rectángulo de la caja: las herramientas giran a los lados y se desvanecen al pasar por delante o por detrás de ella.
+    G.bx = {cx: (r.left - c.left) / k + w / 2, cy: (r.top - c.top) / k + h / 2, w: w / 2 + 18, h: h / 2 + 18}; G.rx = Math.max(G.rx, w / 2 + G.s * .6 + 40);
     // LEY T6: la órbita nunca cruza los textos. Se miden los textos de la escena y el giro se encoge para no llegar a ellos;
     // si aun así una herramienta pisaría un texto, en ese momento se vuelve invisible (pon() la apaga).
     G.tx = [...cam.querySelectorAll('h1,h2,h3,h4,.T,.P,.K,.chip,.fila,.btn,.bt,.ej')].filter((e) => !e.contains(pk) && !it.some((d) => d.contains(e)))
       .map((e) => e.getBoundingClientRect()).filter((q) => q.width * q.height > 40)
       .map((q) => ({l: (q.left - c.left) / k - 24, r: (q.right - c.left) / k + 24, t: (q.top - c.top) / k - 18, b: (q.bottom - c.top) / k + 18}));
     for (const q of G.tx) if (q.b > G.cy - G.ry - G.s && q.t < G.cy + G.ry + G.s) {
-      if (q.r < G.cx) G.rx = Math.max(140, Math.min(G.rx, G.cx - q.r - G.s * .5)); else if (q.l > G.cx) G.rx = Math.max(140, Math.min(G.rx, q.l - G.cx - G.s * .5)); } };
+      if (q.r < G.cx) G.rx = Math.max(140, Math.min(G.rx, G.cx - q.r - G.s * .5)); else if (q.l > G.cx) G.rx = Math.max(140, Math.min(G.rx, q.l - G.cx - G.s * .5)); }
+    // si entre el texto y la orilla no caben la caja y el giro a sus lados, la caja se achica un poco (una sola vez, con animación)
+    if (G.f == null) { let iz = 20, de = 1900; for (const q of G.tx) if (q.b > G.bx.cy - G.bx.h && q.t < G.bx.cy + G.bx.h) { if (q.r < G.bx.cx) iz = Math.max(iz, q.r); else if (q.l > G.bx.cx) de = Math.min(de, q.l); }
+      const half = Math.min(G.bx.cx - iz, de - G.bx.cx), ok = (sz) => w / 2 + sz * 1.1 + 60 <= half;
+      if (ok(G.s)) G.f = 1; else { G.s0 = Math.max(120, Math.min(G.s, (half - w / 2 - 60) / 1.1)); G.f = ok(G.s0) ? 1 : Math.max(.62, 2 * (half - G.s0 * 1.1 - 60) / w); } }
+    if (G.s0) G.s = Math.min(G.s, G.s0); };
   const it = L.map((k) => { const d = document.createElement('div'); d.className = 'abs'; d.style.cssText = 'left:0;top:0;display:flex;align-items:center;justify-content:center;opacity:0'; d.innerHTML = img(k, 'max-width:100%;max-height:100%;filter:drop-shadow(0 14px 18px rgba(0,0,0,.55))'); cam.appendChild(d); return d; });
-  const st = {a: 0, o: 0}, pon = () => it.forEach((d, j) => { const an = st.a + j * Math.PI * 2 / n, z = Math.sin(an), s = .6 + .4 * (z + 1) / 2;
+  const st = {a: 0, o: 0, p: 0}, achica = () => { if (caja && G.f && G.f < 1) caja.style.scale = String(1 - (1 - G.f) * st.p); };
+  const pon = () => it.forEach((d, j) => { const an = st.a + j * Math.PI * 2 / n, z = Math.sin(an), s = .6 + .4 * (z + 1) / 2;
     d.style.width = d.style.height = G.s + 'px'; d.style.margin = -G.s / 2 + 'px 0 0 ' + -G.s / 2 + 'px';
     const x = G.cx + Math.cos(an) * G.rx, y = G.cy + z * G.ry, m = G.s * s / 2;
     const pisa = (G.tx || []).some((q) => x + m > q.l && x - m < q.r && y + m > q.t && y - m < q.b);
-    d.style.transform = `translate(${x}px,${y}px) scale(${s})`; d.style.zIndex = z > 0 ? 40 : 20; d.style.opacity = pisa ? 0 : st.o * (.6 + .4 * (z + 1) / 2); });
-  tl.call(medir, null, T0 - .05); tl.to(st, {o: 1, duration: .6, onUpdate: pon}, T0); tl.to(st, {a: Math.PI * 2 * Math.max(.6, (sc.dur - T0) / 9), duration: Math.max(1, sc.dur - T0 + .4), ease: 'none', onUpdate: () => { medir(); pon(); }}, T0);  // se mide siempre: el pack puede seguir moviéndose
+    const B = G.bx, libre = B ? Math.max(Math.abs(x - B.cx) - B.w - m, Math.abs(y - B.cy) - B.h - m) : 99, vis = Math.max(0, Math.min(1, (libre + 10) / 50));  // 0 = encima de la caja
+    d.style.transform = `translate(${x}px,${y}px) scale(${s})`; d.style.zIndex = z > 0 ? 40 : 20; d.style.opacity = pisa ? 0 : st.o * vis * (.6 + .4 * (z + 1) / 2); });
+  tl.call(medir, null, T0 - .05); tl.fromTo(st, {p: 0}, {p: 1, duration: .7, ease: 'power2.inOut', onUpdate: achica}, T0 - .02); tl.to(st, {o: 1, duration: .6, onUpdate: pon}, T0 + .3); tl.to(st, {a: Math.PI * 2 * Math.max(.6, (sc.dur - T0) / 9), duration: Math.max(1, sc.dur - T0 + .4), ease: 'none', onUpdate: () => { medir(); pon(); }}, T0);  // se mide siempre: el pack puede seguir moviéndose
 }
 // LEY T6 (Christian, 19 nov): ningún texto encima de una imagen ni imagen encima de un texto. Antes de grabar se mide cada escena
 // en dos momentos; si una imagen pisa un texto, la imagen se achica y se aparta del texto (propiedades CSS scale/translate, que se
