@@ -1,7 +1,7 @@
 """Estudio de VSL v3: convierte la receta del panel (producto + guion aprobado + configuración) en un video del motor de animación.
 La receta trae las escenas ya escritas (plantilla upsell con los datos del producto); aquí solo se arma el estilo con la paleta elegida,
 se bajan los materiales con los nombres que espera el motor y se quitan las escenas a las que les faltan imágenes."""
-import os, shutil
+import os, re, shutil
 from PIL import Image
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
@@ -140,6 +140,14 @@ def armar(r, bajar):
         E['musica'] = st['musica'][1:]
     elif st.get('musica') and not E.get('tema') and not E.get('musicaFija') and E.get('motor') != 'mkt':  # Marketplace: la música la decide el director  # en los temas por nicho la música la decide el tema
         E['musica'] = st['musica']
+    # 22 nov: colores pedidos en una corrección ("fondo azul, detalles dorados"): mandan sobre la paleta del diseño y del kit
+    col = st.get('colores')
+    if isinstance(col, dict):
+        col = {k: v for k, v in col.items() if k in ('bg', 'sup', 'ink', 'mut', 'a', 'c', 'b', 'sobre') and re.match(r'^#[0-9a-fA-F]{6}$', str(v))}
+        if col:
+            E['colores'] = col
+            if isinstance(E.get('pal'), dict):
+                E['pal'] = {**E['pal'], **col}
     from temas import kit_de
     kit = kit_de(prod, E)
     if kit:  # 20 nov: kit del nicho (fondos, elementos, animaciones, letras, colores y música del nicho; ver pro/kit.js)
@@ -151,7 +159,7 @@ def armar(r, bajar):
     cont = [dict(titulo=c.get('titulo'), valor=c.get('valor'), corto=c.get('corto') or c.get('titulo')) for c in (prod.get('contenidos') or []) if c.get('titulo')]
     PR = dict(nicho=prod.get('nicho'), oferta=prod.get('oferta'), curso=prod.get('curso'), valor=_num(prod.get('valor')), precio=_num(prod.get('precio')), alumnos=_num(prod.get('alumnos')) or 0,
               dias=int(_num(prod.get('garantia_dias')) or 7), unidad=prod.get('unidad') or 'herramientas', etiqueta=prod.get('etiqueta') or 'Herramienta',
-              mods=[m for m in prod.get('mods') or [] if m] or None, logro=prod.get('logro'), cimgs=[f'm{i}' for i in range(1, 13) if f'm{i}' in tiene] or None, vida=bool(prod.get('acceso_vida')) if 'acceso_vida' in prod else None, camino=prod.get('camino') or None, cont=cont or None)
+              mods=[m for m in prod.get('mods') or [] if m] or None, logro=prod.get('logro'), cimgs=[f'm{i}' for i in range(1, 13) if f'm{i}' in tiene] or None, vida=bool(prod.get('acceso_vida')) if 'acceso_vida' in prod else None, camino=prod.get('camino') or None, cont=cont or None, objetivo=prod.get('objetivo') or None)
     PR = {k: v for k, v in PR.items() if v is False or v not in (None, '', [])}
     if E.get('motor') == 'mkt':  # Marketplace: el motor usa los datos del curso tal cual (módulos con sus puntos, logros, alumnos, testimonios)
         PR = {k: prod.get(k) for k in ('curso', 'curso_corto', 'alumnos', 'rating', 'dias', 'mods', 'logros', 'testimonios') if prod.get(k) not in (None, '', [])}

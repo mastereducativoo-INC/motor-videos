@@ -49,11 +49,14 @@ const LETRAS = {
   mecanica: [{ft: 'BarlowC', fw: 800, fb: 'Archivo', fn: 'BarlowC', fk: 'Rajdhani', ls: '.005em'}, {ft: 'Oswald', fw: 600, fb: 'Archivo', fn: 'Oswald', fk: 'Rajdhani', ls: '.01em'}, {ft: 'BigShoulders', fw: 800, fb: 'Archivo', fn: 'BigShoulders', fk: 'Rajdhani', ls: '.01em'}],
   dibujo: [{ft: 'Fraunces', fw: 650, fb: 'DMSans', fn: 'Fraunces', fk: 'Caveat', ls: '-.015em'}, {ft: 'DMSerif', fw: 400, fb: 'DMSans', fn: 'DMSerif', fk: 'Kalam', ls: '-.01em'}, {ft: 'Instrument', fw: 400, fb: 'DMSans', fn: 'Fraunces', fk: 'Caveat', ls: '-.005em'}],
 }[NICHO][v % 3];
-const PL = PALS[NICHO][v];
+// 22 nov (Christian, Dibujo #31: «en vez de café, tonos azules… y los detalles dorados» → decía «Corregido» pero el kit volvía a
+// poner sus colores): los colores pedidos en una corrección (E.colores, de la versión) mandan sobre la paleta del kit.
+const PL = Object.assign({}, PALS[NICHO][v], E.colores && typeof E.colores === 'object' ? E.colores : {});
 Object.assign(P, PL);
 Object.assign(E, {dirFt: LETRAS.ft, dirFw: LETRAS.fw, dirLs: LETRAS.ls, fb: LETRAS.fb});
 // transiciones del nicho (cada diseño su propia mezcla)
-E.trs = (MEC ? [['cortina', 'zoom', 'banda', 'lateral'], ['banda', 'sube', 'cortina', 'fundido'], ['zoom', 'cortina', 'lateral', 'banda'], ['cortina', 'barrido', 'banda', 'sube'], ['banda', 'fundido', 'cortina', 'zoom'], ['lateral', 'banda', 'sube', 'cortina'], ['cortina', 'zoom', 'fundido', 'banda'], ['banda', 'cortina', 'barrido', 'lateral'], ['zoom', 'banda', 'cortina', 'sube']]
+// 22 nov (Christian, Mecánica #30: «incluye un carro… no se ve ninguno»): en cada diseño de mecánica una de cada 4 transiciones es un carro que pasa
+E.trs = (MEC ? [['cortina', 'pasada', 'banda', 'lateral'], ['banda', 'pasada', 'cortina', 'fundido'], ['pasada', 'cortina', 'lateral', 'banda'], ['cortina', 'pasada', 'banda', 'sube'], ['banda', 'fundido', 'cortina', 'pasada'], ['pasada', 'banda', 'sube', 'cortina'], ['cortina', 'pasada', 'fundido', 'banda'], ['banda', 'cortina', 'pasada', 'lateral'], ['pasada', 'banda', 'cortina', 'sube']]
   : [['pagina', 'fundido', 'borrador', 'sube'], ['borrador', 'lateral', 'pagina', 'zoom'], ['fundido', 'pagina', 'sube', 'borrador'], ['pagina', 'borrador', 'zoom', 'fundido'], ['borrador', 'sube', 'pagina', 'lateral'], ['pagina', 'zoom', 'borrador', 'barrido'], ['fundido', 'borrador', 'pagina', 'sube'], ['borrador', 'pagina', 'lateral', 'fundido'], ['sube', 'pagina', 'borrador', 'zoom']])[v];
 if (X.PAPEL) Object.assign(X.PAPEL, MEC ? {bg: '#f2efe8', sup: '#e3ded2', ink: '#16181b', mut: '#5d636b', a: PL.a === '#d9d9de' ? '#c8361f' : PL.a, c: '#c8361f', b: '#b9b2a2', sobre: '#ffffff'}
   : {bg: '#fbf8f1', sup: '#efe8da', ink: '#1f1c1a', mut: '#6f685f', a: '#2747c9', c: '#e4572e', b: '#cfc5b2', sobre: '#ffffff'});
@@ -80,6 +83,14 @@ const ICO = {
   bujia: (s, col) => svg(s * .36, s, `<rect x="14" y="0" width="22" height="40" rx="4" fill="${rgba(P.ink, .9)}"/><rect x="6" y="40" width="38" height="34" rx="3" fill="${col}"/><path d="M6 46h38M6 54h38M6 62h38" stroke="${rgba('#000000', .35)}" stroke-width="3"/><rect x="12" y="74" width="26" height="40" fill="#c9ccd1"/><path d="M12 82h26M12 92h26M12 102h26" stroke="#8b9097" stroke-width="3"/><path d="M25 114v14h10" fill="none" stroke="#c9ccd1" stroke-width="4"/>`, '', '0 0 50 140'),
   piston: (s, col) => svg(s * .7, s, `<rect x="6" y="0" width="88" height="56" rx="8" fill="${col}"/><path d="M6 12h88M6 22h88" stroke="${rgba('#000000', .35)}" stroke-width="4"/><rect x="38" y="50" width="24" height="70" rx="6" fill="#c9ccd1"/><circle cx="50" cy="128" r="16" fill="none" stroke="#c9ccd1" stroke-width="10"/>`, '', '0 0 100 150'),
   llanta: (s, col) => svg(s, s, `<circle cx="50" cy="50" r="46" fill="#151618"/><circle cx="50" cy="50" r="46" fill="none" stroke="#2a2c30" stroke-width="8" stroke-dasharray="6 5"/><circle cx="50" cy="50" r="28" fill="${col}"/><g class="gira" style="transform-origin:50px 50px">${[0, 72, 144, 216, 288].map((a) => `<rect x="47" y="25" width="6" height="22" rx="3" fill="${rgba('#000000', .45)}" transform="rotate(${a} 50 50)"/>`).join('')}</g><circle cx="50" cy="50" r="7" fill="#151618"/>`, '', '0 0 100 100'),
+  // carro deportivo de lado (mira a la derecha); las ruedas giran (.rueda)
+  carro: (w, col) => svg(w, w * .36, `<ellipse cx="210" cy="140" rx="196" ry="9" fill="rgba(0,0,0,.45)"/>
+    <path d="M18 108L26 82Q32 68 52 64L122 57Q152 30 198 24L262 22Q302 24 332 52L374 60Q400 65 406 86L410 106Q410 118 398 120L24 120Q12 118 18 108Z" fill="${col}"/>
+    <path d="M30 96H404" stroke="${rgba('#ffffff', .28)}" stroke-width="4"/><path d="M26 110H408" stroke="${rgba('#000000', .3)}" stroke-width="6"/>
+    <path d="M140 57Q164 36 200 32L254 31Q286 33 306 55Z" fill="#0f151c"/><path d="M226 31V56" stroke="${col}" stroke-width="6"/><path d="M150 52Q170 38 196 36" stroke="${rgba('#ffffff', .35)}" stroke-width="4" fill="none"/>
+    <rect x="392" y="72" width="16" height="12" rx="4" fill="#fff3c4"/><rect x="18" y="74" width="12" height="14" rx="3" fill="#ff3b30"/>
+    ${[100, 322].map((cx) => `<circle cx="${cx}" cy="114" r="38" fill="${rgba('#000000', .55)}"/><g class="rueda" style="transform-origin:${cx}px 114px"><circle cx="${cx}" cy="114" r="31" fill="#111214"/><circle cx="${cx}" cy="114" r="19" fill="#c9ccd1"/>${[0, 72, 144, 216, 288].map((a) => `<rect x="${cx - 3}" y="97" width="6" height="15" rx="3" fill="#6d727a" transform="rotate(${a} ${cx} 114)"/>`).join('')}<circle cx="${cx}" cy="114" r="5" fill="#111214"/></g>`).join('')}`, '', '0 0 420 150'),
+  bandera: (s) => svg(s, s, `<rect x="6" y="4" width="6" height="92" rx="3" fill="#c9ccd1"/><g class="ondea">${Array.from({length: 12}, (_, j) => `<rect x="${12 + (j % 4) * 18}" y="${6 + Math.floor(j / 4) * 16}" width="18" height="16" fill="${(j + Math.floor(j / 4)) % 2 ? '#111' : '#fff'}"/>`).join('')}</g>`, '', '0 0 100 100'),
   lapiz: (s, col) => svg(s, s * .14, `<path d="M18 2h150v24H18z" fill="${col}"/><path d="M18 10h150M18 18h150" stroke="${rgba('#000000', .14)}" stroke-width="2"/><path d="M168 2l26 12-26 12z" fill="#e9c9a0"/><path d="M186 10l8 4-8 4z" fill="#2b2b2b"/><rect x="4" y="1" width="16" height="26" rx="2" fill="#b9bdc3"/><path d="M4 1h-2a4 4 0 0 0 0 26h2z" fill="#f29bb0"/>`, '', '0 0 200 28'),
   goma: (s, col) => svg(s, s * .5, `<rect x="2" y="2" width="96" height="46" rx="10" fill="#f6d3db"/><rect x="2" y="2" width="44" height="46" rx="10" fill="${col}"/><rect x="36" y="2" width="12" height="46" fill="${col}"/>`, '', '0 0 100 50'),
   regla: (s, col) => svg(s, s * .16, `<rect x="0" y="0" width="300" height="48" rx="4" fill="${col}" opacity=".92"/>${Array.from({length: 29}, (_, j) => `<path d="M${10 + j * 10} 0v${j % 5 ? 12 : 22}" stroke="${rgba('#000000', .5)}" stroke-width="2"/>`).join('')}`, '', '0 0 300 48'),
@@ -213,7 +224,7 @@ const FONDOS = {
       return (t) => ups2.forEach((f) => f(t));
     },
     (L) => { // 3 App de dibujo: lienzo digital con muestras de color y trazos de pincel
-      L.style.background = `radial-gradient(1200px 800px at 50% 40%,#26272d,${P.bg} 75%)`;
+      L.style.background = `radial-gradient(1200px 800px at 50% 40%,${P.sup},${P.bg} 75%)`;
       capa(L, `<svg width="1920" height="1080">${Array.from({length: 7}, (_, j) => `<circle cx="${1820}" cy="${180 + j * 110}" r="34" fill="${[P.a, P.c, '#f2c14e', '#e85d75', '#3a86ff', '#8b6cff', '#ffffff'][j]}" opacity=".55"/>`).join('')}<rect x="40" y="160" width="84" height="760" rx="20" fill="rgba(255,255,255,.05)"/>${['M62 210l40 40M62 250l40-40', 'M60 330h44v44H60z', 'M82 430a22 22 0 1 0 .1 0'].map((d) => `<path d="${d}" stroke="${rgba(P.ink, .4)}" stroke-width="5" fill="none"/>`).join('')}</svg>`, 'inset:0');
       const a = lineaQueSeDibuja(L, 'M260 900C500 760 700 980 980 860S1400 700 1700 820', rgba(P.a, .35), 26, 10), b = lineaQueSeDibuja(L, 'M300 160C520 240 760 120 980 200S1400 260 1620 180', rgba(P.c, .25), 18, 12, 4);
       return (t) => { a(t); b(t); };
@@ -282,7 +293,7 @@ X.alEscena.push((c) => {
   // 2) elementos del nicho en las orillas, solo donde no tapan ningún texto ni imagen
   // (se mide con la escena ya armada: las entradas de los diseños mueven los textos al inicio)
   tl.time(Math.min(2.6, c.D * .62), true); const ocup = textosDe(cam), kw = MEC ? null : cam.querySelector('.T .k'), kq = kw ? rel(cam, kw) : null; tl.time(0, true);
-  const lugares = [[-70, 820, 270], [1690, 840, 260], [-60, -40, 230], [1720, -50, 230], [860, 950, 200]], n = 2 + (i % 2);
+  const lugares = [[-70, 820, 270], [1690, 840, 260], [-60, -40, 230], [1720, -50, 230], [860, 950, 200]], n = cam.querySelector('.kruta') ? 0 : 2 + (i % 2);
   let puestos = 0;
   for (let j = 0; j < lugares.length && puestos < n; j++) {
     const [x, y, s] = lugares[(j + i) % lugares.length], k = PROPS[(i * 2 + j + v) % PROPS.length], box = {l: x, t: y, r: x + s, b: y + s};
@@ -293,6 +304,7 @@ X.alEscena.push((c) => {
     tl.fromTo(e, {scale: .3, opacity: 0, rotation: rot0 * 2}, {scale: 1, opacity: MEC ? .85 : .9, rotation: rot0, duration: .9, ease: 'back.out(1.6)'}, .15 + j * .12);
     const g = e.querySelector('.gira'); if (g) tl.fromTo(g, {rotation: 0}, {rotation: (j % 2 ? -1 : 1) * 30 * c.D, duration: c.D + .5, ease: 'none', transformOrigin: '50% 50%'}, 0);
     tl.to(e, {y: '-=12', duration: 2.2, ease: 'sine.inOut', yoyo: true, repeat: Math.ceil(c.D / 2.2) + 1}, 1.1);
+    if (MEC) trabaja(c, e, k, j);
   }
   // 3) animaciones firma del nicho
   if (MEC) {
@@ -303,6 +315,105 @@ X.alEscena.push((c) => {
     if (['felicita', 'revela', 'cta2'].includes(sc.c)) migas(c);
   }
 });
+// 22 nov (Christian, Mecánica #30: «agrega más animaciones en todo el video relacionadas con la mecánica automotriz»):
+// cada herramienta hace su trabajo: la llave aprieta, el pistón bombea, la bujía echa chispa, la tuerca gira y la llanta rueda
+function trabaja(c, e, k, j) { const {tl} = c, s = e.firstElementChild, D = c.D, rep = (d) => Math.max(1, Math.ceil(D / d));
+  if (!s) return;
+  if (k === 'llave') tl.to(s, {rotation: -26, duration: .32, ease: 'power2.in', yoyo: true, repeat: rep(.64) * 2, repeatDelay: .5, transformOrigin: '82% 50%'}, 1.2 + j * .2);
+  else if (k === 'piston') tl.to(s, {y: -26, duration: .24, ease: 'sine.inOut', yoyo: true, repeat: rep(.48) * 2}, 1 + j * .1);
+  else if (k === 'tuerca') tl.fromTo(s, {rotation: 0}, {rotation: 90 * D, duration: D, ease: 'none', transformOrigin: '50% 50%'}, 0);
+  else if (k === 'llanta') tl.fromTo(s, {rotation: 0}, {rotation: 160 * D, duration: D, ease: 'none', transformOrigin: '50% 50%'}, 0);
+  else if (k === 'bujia') { const q = rel(c.cam, s), x = q.l + q.w / 2, y = q.b - 6;
+    for (let m = 0; m < Math.min(6, Math.floor(D / 2.2)); m++) { const f = $(`<i class="kchispa" style="left:${x}px;top:${y}px;height:14px"></i>`); c.cam.appendChild(f);
+      const a = Math.PI * (.2 + .6 * r()); tl.fromTo(f, {x: 0, y: 0, opacity: 1, rotation: a * 57.3 - 90}, {x: Math.cos(a) * 70, y: Math.sin(a) * 70, opacity: 0, duration: .35, ease: 'power2.out'}, 1.4 + m * 2.2 + r() * .4); } }
+}
+// carro que avanza sobre una curva: el carro se coloca y se inclina con la pendiente; las ruedas giran con la distancia
+function carroEn(c, path, w = 230) { const el = $(`<div class="kel kcarro" style="left:0;top:0;width:${w}px;height:${w * .36}px;z-index:4">${ICO.carro(w, P.a)}</div>`); c.cam.appendChild(el);
+  const L = path.getTotalLength(), ruedas = el.querySelectorAll('.rueda'), hh = w * .36;
+  const poner = (f) => { const d = Math.max(0, Math.min(1, f)) * L, p0 = path.getPointAtLength(Math.max(0, d - 2)), p1 = path.getPointAtLength(Math.min(L, d + 2)), p = path.getPointAtLength(d), a = Math.atan2(p1.y - p0.y, p1.x - p0.x) * 57.3;
+    const ext = f < 0 ? f * L : 0; // antes de la curva: entra derecho por la izquierda
+    el.style.transform = `translate(${p.x - w / 2 + ext}px,${p.y - hh * .93}px) rotate(${a}deg)`; el.style.transformOrigin = `50% 93%`;
+    ruedas.forEach((r0) => { r0.style.transform = `rotate(${(d + ext) * 2.2}deg)`; }); };
+  return {el, poner}; }
+
+// ---------------- ESCENA «TU SIGUIENTE ESCALÓN» DE MECÁNICA ----------------
+// 22 nov (Christian, Mecánica #30): «es una de las partes más importantes del video y no se está transmitiendo… las personas son más
+// visuales. Que se vea lo que ya ganó con el curso, qué aprendizaje adicional y en qué impacta el Súper Pack, qué crecimiento tan
+// exponencial va a tener… coloca un carro en esta escena».
+// Una curva de crecimiento: el tramo plano es lo que ya ganó con su curso; el tramo que se dispara es el Súper Pack.
+// Un carro recorre la curva: llega a su curso, y con el Súper Pack acelera cuesta arriba hasta su meta (el objetivo real del Súper Pack).
+// Solo usa datos reales: nombre del curso, sus módulos, el camino del curso, el Súper Pack, cuántas herramientas trae y su objetivo.
+function ruta(c) {
+  const {cam, tl, sc} = c, cm = (PR.camino || []).slice(0, 6), ya = Math.max(1, Math.min(cm.length - 1, PR.camino_ya || 2));
+  const tiene = cm.length > 1 ? cm.slice(0, ya) : [], falta = cm.length > 1 ? cm.slice(ya, ya + 3) : [];
+  X.texto(c, {x: 130, y: 56, w: 1080, t: sc.t || 'Tu *siguiente escalón*', size: 92, maxH: 112, at: .15});
+  const X0 = 150, X1 = 1790, YB = 965, YT = 430, K = 3.6, F = (t) => (Math.exp(K * t) - 1) / (Math.exp(K) - 1), pt = (t) => [X0 + (X1 - X0) * t, YB - (YB - YT) * F(t)];
+  const linea = (a, b) => Array.from({length: 61}, (_, j) => pt(a + (b - a) * j / 60)).map(([x, y], j) => (j ? 'L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1)).join('');
+  const tS = .4, T1 = .3, TF = .965, [mx1, my1] = pt(T1), [mx2, my2] = pt(tS), [fx, fy] = pt(1);
+  const sv = $(`<svg class="kel kruta" style="left:0;top:0;overflow:visible" width="1920" height="1080"><defs><linearGradient id="kra" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${rgba(P.a, .34)}"/><stop offset="1" stop-color="${rgba(P.a, 0)}"/></linearGradient></defs>
+    <path class="ar" d="${linea(0, 1)}L${X1} ${YB}L${X0} ${YB}Z" fill="url(#kra)"/>
+    <path class="kej" d="M${X0 - 40} ${YB}H${X1 + 70}M${X0 - 40} ${YB}V${YT - 150}" stroke="${rgba(P.ink, .35)}" stroke-width="3" fill="none" pathLength="1"/>
+    <text x="${X1 + 60}" y="${YB + 50}" text-anchor="end" font-family="var(--fk)" font-weight="700" font-size="26" letter-spacing="5" fill="${rgba(P.ink, .55)}">TU APRENDIZAJE →</text>
+    <text transform="translate(${X0 - 62} ${YB - 30}) rotate(-90)" font-family="var(--fk)" font-weight="700" font-size="26" letter-spacing="5" fill="${rgba(P.ink, .55)}">TU CRECIMIENTO →</text>
+    <path class="c1" d="${linea(0, tS)}" stroke="${rgba(P.ink, .75)}" stroke-width="10" stroke-linecap="round" fill="none" pathLength="1"/>
+    <path class="c2" d="${linea(tS, 1)}" stroke="${P.a}" stroke-width="16" stroke-linecap="round" fill="none" pathLength="1" style="filter:drop-shadow(0 0 14px ${rgba(P.a, .7)})"/>
+    <path class="cg" d="${linea(-.3, 1)}" fill="none" stroke="none"/></svg>`);
+  cam.appendChild(sv);
+  // la curva por donde va el carro arranca antes del eje (entra por la izquierda)
+  const guia = sv.querySelector('.cg'), Lg = guia.getTotalLength(), c1 = sv.querySelector('.c1'), c2 = sv.querySelector('.c2');
+  const largo = (t) => { let lo = 0, hi = Lg; for (let q = 0; q < 22; q++) { const m = (lo + hi) / 2; if (guia.getPointAtLength(m).x < X0 + (X1 - X0) * t) lo = m; else hi = m; } return lo / Lg; };
+  const f0 = largo(0), fS = largo(tS), f1 = largo(T1), fF = largo(TF);
+  // tarjetas
+  const card = (x, y, w, borde, cab, tit, cuerpo) => { const e = $(`<div class="abs" style="left:${x}px;top:${y}px;width:${w}px;padding:24px 28px 26px;border-radius:18px;background:${rgba(P.sup, .92)};border:${borde};box-shadow:0 24px 50px rgba(0,0,0,.45)"><div class="K" style="font-family:var(--fk);font-size:24px;letter-spacing:.16em;margin:0 0 12px">${cab}</div>${tit ? `<div class="T" style="font-size:48px;line-height:1.05;margin-bottom:16px">${esc(tit)}</div>` : ''}${cuerpo}</div>`); cam.appendChild(e); return e; };
+  const item = (t, ok) => `<div class="kit-it" style="display:flex;align-items:center;gap:16px;font:700 40px var(--fb);color:${P.ink};margin-top:10px"><span class="bx" style="flex:none;width:46px;height:46px;border-radius:11px;border:3px solid ${ok ? P.a : rgba(P.ink, .45)};display:inline-flex;align-items:center;justify-content:center;font-size:28px;color:${P.a}"><b class="ck" style="opacity:${ok ? 1 : 0}">✓</b></span><span>${esc(t)}</span></div>`;
+  const nm = (PR.mods || []).length, nT = (PR.cont || []).length, uni = PR.unidad || 'herramientas';
+  const A = card(150, 230, 570, `2px solid ${rgba(P.ink, .14)}`, `<span style="color:${P.mut}">LO QUE YA GANASTE</span>`, PR.curso || 'Tu curso',
+    `<div style="display:flex;gap:20px;align-items:center">${IM.logo && IM.logo.ok ? `<div style="flex:none;width:180px;height:140px;display:flex;align-items:center;justify-content:center">${X.img('logo', 'max-width:180px;max-height:140px;object-fit:contain')}</div>` : ''}<div>${nm ? `<div class="chip" style="font-size:24px;margin-bottom:6px">${nm} módulos</div>` : ''}${tiene.map((t) => item(t, 1)).join('')}</div></div>`);
+  const B = card(750, 215, 560, `3px solid ${P.a}`, `<span style="color:${P.a}">+ LO QUE SUMA EL SÚPER PACK</span>`, PR.oferta || 'Súper Pack',
+    `<div style="display:flex;gap:16px;align-items:center">${IM.pack && IM.pack.ok ? `<div class="pk" style="flex:none;width:165px;height:190px;display:flex;align-items:center;justify-content:center">${X.img('pack', 'max-width:165px;max-height:190px;object-fit:contain;filter:drop-shadow(0 14px 20px rgba(0,0,0,.5))')}</div>` : ''}<div>${nT ? `<div class="chip lleno" style="font-size:24px;margin-bottom:6px">${nT} ${esc(uni)}</div>` : ''}${falta.map((t) => item(t, 0)).join('')}</div></div>`);
+  const obj = String(PR.objetivo || '').trim(), objT = obj ? obj.charAt(0).toUpperCase() + obj.slice(1) : 'Tu siguiente nivel';
+  const C = card(1270, 100, 440, `3px solid ${P.c}`, `<span style="color:${P.c}">⬆ TU CRECIMIENTO</span>`, '', `<div class="P" style="font:700 38px/1.22 var(--fb);color:${P.ink}">${esc(objT)}</div>`);
+  [A, B].forEach((e) => X.fit(e.querySelector('.T'), 108, 26)); X.fit(C.querySelector('.P'), 190, 24);
+  // marcas sobre la curva
+  const marca = (x, y, txt, col, arriba) => { const e = $(`<div class="abs" style="left:${x - 150}px;top:${y + (arriba ? -96 : 26)}px;width:300px;text-align:center"><span class="chip${col === P.a ? ' lleno' : ''}" style="font-size:20px">${txt}</span></div>`); const d = $(`<i class="abs" style="left:${x - 15}px;top:${y - 15}px;width:30px;height:30px;border-radius:50%;background:${col};box-shadow:0 0 0 7px ${rgba(col, .25)},0 0 24px ${col}"></i>`); cam.append(e, d); return [e, d]; };
+  const [m1, d1] = marca(mx1, my1, '✓ Tu curso', P.ink, 0), [m2, d2] = marca(mx2, my2, '+ Súper Pack', P.a, 0);
+  const fl = $(`<div class="kel" style="left:${fx - 8}px;top:${fy - 118}px">${ICO.bandera(110)}</div>`); cam.appendChild(fl);
+  // tiempos con la voz
+  const tA = .45, t1 = Math.max(1.4, c.cue('aprender', .22)), t2 = Math.max(t1 + .8, c.cue('practicar', .32)), tP = Math.max(t2 + 1.2, c.cue('super pack', .48)),
+    t3 = Math.max(tP + .8, c.cue('revisar', .66)), t4 = Math.max(t3 + .6, c.cue('entregar', .74)), tC = Math.min(c.D - 2.2, Math.max(t4 + .8, c.cue('crecer', .86)));
+  const fin = Math.min(c.D - .9, tC + 1.3);
+  draw(tl, sv.querySelector('.kej'), .1, .9);
+  tl.from(sv.querySelector('.ar'), {opacity: 0, duration: 1.2}, tP + .2);
+  tl.from(A, {x: -90, autoAlpha: 0, duration: .8, ease: 'expo.out'}, tA); c.fx(tA, 'whoosh');
+  const itA = A.querySelectorAll('.kit-it'); itA.forEach((e, j) => { const at = j ? t2 : t1; tl.from(e, {x: -30, autoAlpha: 0, duration: .45, ease: 'power3.out'}, at - .15); tl.fromTo(e.querySelector('.bx'), {scale: 1.7}, {scale: 1, duration: .35, ease: 'back.out(2)'}, at); c.fx(at, 'tick'); });
+  tl.from(B, {y: 60, autoAlpha: 0, duration: .8, ease: 'expo.out'}, tP - .25); c.fx(tP - .25, 'whoosh');
+  const pk = B.querySelector('.pk'); if (pk) tl.from(pk, {scale: .4, rotation: -10, duration: .9, ease: 'back.out(1.6)'}, tP);
+  const itB = B.querySelectorAll('.kit-it'), tB = [t3, t4, Math.min(tC - .3, t4 + .8)];
+  itB.forEach((e, j) => { const at = tB[j] || tB[2]; tl.to(e.querySelector('.ck'), {opacity: 1, duration: .15}, at);
+    tl.to(e.querySelector('.bx'), {borderColor: P.a, backgroundColor: rgba(P.a, .15), duration: .2}, at); tl.fromTo(e.querySelector('.bx'), {scale: 1.7}, {scale: 1, duration: .35, ease: 'back.out(2)', immediateRender: false}, at); c.fx(at, 'click'); });
+  tl.from(C, {scale: .7, autoAlpha: 0, duration: .8, ease: 'back.out(1.5)', transformOrigin: '50% 100%'}, tC); c.fx(tC, 'ding');
+  tl.from([m1, d1], {scale: 0, autoAlpha: 0, duration: .45, ease: 'back.out(2.4)'}, t2 + .3);
+  tl.from([m2, d2], {scale: 0, autoAlpha: 0, duration: .45, ease: 'back.out(2.4)'}, tP + .1);
+  tl.from(fl, {scale: 0, autoAlpha: 0, transformOrigin: '10% 100%', duration: .6, ease: 'back.out(2)'}, tP + .4);
+  tl.to(fl.querySelector('.ondea'), {skewY: 6, duration: .4, ease: 'sine.inOut', yoyo: true, repeat: Math.ceil(c.D / .4)}, 0);
+  // el carro: entra, llega a su curso; con el Súper Pack acelera cuesta arriba (crecimiento exponencial)
+  const {el, poner} = carroEn(c, guia), pr = {f: 0}, sync = () => { poner(pr.f);
+    c1.style.strokeDashoffset = 1 - Math.max(0, Math.min(1, (pr.f - f0) / (fS - f0))); c2.style.strokeDashoffset = 1 - Math.max(0, Math.min(1, (pr.f - fS) / (fF - fS))); };
+  c1.style.strokeDasharray = c2.style.strokeDasharray = '1 1';
+  tl.fromTo(pr, {f: 0}, {f: f1, duration: Math.max(1.2, t2 + .3 - .8), ease: 'power1.inOut', onUpdate: sync, immediateRender: true}, .8); c.fx(.8, 'whoosh');
+  tl.to(pr, {f: fS, duration: .8, ease: 'power1.inOut', onUpdate: sync}, tP - .6);
+  tl.to(pr, {f: fF, duration: fin - (tP + .5), ease: 'power3.in', onUpdate: sync}, tP + .5); c.fx(tP + .5, 'riser');
+  // humo y velocidad mientras acelera
+  const cola = $(`<div class="abs" style="left:-150px;top:16px;width:160px;height:60px">${[0, 1, 2].map((j) => `<i class="vl" style="position:absolute;right:${j * 14}px;top:${8 + j * 18}px;width:${120 - j * 20}px;height:5px;border-radius:3px;background:linear-gradient(90deg,transparent,${rgba(P.ink, .7)})"></i>`).join('')}</div>`);
+  el.appendChild(cola); tl.fromTo(cola, {opacity: 0}, {opacity: 1, duration: .4}, tP + 1.2); tl.to(cola, {opacity: 0, duration: .3}, fin);
+  for (let m = 0; m < 8; m++) { const h = $(`<i class="abs" style="left:-10px;top:52px;width:26px;height:26px;border-radius:50%;background:${rgba(P.ink, .35)}"></i>`); el.appendChild(h);
+    const at = .9 + m * Math.max(.4, (fin - 1) / 8); tl.fromTo(h, {x: 0, y: 0, scale: .4, opacity: .8}, {x: -90 - r() * 50, y: -20 - r() * 20, scale: 1.8, opacity: 0, duration: .9, ease: 'power1.out'}, at); }
+  // llega a la meta: chispas, y el carro se queda vibrando (motor encendido)
+  chispas(c, fx - 10, fy - 30, fin);
+  tl.to(el.firstElementChild, {y: -3, duration: .06, ease: 'none', yoyo: true, repeat: Math.max(1, Math.round((c.D - fin) / .06))}, fin + .1);
+}
+if (MEC) { const d = (X.D[E.dir] = X.D[E.dir] || {}); d.escalera = ruta; }
+
 // chispas de esmeril (mecánica)
 function chispas(c, x, y, at) { const {cam, tl} = c;
   for (let j = 0; j < 30; j++) { const e = $(`<i class="kchispa" style="left:${x}px;top:${y}px"></i>`); cam.appendChild(e);
@@ -331,6 +442,17 @@ X.TRX.banda = ({M, t, FX}) => { // banda diagonal de acero antiderrapante con or
   if (!banda) { banda = $(`<div class="abs" style="left:-2600px;top:-300px;width:2400px;height:1680px;transform:skewX(-14deg);background:${textura.rombo('rgba(255,255,255,.07)', '#2a2e34')};background-size:44px 44px,44px 44px,auto;border-left:26px solid ${P.a};border-right:26px solid ${P.a};box-shadow:0 0 120px rgba(0,0,0,.7);z-index:5"></div>`); FX.appendChild(banda); }
   M.fromTo(banda, {x: 0}, {x: 2500, duration: .3, ease: 'power3.in'}, t - .3); M.to(banda, {x: 5000, duration: .34, ease: 'power3.out'}, t + .02); M.set(banda, {x: 0}, t + .42);
   return {on: t - .02, off: t + .02}; };
+let pasada;
+X.TRX.pasada = ({M, t, FX}) => { // un carro pasa a toda velocidad y arrastra una cortina de velocidad que cambia la escena
+  if (!pasada) { pasada = $(`<div class="abs" style="left:0;top:0;width:3000px;height:1080px;z-index:5;transform:translateX(-3000px)">
+    <div style="position:absolute;left:0;top:0;width:2350px;height:1080px;background:repeating-linear-gradient(0deg,transparent 0 46px,${rgba(P.ink, .07)} 46px 49px),linear-gradient(90deg,${rgba(P.bg, 0)},${P.bg} 14%,${P.sup} 92%,${P.bg});box-shadow:0 0 90px rgba(0,0,0,.7)"></div>
+    <div style="position:absolute;left:2330px;top:0;width:12px;height:1080px;background:${P.a};box-shadow:0 0 30px ${P.a}"></div>
+    <div class="kc" style="position:absolute;left:2340px;top:560px">${ICO.carro(640, P.a)}</div>
+    ${[0, 1, 2, 3].map((j) => `<i style="position:absolute;left:${1980 - j * 90}px;top:${640 + j * 34}px;width:${420 - j * 60}px;height:6px;border-radius:3px;background:linear-gradient(90deg,transparent,${rgba(P.ink, .55)})"></i>`).join('')}</div>`); FX.appendChild(pasada); }
+  // cubre toda la pantalla cuando su borde izquierdo está entre −430 y 0 px
+  M.fromTo(pasada, {x: -3000}, {x: -215, duration: .6, ease: 'power1.in'}, t - .6); M.to(pasada, {x: 2000, duration: .42, ease: 'power2.out'}, t);
+  pasada.querySelectorAll('.rueda').forEach((w, j) => M.fromTo(w, {rotation: 0}, {rotation: 1800, duration: 1.02, ease: 'none', svgOrigin: (j ? 322 : 100) + ' 114'}, t - .6)); M.set(pasada, {x: -3000}, t + .45);
+  return {on: t - .005, off: t + .005}; };
 X.TRX.pagina = ({M, pv, el, t}) => { // la escena anterior se voltea como una hoja del cuaderno
   M.set(el, {visibility: 'visible', zIndex: 1}, t - .42); M.set(pv, {zIndex: 2, transformOrigin: '0% 50%', transformPerspective: 2600}, t - .42);
   M.fromTo(pv, {rotationY: 0, boxShadow: '0 0 0 rgba(0,0,0,0)'}, {rotationY: -96, boxShadow: '-60px 0 120px rgba(0,0,0,.55)', duration: .44, ease: 'power2.in'}, t - .4);
