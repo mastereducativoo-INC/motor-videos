@@ -210,7 +210,7 @@ def kit_de(prod, E):
     d = int(E.get('dir'))
     v = KIT_ORDEN.index(d) if d in KIT_ORDEN else 0
     if foto:
-        conf = {k: foto.get(k) for k in ('nombre', 'firma', 'emblema', 'letras', 'vocab')}
+        conf = {k: foto.get(k) for k in ('nombre', 'firma', 'emblema', 'letras', 'vocab', 'fondo')}
         conf.update(paleta=foto['paletas'][v % len(foto['paletas'])], trs=foto['trs'][v % len(foto['trs'])], diseno=foto['disenos'][v % len(foto['disenos'])])
         return dict(nicho=nicho, v=v, musica='musica/%s.mp3' % foto['musica'][v % len(foto['musica'])], foto=conf)
     return dict(nicho=nicho, v=v, musica='musica/%s.mp3' % KIT_MUSICA[nicho][v])

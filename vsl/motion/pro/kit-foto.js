@@ -86,13 +86,47 @@ const FIRMA = {
       ps.forEach((p, j) => { const f = ((t + j * 2) % 8) / 8; p.style.strokeDashoffset = f < .5 ? 1 - f / .5 : f < .85 ? 0 : -(f - .85) / .15; });
     };
   },
+  mates: (L) => { // matemáticas (23 nov, Christian: «fondo de matemáticas… más educativo… dinámico, nada aburrido»): hoja cuadriculada viva,
+    // símbolos de colores que flotan, un plano cartesiano que dibuja su parábola, un cubo 3D que gira y fórmulas de gis que aparecen y se borran
+    const lin = CLARO ? rgba(P.a, .13) : rgba('#ffffff', .07), lin2 = CLARO ? rgba(P.a, .22) : rgba('#ffffff', .13);
+    const hoja = capa(L, '', `left:-300px;top:-300px;width:2520px;height:1680px;background-image:linear-gradient(${lin2} 3px,transparent 3px),linear-gradient(90deg,${lin2} 3px,transparent 3px),linear-gradient(${lin} 1px,transparent 1px),linear-gradient(90deg,${lin} 1px,transparent 1px);background-size:300px 300px,300px 300px,60px 60px,60px 60px`);
+    capa(L, '', `inset:0;background:radial-gradient(1200px 760px at 50% 46%,${rgba(P.bg, CLARO ? .55 : .5)},transparent 72%)`);  // el centro más limpio: ahí van los textos
+    // plano cartesiano con parábola que se dibuja y un punto que la recorre
+    const pc = CLARO ? P.a : '#ffffff';
+    const plano = capa(L, svg(620, 440, `<path d="M40 380H600M320 420V20" stroke="${rgba(pc, .55)}" stroke-width="5" stroke-linecap="round"/>${Array.from({length: 9}, (_, j) => `<path d="M${80 + j * 60} 372v16M312 ${80 + j * 34}h16" stroke="${rgba(pc, .45)}" stroke-width="3"/>`).join('')}<path class="par" d="M70 40Q320 720 570 40" fill="none" stroke="${P.c}" stroke-width="7" stroke-linecap="round" pathLength="1" stroke-dasharray="1 1"/><circle class="pto" r="13" fill="${P.a}" stroke="#fff" stroke-width="4"/>`, '0 0 620 440'), `left:${v % 2 ? 40 : 1290}px;top:${v % 3 ? 610 : 590}px;opacity:${CLARO ? .7 : .62}`);
+    const par = plano.querySelector('.par'), pto = plano.querySelector('.pto');
+    // cubo 3D en alambre que gira
+    const cubo = capa(L, svg(220, 220, `<g fill="none" stroke="${P.a}" stroke-width="5" stroke-linejoin="round" opacity=".85"><path class="cb"/></g>`, '0 0 260 260'), `left:1660px;top:${v % 2 ? 820 : 40}px;opacity:.7`);
+    const cb = cubo.querySelector('.cb'), V3 = [[-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1], [-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1]], AR = [[0, 1], [1, 2], [2, 3], [3, 0], [4, 5], [5, 6], [6, 7], [7, 4], [0, 4], [1, 5], [2, 6], [3, 7]];
+    // símbolos de colores (como fichas 3D) que suben despacio por las orillas
+    const SY = ['+', '×', '÷', '=', 'π', '√', '%', 'Σ', 'x²', '½', '∞', '−', '7', '3'];
+    const cols = [[P.a, CLARO ? '#16285a' : '#1b1b1b'], [P.c, '#ffffff'], ['#ffffff', P.bg === '#ffffff' ? P.a : P.bg], [CLARO ? P.a : '#5ec8ff', '#ffffff']];
+    const fichas = Array.from({length: 16}, (_, j) => { const s = 58 + r() * 44, orilla = j % 2 ? 1800 + r() * 70 : 8 + r() * 70, [fo, tx] = cols[j % cols.length];
+      const e = capa(L, `<div style="width:${s}px;height:${s}px;border-radius:${j % 3 ? 26 : 50}%;background:linear-gradient(160deg,${rgba('#ffffff', .55)},${fo} 38%,${fo});box-shadow:inset 0 -8px 0 ${rgba('#000000', .18)},0 18px 26px ${rgba('#000000', CLARO ? .14 : .32)};display:flex;align-items:center;justify-content:center;font:900 ${Math.round(s * .5)}px Rubik,sans-serif;color:${tx}">${SY[(j + v * 5) % SY.length]}</div>`, `left:${orilla}px;top:0`);
+      return {e, y0: r() * 1300, vel: 22 + r() * 30, f: r() * 6}; });
+    // fórmulas de gis que se escriben y se borran (en las orillas)
+    const F = ['a² + b² = c²', 'y = mx + b', 'A = πr²', 'sen²θ + cos²θ = 1', 'Δ = b² − 4ac', 'f(x) = x²', '√144 = 12', '(a+b)² = a²+2ab+b²', 'V = l³'];
+    const lug = [[330, 60], [1180, 70], [360, 960], [1150, 980]];
+    const fx = lug.map(([x, y], j) => ({e: capa(L, `<span style="font-family:Kalam,cursive;font-weight:700;font-size:44px;color:${CLARO ? rgba(P.ink, .3) : rgba('#ffffff', .34)};white-space:nowrap">${F[(j + v * 2) % F.length]}</span>`, `left:${x}px;top:${y}px`), f: j * 1.9}));
+    return (t) => {
+      hoja.style.transform = `translate(${(t * 18) % 300}px,${(t * 11) % 300}px)`;
+      const f = (t % 6) / 6, k = f < .55 ? f / .55 : f < .9 ? 1 : 1 - (f - .9) / .1; par.style.strokeDashoffset = 1 - k;
+      const u = Math.min(1, f / .55), px = 70 + 500 * u, py = 40 + 680 * u * (1 - u); pto.setAttribute('cx', px.toFixed(1)); pto.setAttribute('cy', py.toFixed(1)); pto.style.opacity = f < .9 ? 1 : 0;
+      const a1 = t * .7, a2 = t * .45, P2 = V3.map(([x, y, z]) => { const x1 = x * Math.cos(a1) - z * Math.sin(a1), z1 = x * Math.sin(a1) + z * Math.cos(a1); const y1 = y * Math.cos(a2) - z1 * Math.sin(a2); return [130 + x1 * 62, 130 + y1 * 62]; });
+      cb.setAttribute('d', AR.map(([i0, i1]) => `M${P2[i0][0].toFixed(1)} ${P2[i0][1].toFixed(1)}L${P2[i1][0].toFixed(1)} ${P2[i1][1].toFixed(1)}`).join(''));
+      fichas.forEach((q) => { const y = ((q.y0 - t * q.vel) % 1380 + 1380) % 1380 - 180; q.e.style.transform = `translate(${Math.sin(t * .7 + q.f) * 22}px,${y}px) rotate(${Math.sin(t * .9 + q.f) * 18}deg)`; });
+      fx.forEach((q) => { const ph = ((t * .28 + q.f) % 3) / 3; q.e.style.opacity = ph < .2 ? ph / .2 : ph < .75 ? 1 : 1 - (ph - .75) / .25; q.e.style.clipPath = ph < .2 ? `inset(0 ${(100 - ph / .2 * 100).toFixed(0)}% 0 0)` : 'none'; });
+    };
+  },
 };
 X.alMontar.push(({bg: B}) => {
   const L = $('<div class="kbg"></div>'); B.appendChild(L); L.style.background = P.bg;
-  const k = fotoFondo(); let foto = null;
+  const GRAF = K.fondo === 'grafico';  // 23 nov: Matemáticas no lleva foto de fondo, lleva un fondo gráfico vivo del nicho (colores del curso principal)
+  if (GRAF) L.style.background = `radial-gradient(1500px 1000px at 28% 18%,${P.sup},${P.bg} 72%)`;
+  const k = GRAF ? null : fotoFondo(); let foto = null;
   if (k) foto = capa(L, '', `left:-60px;top:-40px;width:2040px;height:1160px;background:url("${IM[k].src}") center/cover no-repeat;filter:blur(${CLARO ? 2 : 1.5}px) saturate(1.06)`);
   // velo: la foto se ve y el texto se lee (más denso del lado donde suelen ir los títulos)
-  capa(L, '', `inset:0;background:linear-gradient(100deg,${rgba(P.bg, CLARO ? .86 : .82)} 0%,${rgba(P.bg, CLARO ? .62 : .5)} 48%,${rgba(P.bg, CLARO ? .74 : .66)} 100%)`);
+  if (!GRAF) capa(L, '', `inset:0;background:linear-gradient(100deg,${rgba(P.bg, CLARO ? .86 : .82)} 0%,${rgba(P.bg, CLARO ? .62 : .5)} 48%,${rgba(P.bg, CLARO ? .74 : .66)} 100%)`);
   const fi = FIRMA[K.firma] ? FIRMA[K.firma](L) : null;
   L.appendChild($('<div class="vig"></div>'));
   ups.push((t) => { if (foto) foto.style.transform = `scale(${1.04 + .035 * Math.sin(t * .07)}) translate(${Math.sin(t * .05) * 22}px,${Math.cos(t * .04) * 12}px)`; if (fi) fi(t); });
@@ -107,7 +141,7 @@ const PAL = (K.vocab || []).map(([re, nv]) => [new RegExp(re, 'gi'), nv]);
 const vocab = (raiz) => { if (!PAL.length) return; const w = document.createTreeWalker(raiz, NodeFilter.SHOW_TEXT); let n;
   while ((n = w.nextNode())) { let t = n.nodeValue; if (!t || t.length < 4) continue; PAL.forEach(([re, nv]) => { t = t.replace(re, (m) => (m === m.toUpperCase() ? nv.toUpperCase() : nv)); }); if (t !== n.nodeValue) n.nodeValue = t; } };
 const objetos = () => Array.from({length: 8}, (_, j) => 'ko' + (j + 1)).filter((k) => IM[k] && IM[k].ok);  // se miden al armar cada escena (las imágenes cargan después)
-const SIMB = {ondas: ['♪', '♫', '♬', '♩'], burbujas: ['♥', '★', '♥', '✿'], formulas: ['+', '×', '=', 'π', '√', '÷', '∑']}[K.firma] || ['★'];
+const SIMB = {ondas: ['♪', '♫', '♬', '♩'], burbujas: ['♥', '★', '♥', '✿'], formulas: ['+', '×', '=', 'π', '√', '÷', '∑'], mates: ['+', '×', '=', 'π', '√', '÷', '%', '∑', '★']}[K.firma] || ['★'];
 function rafaga(c, x, y, at) { const {cam, tl} = c;
   for (let j = 0; j < 14; j++) { const e = $(`<i class="kel" style="position:absolute;left:${x}px;top:${y}px;font-style:normal;font-family:${LET.fk},serif;font-weight:700;font-size:${34 + r() * 40}px;color:${[P.a, P.c, P.ink][j % 3]};z-index:3;pointer-events:none">${SIMB[j % SIMB.length]}</i>`);
     cam.appendChild(e); const ang = -Math.PI / 2 + (r() - .5) * 2.2, d = 180 + r() * 260;
@@ -119,6 +153,13 @@ X.alEscena.push((c) => {
   // 1) los diseños traían el fondo de su nicho de origen (madera de despacho, mármol de tribunal, negro de keynote…): fuera
   [...cam.children].forEach((e) => { if (e.classList.contains('kel')) return; const q = rel(cam, e);
     if (q.w >= 1780 && q.h >= 1000 && e.children.length < 8 && !e.querySelector('img,.T,.P,.K,.num,.chip,.btn,.bt,.app,.papel,.vid,canvas') && !String(e.textContent || '').trim()) e.style.display = 'none'; });
+  // 1b) Matemáticas: el tablero en perspectiva del diseño Tablero se vuelve una hoja cuadriculada con sus ejes (nada de ajedrez)
+  if (K.fondo === 'grafico') [...cam.querySelectorAll('div')].forEach((e) => { if (e.children.length !== 64 || getComputedStyle(e).display !== 'grid') return;
+    [...e.children].forEach((ch) => { ch.style.background = 'transparent'; });
+    const gl = CLARO ? rgba(P.a, .3) : rgba('#ffffff', .2);
+    Object.assign(e.style, {background: `${rgba(CLARO ? '#ffffff' : P.sup, .55)}`, backgroundImage: `linear-gradient(${rgba(P.a, .7)} 6px,transparent 6px),linear-gradient(90deg,${rgba(P.a, .7)} 6px,transparent 6px),linear-gradient(${gl} 2px,transparent 2px),linear-gradient(90deg,${gl} 2px,transparent 2px)`,
+      backgroundSize: '100% 100%,100% 100%,53px 53px,53px 53px', backgroundPosition: '0 50%,50% 0,0 0,0 0', backgroundRepeat: 'no-repeat,no-repeat,repeat,repeat', borderColor: P.a});
+    const sh = e.nextElementSibling; if (sh && /rgba\(0, 0, 0/.test(sh.style.background || '')) sh.style.background = `linear-gradient(180deg,${P.bg} 0%,transparent 22%)`; });
   // 2) objetos reales del nicho en las orillas, solo donde no tapan nada (se mide con la escena ya armada)
   const OBJ = objetos();
   if (OBJ.length) {
@@ -164,6 +205,11 @@ X.TRX.burbuja = ({M, el, t, FX}) => { // bebés: una burbuja crece desde abajo y
 X.TRX.tiza = ({M, t, FX}) => { // matemáticas: un borrador de pizarrón con gis barre la pantalla
   const e = una('tiza', FX, `<div class="abs" style="left:-2700px;top:-300px;width:2500px;height:1680px;z-index:5;transform:skewX(-12deg);background:${CLARO ? '#2b3446' : '#3a4558'};box-shadow:0 0 120px rgba(0,0,0,.6)"><div style="position:absolute;inset:0;background:repeating-linear-gradient(92deg,rgba(255,255,255,.05) 0 3px,transparent 3px 11px)"></div><div style="position:absolute;right:0;top:0;bottom:0;width:30px;background:${P.a}"></div></div>`);
   M.fromTo(e, {x: 0}, {x: 2600, duration: .32, ease: 'power3.in'}, t - .32); M.to(e, {x: 5200, duration: .36, ease: 'power3.out'}, t + .02); M.set(e, {x: 0}, t + .45);
+  return {on: t - .02, off: t + .02}; };
+X.TRX.numeros = ({M, t, FX}) => { // matemáticas: una ola amarilla llena de números y símbolos barre la pantalla
+  const SY = ['+', '×', '÷', '=', 'π', '√', '%', '2', '5', '9', 'x²', 'Σ'];
+  const e = una('num', FX, `<div class="abs" style="left:-2700px;top:-300px;width:2500px;height:1680px;z-index:5;transform:skewX(-10deg);background:${P.a};overflow:hidden;box-shadow:0 0 0 40px ${P.c}">${Array.from({length: 60}, (_, j) => `<b style="position:absolute;left:${(j % 10) * 250 + (Math.floor(j / 10) % 2) * 120}px;top:${Math.floor(j / 10) * 280 + 40}px;font:900 150px Rubik,sans-serif;color:${rgba(j % 3 ? '#ffffff' : P.bg, .38)};transform:skewX(10deg) rotate(${(j * 37) % 40 - 20}deg)">${SY[j % SY.length]}</b>`).join('')}</div>`);
+  M.fromTo(e, {x: 0}, {x: 2600, duration: .34, ease: 'power3.in'}, t - .34); M.to(e, {x: 5200, duration: .38, ease: 'power3.out'}, t + .02); M.set(e, {x: 0}, t + .48);
   return {on: t - .02, off: t + .02}; };
 X.TRX.cuadricula = ({M, el, t, FX}) => { // matemáticas: la escena nueva se dibuja de arriba abajo sobre una hoja cuadriculada
   const g = una('cua', FX, `<div class="abs" style="left:0;top:0;width:1920px;height:1080px;z-index:5;opacity:0;background:${CLARO ? '#ffffff' : P.sup};background-image:linear-gradient(${rgba(P.a, .25)} 2px,transparent 2px),linear-gradient(90deg,${rgba(P.a, .25)} 2px,transparent 2px);background-size:60px 60px"></div>`);

@@ -99,7 +99,12 @@ def armar(r, bajar):
         elif dest.endswith('.png'):
             im, ok = quitar_fondo(im)
             if not ok and k not in ('f_cuarto', 'f_evento'):
-                avisos.append(f'La imagen «{k}» no tiene fondo liso: no se pudo recortar.')
+                # 23 nov (Matemáticas): la caja, los cursos y los objetos que llegan con escenario (escritorio, pared) salen como un cuadro
+                # con fondo en el video. Eso es ERROR (regla F9), no aviso: hay que pedir la imagen otra vez.
+                if k == 'pack' or re.match(r'^(c\d+|ko\d)$', k):
+                    avisos.append(f'ERROR IMAGEN: «{k}» llegó con fondo o escenario (no es un color liso): se ve como un cuadro en el video. Pídela otra vez.')
+                else:
+                    avisos.append(f'La imagen «{k}» no tiene fondo liso: no se pudo recortar.')
         else:
             im = im.convert('RGB')
         im.thumbnail((1400, 1400)); im.save(dest); tiene.add(k)

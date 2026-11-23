@@ -49,6 +49,8 @@ def correr(receta, bajar, paso=print, parte=None, partes=1, carpeta=None):
     v, avisos = estudio3.armar(r, bajar)
     hacer.PRON[:] = v.get('pronuncia') or []
     eg, ag = qa.qa_guion(v['escenas'], r.get('prod') or {})
+    eg = eg + [x for x in avisos if x.startswith('ERROR IMAGEN')]  # regla F9 (23 nov): imagen con fondo = el video no sale «listo»
+    avisos = [x for x in avisos if not x.startswith('ERROR IMAGEN')]
     if r.get('modo') == 'vista':
         paso(f'Armando la vista previa de {len(v["escenas"])} escenas')
         hoja, ep, al = asyncio.run(_vista(v))

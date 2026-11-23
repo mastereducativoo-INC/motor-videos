@@ -570,189 +570,189 @@
       "Examen aprobado",
       "Escuadra y compás"
     ],
-    "firma": "formulas",
+    "firma": "mates",
     "emblema": "compas",
     "paletas": [
       [
-        "#1b2330",
-        "#263244",
-        "#f4f1e8",
-        "#a9b2bf",
-        "#ffd24a",
-        "#ff8a5c",
-        "#34445c",
-        "#1b2330",
-        "rgba(6,10,18,.62)"
+        "#0b3d9e",
+        "#1452c4",
+        "#ffffff",
+        "#cfdcff",
+        "#ffd23f",
+        "#ff8a3d",
+        "#2a64d6",
+        "#0b2f7a",
+        "rgba(4,18,60,.30)"
       ],
       [
-        "#12182b",
-        "#1c2440",
-        "#eef2ff",
-        "#9aa5c7",
+        "#eef4ff",
+        "#ffffff",
+        "#0f2a6b",
+        "#4a5f8f",
+        "#1f5cff",
+        "#ff7a2f",
+        "#cfdcff",
+        "#ffffff",
+        "rgba(20,50,120,.10)"
+      ],
+      [
+        "#0d2f74",
+        "#16449c",
+        "#ffffff",
+        "#c6d6f7",
         "#ffb020",
-        "#7aa2ff",
-        "#2b3760",
-        "#12182b",
-        "rgba(4,8,20,.64)"
+        "#33c3ff",
+        "#2457b8",
+        "#0a2560",
+        "rgba(3,14,48,.32)"
       ],
       [
-        "#101318",
-        "#1a1f27",
-        "#f2f4f7",
-        "#98a1ad",
-        "#ff9f1c",
-        "#2ec4ff",
-        "#2b313b",
-        "#101318",
-        "rgba(0,0,0,.66)"
-      ],
-      [
-        "#0e1a2e",
-        "#172742",
-        "#eaf2ff",
-        "#93a8c6",
-        "#4cc3ff",
-        "#ffcc4d",
-        "#24395e",
-        "#0e1a2e",
-        "rgba(2,8,20,.62)"
-      ],
-      [
-        "#f7f8fb",
+        "#1b2a8f",
+        "#2a3cb8",
         "#ffffff",
-        "#1d2433",
-        "#5d6678",
-        "#2f6bff",
-        "#ff5a5f",
-        "#d6dce8",
-        "#ffffff",
-        "rgba(40,60,100,.14)"
-      ],
-      [
-        "#1a1330",
-        "#261c45",
-        "#f6f2ff",
-        "#b3a8d6",
-        "#ff7a59",
-        "#ffd166",
-        "#3a2d66",
-        "#1a1330",
-        "rgba(8,4,20,.62)"
-      ],
-      [
-        "#0b0f1a",
-        "#151b2b",
-        "#ffffff",
-        "#9aa3b8",
+        "#d2d8ff",
         "#ffe14d",
-        "#ff6b9a",
-        "#27304a",
-        "#0b0f1a",
-        "rgba(0,0,8,.66)"
+        "#ff6fa8",
+        "#3a4fd0",
+        "#141f6e",
+        "rgba(8,10,50,.30)"
       ],
       [
-        "#1d1a2e",
-        "#2a2642",
-        "#fff7ec",
-        "#c3b9d6",
-        "#ffb703",
-        "#fb8500",
-        "#403a63",
-        "#1d1a2e",
-        "rgba(8,6,18,.6)"
+        "#fffdf5",
+        "#ffffff",
+        "#16285a",
+        "#56638a",
+        "#2563eb",
+        "#f59e0b",
+        "#d9e4ff",
+        "#ffffff",
+        "rgba(30,50,110,.08)"
       ],
       [
-        "#16213a",
-        "#1f2c4a",
-        "#f7f3ea",
-        "#a9b4cc",
-        "#ff7b3a",
-        "#5aa9ff",
-        "#2f3f66",
-        "#16213a",
-        "rgba(4,8,20,.62)"
+        "#3a1e93",
+        "#4c2cb8",
+        "#ffffff",
+        "#ddd2ff",
+        "#ffd23f",
+        "#ff8a3d",
+        "#5b3fd0",
+        "#2c167a",
+        "rgba(15,5,50,.30)"
+      ],
+      [
+        "#0a4d9c",
+        "#0f63c4",
+        "#ffffff",
+        "#c9e0fa",
+        "#ffe14d",
+        "#ff7b54",
+        "#2b78d6",
+        "#083c7c",
+        "rgba(2,20,55,.30)"
+      ],
+      [
+        "#102e86",
+        "#1a40ad",
+        "#ffffff",
+        "#c9d5f7",
+        "#ffc93c",
+        "#ff5d73",
+        "#2c55c8",
+        "#0b236a",
+        "rgba(4,12,48,.30)"
+      ],
+      [
+        "#123a8f",
+        "#1b4db3",
+        "#ffffff",
+        "#cbd9fb",
+        "#ffcf33",
+        "#38bdf8",
+        "#2d63cc",
+        "#0d2c70",
+        "rgba(3,15,50,.30)"
       ]
     ],
     "letras": [
       {
-        "ft": "SpaceG",
-        "fw": 700,
-        "fb": "Manrope",
-        "fn": "JetBrains",
-        "fk": "Kalam",
-        "ls": "-.015em"
-      },
-      {
-        "ft": "Epilogue",
+        "ft": "Rubik",
         "fw": 800,
-        "fb": "DMSans",
-        "fn": "SpaceG",
-        "fk": "Caveat",
+        "fb": "Outfit",
+        "fn": "Rubik",
+        "fk": "Kalam",
         "ls": "-.02em"
       },
       {
-        "ft": "Sora",
+        "ft": "Unbounded",
         "fw": 700,
-        "fb": "Manrope",
-        "fn": "JetBrains",
+        "fb": "Outfit",
+        "fn": "Rubik",
         "fk": "Kalam",
-        "ls": "-.015em"
+        "ls": "-.03em"
+      },
+      {
+        "ft": "Rubik",
+        "fw": 900,
+        "fb": "Manrope",
+        "fn": "Unbounded",
+        "fk": "Kalam",
+        "ls": "-.025em"
       }
     ],
     "trs": [
       [
+        "cuadricula",
+        "numeros",
         "tiza",
-        "fundido",
+        "sube"
+      ],
+      [
+        "numeros",
+        "cuadricula",
+        "zoom",
+        "tiza"
+      ],
+      [
+        "tiza",
+        "numeros",
         "cuadricula",
         "sube"
       ],
       [
         "cuadricula",
-        "lateral",
+        "zoom",
+        "numeros",
+        "fundido"
+      ],
+      [
+        "numeros",
+        "sube",
+        "cuadricula",
+        "tiza"
+      ],
+      [
         "tiza",
+        "cuadricula",
+        "numeros",
         "zoom"
       ],
       [
-        "fundido",
+        "numeros",
         "tiza",
         "sube",
         "cuadricula"
       ],
       [
-        "tiza",
         "cuadricula",
-        "zoom",
-        "fundido"
-      ],
-      [
-        "cuadricula",
-        "sube",
+        "numeros",
         "tiza",
         "lateral"
       ],
       [
-        "tiza",
-        "zoom",
-        "cuadricula",
-        "barrido"
-      ],
-      [
-        "fundido",
-        "cuadricula",
-        "tiza",
-        "sube"
-      ],
-      [
-        "cuadricula",
-        "tiza",
-        "lateral",
-        "fundido"
-      ],
-      [
         "sube",
-        "tiza",
+        "numeros",
         "cuadricula",
-        "zoom"
+        "tiza"
       ]
     ],
     "musica": [
@@ -824,14 +824,16 @@
       "Vista cenital de un compás, escuadra, transportador y lápices de colores sobre papel crema con circunferencias y ángulos trazados."
     ],
     "objetos": [
-      "Calculadora científica negra con teclas grises.",
-      "Compás metálico de dibujo técnico abierto.",
-      "Escuadra y transportador transparentes.",
-      "Cuaderno cuadriculado abierto con ejercicios de matemáticas a lápiz.",
-      "Cuerpos geométricos de madera: cubo, pirámide y esfera.",
-      "Lápiz amarillo con goma rosa.",
-      "Regla metálica de 30 cm.",
-      "Libro de matemáticas cerrado de pasta dura azul marino, sin texto en la portada."
-    ]
+      "Calculadora científica 3D, azul rey con teclas amarillas y blancas, pantalla que muestra «2+3=5».",
+      "Compás de dibujo técnico 3D, metálico con detalles azul y amarillo, abierto.",
+      "Escuadra y transportador 3D de plástico transparente con bordes amarillos.",
+      "Lápiz amarillo 3D grande con goma rosa, ligeramente inclinado.",
+      "Cuerpos geométricos 3D juntos: cubo azul, pirámide amarilla y esfera naranja.",
+      "Regla 3D amarilla con números grandes bien legibles.",
+      "Cuaderno cuadriculado 3D abierto con la fórmula a²+b²=c² escrita a mano en azul.",
+      "Birrete de graduación 3D azul rey con borla amarilla."
+    ],
+    "fondo": "grafico",
+    "imagenes": "curso"
   }
 }
