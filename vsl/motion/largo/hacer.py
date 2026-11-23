@@ -84,7 +84,7 @@ def preparar(v):
     html = os.path.join(AQUI, 'build', v['id'] + '.html')
     datos = json.dumps({k: v[k] for k in ('id', 'titulo', 'estilo', 'escenas', 'dur', 'prod', 'assets', 'assets2') if k in v}, ensure_ascii=False).replace('</', '<\\/')
     if E.get('motor') == 'mkt':  # video del producto principal (Marketplace): vsl/motion/mkt
-        cab, pie = '<link rel="stylesheet" href="../../mkt/mkt.css">', '<script src="../../pro/lib/gsap.min.js"></script><script src="../../mkt/mkt.js"></script>'
+        cab, pie = '<link rel="stylesheet" href="../../mkt/mkt.css">', '<script src="../../pro/lib/gsap.min.js"></script><script src="../../mkt/mundos.js"></script><script src="../../mkt/mkt.js"></script>'
     elif E.get('motor') == 'pro':  # motor nuevo (vsl/motion/pro): GSAP + escenas sincronizadas con la voz
         cab, pie = '<link rel="stylesheet" href="../../pro/pro.css">', '<script src="../../pro/lib/gsap.min.js"></script><script src="../../pro/pro.js"></script>' + ('<link rel="stylesheet" href="../../pro/dir.css"><script src="../../pro/lib/three.min.js"></script><script src="../../pro/dir.js"></script><script src="../../pro/nicho.js"></script><link rel="stylesheet" href="../../pro/kit.css"><script src="../../pro/kit.js"></script><script src="../../pro/kit-foto.js"></script>' if E.get('dir') else '')
     else:

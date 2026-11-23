@@ -110,8 +110,11 @@ def estilo(clave):
     if clave[:2] == 'mk' and clave[2:3].isdigit():
         # 19 nov: video de venta del producto PRINCIPAL (Marketplace). Motor vsl/motion/mkt, 5 directores (mk1..mk5).
         k = max(1, min(5, int(clave[2]))); fam = clave.split('-')[1] if '-' in clave else 'gen'
+        if fam in MKT_MUNDOS:  # 23 nov: el mundo del nicho (mkt/mundos.js) con la música de su kit; nada del estilo de DJ
+            M = MKT_MUNDOS[fam]
+            return dict(COMUN, motor='mkt', mk=k, tema=False, nicho=fam, musica='musica/%s.mp3' % M['musica'][k - 1], nombre=M['nombres'][k - 1])
         mus = {1: 'musica/house-fest.mp3', 2: 'musica/gear.mp3', 3: 'musica/deep-techno.mp3', 4: 'musica/uplifting-bass.mp3', 5: 'musica/b-o-r-n.mp3'}[k] if fam == 'dj' else musica_para(fam if fam in FAMILIAS else 'gen', k - 1, 'musica/savana.mp3')
-        return dict(COMUN, motor='mkt', mk=k, tema=False, musica=mus, nombre=['Club', 'Vinilo', 'Cabina', 'Cartel', 'Cine'][k - 1])
+        return dict(COMUN, motor='mkt', mk=k, tema=False, nicho='dj' if fam == 'dj' else '', musica=mus, nombre=['Club', 'Vinilo', 'Cabina', 'Cartel', 'Cine'][k - 1])
     if len(clave) > 4 and clave[0] == 'f' and clave[1:3].isdigit() and clave[3] == '-':
         # 19 nov 20:18 (Christian): el diseño APROBADO de DJ («Morado profundo», f05, motor clásico) se usa en todos los productos.
         # Fuera de DJ se quita todo lo de audio (vinilo, ondas, ecualizador, disco) y la música se elige para el nicho.
@@ -155,6 +158,17 @@ def estilo(clave):
     fk = next((k for k, f in FAMILIAS.items() if f is fam), 'gen'); e['musica'] = musica_para(fk, n, e.get('musica'))
     e['var'] = n % len(fam['variantes']) + 1  # cada variante cambia además el orden de composiciones y transiciones
     return e
+
+
+# ---------------- MUNDOS DEL MARKETPLACE (23 nov 2026) ----------------
+# Video de venta del Marketplace (motor mkt): cada nicho con mundo propio en vsl/motion/mkt/mundos.js. Nombres y música de sus 5 directores.
+# Un nicho nuevo se agrega aquí Y en mundos.js (y en NICHOS_MKT de functions/_lib/mkt.js).
+MKT_MUNDOS = {
+    'dibujo': dict(nombres=['Mesa de dibujo', 'Rueda de color', 'App de dibujo', 'Cuaderno de bocetos', 'Galería'],
+                   musica=['sounds-good', 'light-it-up-boy', 'funky-martian', 'year-2001', 'dirty-thinkin']),
+    'mecanica': dict(nombres=['Pista', 'Velocímetro', 'Escáner', 'Orden de servicio', 'Taller'],
+                     musica=['ko', 'sports-rock', 'caught-on-tape', 'rock-the-game', 'im-all-heart']),
+}
 
 
 # ---------------- KIT DEL NICHO (Christian, 20 nov 2026) ----------------

@@ -8,6 +8,13 @@
 (() => {
 const V = window.V, E = V.estilo || {}, A = V.assets || '', A2 = V.assets2 || A, PR = V.prod || {};
 const DIR = Math.min(5, Math.max(1, +E.mk || 1));
+// 23 nov 2026 (Christian, Dibujo: «me lo hiciste con todo el diseño y estilo de DJ»): el mundo visual del NICHO (mundos.js) va encima
+// del director. Sin mundo (nicho 'dj') quedan los 5 directores originales de DJ. El panel no genera videos de un nicho sin mundo.
+const NICHO = String(E.nicho || (window.MKT_NICHO_DE ? window.MKT_NICHO_DE([PR.curso, PR.curso_corto].join(' ')) : '') || '').toLowerCase();
+const MU = NICHO && NICHO !== 'dj' && window.MKT_MUNDOS ? window.MKT_MUNDOS[NICHO] || null : null;
+const CH = MU ? MU.chip : {bg: '#111', ink: '#fff', font: 'Archivo', tt: 'uppercase'};  // etiquetas sólidas del director 4
+const chipCss = (pad) => `;background:${CH.bg};color:${CH.ink};padding:${pad};font-family:${CH.font};font-weight:800;text-transform:${CH.tt}`;
+const TX = (k, def, x) => { const v = MU && MU.txt && MU.txt[k]; return v == null ? def : typeof v === 'function' ? v(x) : v; };
 gsap.defaults({lazy: false, overwrite: false}); gsap.config({nullTargetWarn: false});
 const PAL = {
   1: {bg: '#07060f', ink: '#ffffff', mut: '#cfc8ee', a: '#ff2bd6', b: '#22e5ff', c: '#ffe14d', sobre: '#0a0612', panel: 'rgba(255,255,255,.06)', line: 'rgba(255,43,214,.55)', sombra: 'rgba(255,43,214,.45)',
@@ -21,11 +28,13 @@ const PAL = {
   5: {bg: '#050505', ink: '#f7f1e6', mut: '#d6ccbb', a: '#e2b866', b: '#9a6b2f', c: '#e2b866', sobre: '#140e05', panel: 'rgba(255,255,255,.06)', line: 'rgba(226,184,102,.45)', sombra: 'rgba(0,0,0,.6)',
       ft: 'Instrument', fw: 400, fb: 'Manrope', fm: 'Manrope', tt: 'none', ls: '-.01em', rad: '6px', acc: 'linear-gradient(90deg,#e2b866,#fff1c9,#e2b866)'},
 }[DIR];
+if (MU) Object.assign(PAL, MU.pal[DIR - 1]);
 if (E.pal) Object.assign(PAL, E.pal);  // un tema puede cambiar los colores del director
 const R = document.documentElement.style;
 for (const k of ['bg', 'ink', 'mut', 'a', 'b', 'c', 'sobre', 'panel', 'line', 'sombra', 'tt', 'ls', 'rad', 'acc']) R.setProperty('--' + k, PAL[k]);
 R.setProperty('--ft', PAL.ft); R.setProperty('--fb', PAL.fb); R.setProperty('--fm', PAL.fm); R.setProperty('--fw', PAL.fw);
 document.body.classList.add('d' + DIR);
+if (MU) { document.body.classList.add('mu', 'mu-' + NICHO); const st = document.createElement('style'); st.textContent = MU.css || ''; document.head.appendChild(st); }
 
 let seed = 11 + DIR * 97; const rnd = () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
 const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
@@ -82,7 +91,7 @@ function objeto(c, k, o) {
   const ob = $(`<div class="abs sombra" style="inset:0">${img(k, o.st || '')}</div>`); box.appendChild(ob);
   (o.en || c.cam).appendChild(box);
   const at = o.at == null ? .25 : o.at, tl = c.tl, d = o.dir || 1;
-  if (DIR === 1) { tl.from(ob, {scale: .6, autoAlpha: 0, duration: .9, ease: 'back.out(1.6)'}, at); tl.fromTo(ob, {filter: 'drop-shadow(0 0 0 rgba(255,43,214,0)) brightness(2)'}, {filter: 'drop-shadow(0 0 40px rgba(255,43,214,.55)) brightness(1)', duration: .6}, at + .1); }
+  if (DIR === 1) { tl.from(ob, {scale: .6, autoAlpha: 0, duration: .9, ease: 'back.out(1.6)'}, at); tl.fromTo(ob, {filter: `drop-shadow(0 0 0 ${MU ? window.MKT_RGBA(PAL.a, 0) : 'rgba(255,43,214,0)'}) brightness(${MU ? 1.3 : 2})`}, {filter: `drop-shadow(0 ${MU ? 30 : 0}px 40px ${MU ? PAL.sombra : 'rgba(255,43,214,.55)'}) brightness(1)`, duration: .6}, at + .1); }
   else if (DIR === 2) tl.from(ob, {y: 260, rotation: d * 8, autoAlpha: 0, duration: 1.1, ease: 'expo.out'}, at);
   else if (DIR === 3) { tl.from(ob, {x: d * 120, autoAlpha: 0, duration: .5, ease: 'power3.out'}, at); tl.from(ob, {clipPath: 'inset(0 0 100% 0)', duration: .55, ease: 'power2.inOut'}, at); }
   else if (DIR === 4) tl.from(ob, {scale: 1.9, rotation: d * -14, autoAlpha: 0, duration: .45, ease: 'power4.out'}, at);
@@ -100,7 +109,7 @@ function puntos(c, items, o) {
     const lab = DIR === 2 ? 'A' + (j + 1) : DIR === 3 ? String(j + 1).padStart(2, '0') : DIR === 5 ? '' : String(j + 1);
     const f = $(`<div class="fila" style="font-size:${o.size || 44}px">${DIR === 5 ? `<span style="flex:0 0 46px;height:2px;background:var(--a);margin-top:4px"></span>` : `<span class="n">${lab}</span>`}<span>${esc(cap(it))}</span></div>`);
     if (DIR === 1) f.style.cssText += ';padding:16px 24px;border-radius:14px;background:rgba(255,255,255,.05);border:2px solid var(--line)';
-    if (DIR === 4) f.style.cssText += ';background:#111;color:#fff;padding:16px 22px;font-family:Archivo;font-weight:800;text-transform:uppercase';
+    if (DIR === 4) f.style.cssText += chipCss('16px 22px');
     b.appendChild(f);
     const t = c.cue(it.split(/\s+/).slice(0, 2).join(' '), (o.from || .32) + j * (o.paso || .17), (o.at || .6) + j * .25);
     if (DIR === 4) c.tl.from(f, {x: -260, autoAlpha: 0, duration: .32, ease: 'power4.out'}, t);
@@ -120,6 +129,7 @@ function ventana(c, o) {
   return w;
 }
 function onda(c, o) {
+  if (MU && MU.onda) return MU.onda(c, o, H);
   const w = $(`<div class="onda${o.b ? ' b' : ''}" style="left:${o.x}px;top:${o.y}px;width:${o.w}px;height:${o.h}px"></div>`);
   const n = Math.floor(o.w / 9);
   for (let i = 0; i < n; i++) { const v = .25 + .75 * Math.abs(Math.sin(i * .37 + DIR) * Math.cos(i * .11)); w.appendChild($(`<i style="height:${Math.round(v * o.h)}px"></i>`)); }
@@ -147,13 +157,25 @@ function foto(c, k, o = {}) {
 // color de fondo por escena (director 4: cada escena cambia de color, como un cartel)
 const C4 = [['#ffd400', '#111111', '#e62e2e'], ['#111111', '#ffd400', '#ffd400'], ['#e62e2e', '#ffffff', '#111111'], ['#f2efe6', '#111111', '#e62e2e']];
 function cartel(c, n) {
-  const [bg, ink, a] = C4[n % C4.length];
+  const L4 = (MU && MU.cartel) || C4, [bg, ink, a] = L4[n % L4.length];
   c.el.style.setProperty('--ink', ink); c.el.style.setProperty('--cbg', bg); c.el.style.setProperty('--a', a); c.el.style.setProperty('--mut', ink); c.el.style.setProperty('--acc', `linear-gradient(90deg,${a},${a})`);
   c.cam.appendChild($(`<div class="abs" style="inset:0;background:${bg}"></div>`)); c.cam.appendChild($('<div class="trama"></div>'));
   return {bg, ink, a};
 }
 const flash = (c, at) => { const f = $('<div class="abs" style="inset:0;background:#fff;mix-blend-mode:screen;opacity:0"></div>'); c.cam.appendChild(f); c.tl.fromTo(f, {opacity: .85}, {opacity: 0, duration: .35}, at); };
 const cuenta = (tl, el, a, b, at, dur, f = fmt) => { const o = {v: a}; el.textContent = f(a); tl.to(o, {v: b, duration: dur, ease: 'power2.out', onUpdate: () => { el.textContent = f(o.v); }}, at); };
+
+// ---------- mundo del nicho (mundos.js) ----------
+const capa = (L, html, st = '') => { const e = $(`<div style="position:absolute;${st}">${html}</div>`); L.appendChild(e); return e; };
+const linea = (L, d, col, sw, per, des = 0) => { const e = capa(L, `<svg width="1920" height="1080" style="overflow:visible"><path d="${d}" fill="none" stroke="${col}" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1"/></svg>`, 'inset:0'), p = e.querySelector('path');
+  return (t) => { const f = ((t + des) % per) / per; p.style.strokeDashoffset = f < .55 ? 1 - f / .55 : f < .8 ? 0 : -(f - .8) / .2; }; };
+const H = {$, pal: PAL, capa, linea};
+// director 1: láseres en DJ; en un mundo, lo que toque al nicho (trazos de lápiz, faros…)
+function rayos(c, inverso) {
+  if (MU) return MU.rayos(c, H, inverso);
+  for (let i = 0; i < 6; i++) { const l = $(`<div class="laser${i % 2 ? ' c' : ''}" style="left:${200 + i * 300}px"></div>`); c.cam.insertBefore(l, c.cam.firstChild);
+    c.tl.fromTo(l, {rotation: inverso ? 30 - i * 10 : -35 + i * 12}, {rotation: inverso ? -30 + i * 12 : 35 - i * 9, duration: c.D, ease: 'sine.inOut'}, 0); }
+}
 
 // ================= ESCENAS =================
 const S = {};
@@ -165,15 +187,15 @@ S.k_gancho = (c) => {
   if (DIR === 1) {
     flash(c, .05);
     texto(c, {x: 160, y: 250, w: 1600, c: 1, k, t, s, size: 132, maxH: 470});
-    for (let i = 0; i < 6; i++) { const l = $(`<div class="laser${i % 2 ? ' c' : ''}" style="left:${200 + i * 300}px"></div>`); c.cam.insertBefore(l, c.cam.firstChild); c.tl.fromTo(l, {rotation: -35 + i * 12}, {rotation: 35 - i * 9, duration: c.D, ease: 'sine.inOut'}, 0); }
+    rayos(c, false);
     c.fx(.05, 'golpe');
   } else if (DIR === 2) {
     disco(c, {x: 1080, y: 150, s: 820, lab: PR.curso_corto || '', at: 0});
     texto(c, {x: 120, y: 250, w: 920, k, t, s, size: 132, maxH: 560});
     c.fx(.1, 'whoosh');
   } else if (DIR === 3) {
-    const w1 = ventana(c, {x: 80, y: 90, w: 1760, h: 230, titulo: 'DECK A', der: '124.0 BPM'}); onda(c, {x: 30, y: 80, w: 1700, h: 120, en: w1});
-    const w2 = ventana(c, {x: 80, y: 760, w: 1760, h: 230, titulo: 'DECK B', der: '124.0 BPM', at: .1}); onda(c, {x: 30, y: 80, w: 1700, h: 120, b: 1, en: w2});
+    const w1 = ventana(c, {x: 80, y: 90, w: 1760, h: 230, titulo: TX('deck', 'DECK A', 0), der: TX('bpm', '124.0 BPM')}); onda(c, {x: 30, y: 80, w: 1700, h: 120, en: w1});
+    const w2 = ventana(c, {x: 80, y: 760, w: 1760, h: 230, titulo: TX('deck', 'DECK B', 1), der: TX('bpm', '124.0 BPM'), at: .1}); onda(c, {x: 30, y: 80, w: 1700, h: 120, b: 1, en: w2});
     texto(c, {x: 140, y: 360, w: 1640, c: 1, k, t, s, size: 100, maxH: 330, ss: 40});
     c.fx(.1, 'click');
   } else if (DIR === 4) {
@@ -194,7 +216,7 @@ function tarjetasDolor(c, items, y0) {
   const L = recortes().slice(0, Math.min(4, items.length)), n = L.length, wcol = 1680 / n, col = DIR === 4 ? 'var(--a)' : 'var(--b)';
   L.forEach((k, j) => {
     const x = 120 + j * wcol, it = items[j] || '', t = c.cue(it.split(/\s+/).slice(0, 2).join(' '), .3 + j * .16, .5 + j * .3);
-    if (DIR === 3) ventana(c, {x: x + 14, y: y0 - 30, w: wcol - 28, h: 660, titulo: 'ERROR ' + (j + 1), at: t - .1});
+    if (DIR === 3) ventana(c, {x: x + 14, y: y0 - 30, w: wcol - 28, h: 660, titulo: TX('error', 'ERROR ' + (j + 1), j), at: t - .1});
     objeto(c, k, {x: x + 30, y: y0, w: wcol - 60, h: 400, at: t, halo: false, sfx: false, dir: j % 2 ? 1 : -1, st: 'filter:saturate(.75)'});
     const l = $(`<div class="abs ctr" style="left:${x + 16}px;top:${y0 + 430}px;width:${wcol - 32}px;display:flex;justify-content:center;align-items:center;gap:12px;font-family:var(--fb);font-weight:700;font-size:34px;line-height:1.15;color:${DIR === 4 ? '#fff' : 'var(--ink)'};${DIR === 4 ? 'background:#111;padding:14px 16px' : DIR === 3 ? 'font-family:JetBrains;font-size:30px' : ''}"><span style="color:${col};flex:0 0 46px;display:flex">${NO.replace('width="58" height="58"', 'width="46" height="46"')}</span><span style="position:relative">${esc(cap(it))}<i style="position:absolute;left:0;right:0;top:52%;height:4px;background:${col};transform-origin:0 50%"></i></span></div>`);
     c.cam.appendChild(l);
@@ -218,7 +240,7 @@ S.k_dolor = (c) => {
     items.forEach((it, j) => {
       const col = DIR === 4 ? 'var(--a)' : 'var(--b)', f = $(`<div class="fila" style="font-size:${size}px;color:var(--ink)"><span style="color:${col};flex:0 0 58px">${NO}</span><span class="tx" style="position:relative">${esc(cap(it))}<i style="position:absolute;left:0;right:0;top:54%;height:5px;background:${col};transform-origin:0 50%"></i></span></div>`);
       if (DIR === 3) f.style.cssText += ';background:#1f141a;border:2px solid #4a2230;border-radius:12px;padding:18px 24px;font-family:JetBrains;font-size:' + (size - 6) + 'px';
-      if (DIR === 4) f.style.cssText += ';background:#111;color:#fff;padding:16px 22px;font-family:Archivo;font-weight:800;text-transform:uppercase';
+      if (DIR === 4) f.style.cssText += chipCss('16px 22px');
       b.appendChild(f);
       const t = c.cue(it.split(/\s+/).slice(0, 2).join(' '), .3 + j * .16, .5 + j * .3);
       c.tl.from(f, {autoAlpha: 0, x: -50, duration: .5, ease: 'expo.out'}, t);
@@ -229,7 +251,7 @@ S.k_dolor = (c) => {
   };
   if (DIR === 1) { texto(c, {x: 140, y: 120, w: 1640, k: sc.k, t: sc.t, size: 96, maxH: 240}); lista(260, 430, 1400, 46); }
   else if (DIR === 2) { disco(c, {x: -420, y: 180, s: 820, lab: '', desde: -600}); texto(c, {x: 520, y: 120, w: 1280, k: sc.k, t: sc.t, size: 92, maxH: 260}); lista(520, 430, 1300, 44); }
-  else if (DIR === 3) { const w = ventana(c, {x: 140, y: 90, w: 1640, h: 900, titulo: 'REGISTRO', der: '⚠ ' + items.length}); texto(c, {x: 200, y: 190, w: 1520, k: sc.k, t: sc.t, size: 84, maxH: 220}); lista(200, 450, 1520, 40); c.tl.from(w, {autoAlpha: 0}, 0); }
+  else if (DIR === 3) { const w = ventana(c, {x: 140, y: 90, w: 1640, h: 900, titulo: TX('registro', 'REGISTRO'), der: '⚠ ' + items.length}); texto(c, {x: 200, y: 190, w: 1520, k: sc.k, t: sc.t, size: 84, maxH: 220}); lista(200, 450, 1520, 40); c.tl.from(w, {autoAlpha: 0}, 0); }
   else if (DIR === 4) { cartel(c, 1); texto(c, {x: 110, y: 90, w: 1700, k: sc.k, t: sc.t, size: 140, maxH: 330}); lista(110, 470, 1500, 46); }
   else { foto(c, fotos()[1] || fotos()[0], {dir: -1}); c.cam.appendChild($('<div class="abs franjas" style="inset:0"></div>')); texto(c, {x: 150, y: 170, w: 1300, k: sc.k, t: sc.t, size: 100, maxH: 280}); lista(150, 480, 1250, 42); }
 };
@@ -244,9 +266,9 @@ S.k_curso = (c) => {
   if (DIR === 1) { objeto(c, 'logo', {x: 660, y: 70, w: 600, h: 300, at: .1}); abanico(960, 690, 400, 300, 5); texto(c, {x: 160, y: 930, w: 1600, c: 1, t: sc.t, size: 64, maxH: 110, at: 1.4}); }
   else if (DIR === 2) { objeto(c, 'logo', {x: 1160, y: 200, w: 640, h: 560, at: .3}); abanico(560, 540, 470, 200, 7); texto(c, {x: 120, y: 880, w: 900, t: sc.t, size: 60, maxH: 160, at: 1.4}); }
   else if (DIR === 3) {
-    const w = ventana(c, {x: 80, y: 70, w: 1760, h: 940, titulo: 'BIBLIOTECA', der: n + ' MÓDULOS'});
+    const w = ventana(c, {x: 80, y: 70, w: 1760, h: 940, titulo: TX('biblioteca', 'BIBLIOTECA'), der: n + ' MÓDULOS'});
     M.forEach((k, j) => { const x = 180 + j * 410, y = 220; objeto(c, k, {x, y, w: 340, h: 470, at: .4 + j * .2, halo: false, sfx: j === 0});
-      const r = $(`<div class="abs" style="left:${x}px;top:${y + 500}px;width:340px;font-family:JetBrains;font-size:26px;color:var(--a);font-weight:700">MÓDULO ${String(j + 1).padStart(2, '0')}</div>`); c.cam.appendChild(r); c.tl.from(r, {autoAlpha: 0}, .6 + j * .2); });
+      const r = $(`<div class="abs" style="left:${x}px;top:${y + 500}px;width:340px;font-family:${MU ? 'var(--fm)' : 'JetBrains'};font-size:26px;color:var(--a);font-weight:700">MÓDULO ${String(j + 1).padStart(2, '0')}</div>`); c.cam.appendChild(r); c.tl.from(r, {autoAlpha: 0}, .6 + j * .2); });
     texto(c, {x: 180, y: 790, w: 1560, t: sc.t, size: 70, maxH: 180, at: 1.4}); c.tl.from(w, {autoAlpha: 0}, 0);
   } else if (DIR === 4) { cartel(c, 2); texto(c, {x: 100, y: 60, w: 1720, t: sc.t, size: 150, maxH: 300}); abanico(960, 700, 470, 390, 6); }
   else { foto(c, fotos()[2] || fotos()[0], {dir: 1, centro: 1}); c.cam.appendChild($('<div class="abs franjas" style="inset:0"></div>')); objeto(c, 'logo', {x: 710, y: 110, w: 500, h: 240, at: .2, halo: false}); abanico(960, 640, 400, 300, 4); texto(c, {x: 260, y: 880, w: 1400, c: 1, t: sc.t, size: 62, maxH: 110, at: 1.4}); }
@@ -258,7 +280,7 @@ S.k_mod = (c) => {
   const k = sc.k || ('Módulo ' + (i + 1)), t = sc.t || M.t, s = sc.s || M.s, izq = (DIR === 2 || DIR === 4) ? i % 2 === 1 : i % 2 === 0;
   const ix = izq ? 120 : 1180, tx = izq ? 820 : 120;
   if (DIR === 3) {
-    const w = ventana(c, {x: 70, y: 70, w: 1780, h: 940, titulo: 'DECK ' + 'ABCD'[i % 4], der: 'MÓDULO ' + String(i + 1).padStart(2, '0')});
+    const w = ventana(c, {x: 70, y: 70, w: 1780, h: 940, titulo: TX('deck', 'DECK ' + 'ABCD'[i % 4], i), der: 'MÓDULO ' + String(i + 1).padStart(2, '0')});
     onda(c, {x: 30, y: 790, w: 1720, h: 90, en: w, b: i % 2});
     objeto(c, mk, {x: 150, y: 170, w: 470, h: 640, at: .25, halo: false});
     texto(c, {x: 700, y: 170, w: 1080, k, t, s, size: 74, maxH: 250, ss: 36});
@@ -278,7 +300,7 @@ S.k_logros = (c) => {
   const {sc} = c, labs = (sc.items && sc.items.length ? sc.items : PR.logros || []).slice(0, 4), M = mods();
   if (DIR === 4) cartel(c, 2);
   if (DIR === 5) { foto(c, fotos()[4] || fotos()[0], {centro: 1}); c.cam.appendChild($('<div class="abs franjas" style="inset:0"></div>')); }
-  if (DIR === 3) { const w = ventana(c, {x: 80, y: 70, w: 1760, h: 940, titulo: 'NUEVAS HABILIDADES', der: labs.length + ' DESBLOQUEADAS'}); c.tl.from(w, {autoAlpha: 0}, 0); }
+  if (DIR === 3) { const w = ventana(c, {x: 80, y: 70, w: 1760, h: 940, titulo: TX('nuevas', 'NUEVAS HABILIDADES'), der: labs.length + ' ' + TX('desbloq', 'DESBLOQUEADAS')}); c.tl.from(w, {autoAlpha: 0}, 0); }
   if (DIR === 2) disco(c, {x: 1060, y: 160, s: 780, lab: '', desde: 600});
   const der = DIR === 2 || DIR === 4;
   texto(c, {x: der ? 120 : 840, y: 120, w: 960, k: sc.k, t: sc.t, size: DIR === 4 ? 116 : 84, maxH: 260});
@@ -286,8 +308,8 @@ S.k_logros = (c) => {
   labs.forEach((it, j) => {
     const f = $(`<div class="fila" style="font-size:44px;align-items:center"><span style="flex:0 0 60px;width:60px;height:60px;color:${DIR === 4 ? 'var(--a)' : 'var(--a)'};display:flex">${OK}</span><span>${esc(cap(it))}</span></div>`);
     if (DIR === 1) f.style.cssText += ';padding:14px 22px;border-radius:14px;background:rgba(255,255,255,.05);border:2px solid var(--line)';
-    if (DIR === 3) f.style.cssText += ';padding:14px 20px;border-radius:10px;background:#04140f;border:2px solid #0f3b2e;font-size:38px';
-    if (DIR === 4) f.style.cssText += ';background:#111;color:#fff;padding:14px 20px;font-family:Archivo;font-weight:800;text-transform:uppercase';
+    if (DIR === 3) f.style.cssText += MU ? ';padding:14px 20px;border-radius:10px;background:var(--panel);border:2px solid var(--line);font-size:38px' : ';padding:14px 20px;border-radius:10px;background:#04140f;border:2px solid #0f3b2e;font-size:38px';
+    if (DIR === 4) f.style.cssText += chipCss('14px 20px');
     b.appendChild(f);
     const t = c.cue(it.split(/\s+/)[0], .28 + j * .16, .6 + j * .3);
     c.tl.from(f, {autoAlpha: 0, x: der ? -60 : 60, duration: .55, ease: 'expo.out'}, t);
@@ -314,7 +336,7 @@ S.k_escena = (c) => {
   const n = Math.min(F.length, 5), W = 330, H = 420;
   F.slice(0, n).forEach((k, j) => {
     const x = 960 + (j - (n - 1) / 2) * (W + 24) - W / 2, y = 400 + (DIR === 2 ? Math.abs(j - (n - 1) / 2) * 30 : 0);
-    const f = $(`<div class="abs" style="left:${x}px;top:${y}px;width:${W}px;height:${H}px;background:url('${IM[k].src}') center/cover;border-radius:${DIR === 4 ? 0 : 18}px;${DIR === 1 ? 'box-shadow:0 0 0 3px var(--a),0 0 40px var(--a)' : DIR === 2 ? 'border:10px solid #f6ead3;box-shadow:0 30px 60px rgba(0,0,0,.5)' : DIR === 3 ? 'border:2px solid #263040' : 'border:8px solid #111'}"></div>`);
+    const f = $(`<div class="abs" style="left:${x}px;top:${y}px;width:${W}px;height:${H}px;background:url('${IM[k].src}') center/cover;border-radius:${DIR === 4 ? 0 : 18}px;${DIR === 1 ? (MU ? 'border:10px solid #fff;box-shadow:0 24px 50px var(--sombra)' : 'box-shadow:0 0 0 3px var(--a),0 0 40px var(--a)') : DIR === 2 ? 'border:10px solid #f6ead3;box-shadow:0 30px 60px rgba(0,0,0,.5)' : DIR === 3 ? 'border:2px solid #263040' : 'border:8px solid #111'}"></div>`);
     c.cam.appendChild(f);
     const at = .5 + j * .22;
     if (DIR === 2) c.tl.from(f, {y: 400, rotation: (j - 2) * 6, autoAlpha: 0, duration: .9, ease: 'expo.out'}, at);
@@ -332,7 +354,7 @@ S.k_cert = (c) => {
   if (DIR === 4) cartel(c, 3);
   if (DIR === 5) { foto(c, fotos()[5] || fotos()[0], {centro: 1}); c.cam.appendChild($('<div class="abs franjas" style="inset:0"></div>')); }
   if (DIR === 2) disco(c, {x: 1180, y: 160, s: 760, lab: '', at: 0});
-  if (DIR === 3) ventana(c, {x: 900, y: 120, w: 900, h: 840, titulo: 'CERTIFICADO.PDF', der: '✓'});
+  if (DIR === 3) ventana(c, {x: 900, y: 120, w: 900, h: 840, titulo: TX('cert', 'CERTIFICADO.PDF'), der: '✓'});
   objeto(c, 'cert', {x: DIR === 3 ? 940 : 980, y: DIR === 3 ? 230 : 190, w: 820, h: 640, at: .3, rot: DIR === 4 ? 4 : DIR === 2 ? -3 : 0});
   texto(c, {x: 120, y: 260, w: 780, k: sc.k, t: sc.t, s: sc.s, size: DIR === 4 ? 120 : 92, maxH: 420, ss: 40});
   c.fx(c.cue('certificado', .5, .8), 'ding');
@@ -343,17 +365,17 @@ S.k_alumnos = (c) => {
   const {sc} = c, N = +PR.alumnos || 0, R5 = +PR.rating || 0, T = (PR.testimonios || []).slice(0, 2);
   if (DIR === 4) cartel(c, 1);
   if (DIR === 5) { foto(c, fotos()[6] || fotos()[0], {dir: 1}); c.cam.appendChild($('<div class="abs franjas" style="inset:0"></div>')); }
-  const big = $(`<div class="abs ${DIR === 5 ? '' : 'ctr'}" style="left:${DIR === 5 ? 150 : 0}px;top:${DIR === 4 ? 70 : 110}px;width:${DIR === 5 ? 1000 : 1920}px"><div class="T" style="font-size:${DIR === 4 ? 300 : 210}px;line-height:1"><span class="w k"><span class="wi num">+0</span></span></div><div class="K" style="margin-top:14px">${esc(sc.k || 'alumnos')}</div></div>`);
+  const big = $(`<div class="abs ${DIR === 5 ? '' : 'ctr'}" style="left:${DIR === 5 ? 150 : 160}px;top:${DIR === 4 ? 70 : 110}px;width:${DIR === 5 ? 1000 : 1600}px"><div class="T" style="font-size:${DIR === 4 ? 300 : 210}px;line-height:1"><span class="w k"><span class="wi num">+0</span></span></div><div class="K" style="margin-top:14px">${esc(sc.k || 'alumnos')}</div></div>`);
   c.cam.appendChild(big);
   const num = big.querySelector('.num'), at = c.cue('alumnos', .2, .4);
   c.tl.from(big, {autoAlpha: 0, scale: .8, duration: .6, ease: 'expo.out'}, .1);
   const o = {v: 0}; c.tl.to(o, {v: N, duration: 1.8, ease: 'power2.out', onUpdate: () => { num.textContent = '+' + fmt(o.v); }}, Math.max(.2, at - .9));
   for (let i = 0; i < 6; i++) c.fx(Math.max(.2, at - .9) + i * .28, 'tick');
-  if (R5) { const st = $(`<div class="abs ${DIR === 5 ? '' : 'ctr'}" style="left:${DIR === 5 ? 150 : 0}px;top:${DIR === 4 ? 470 : 430}px;width:${DIR === 5 ? 1000 : 1920}px;font-family:var(--fb);font-weight:700;font-size:44px;color:var(--ink)"><span class="estrella">★★★★★</span>&nbsp; ${String(R5).replace('.', ',')} de calificación</div>`); c.cam.appendChild(st); c.tl.from(st, {autoAlpha: 0, y: 30, duration: .6}, at + .6); }
+  if (R5) { const st = $(`<div class="abs ${DIR === 5 ? '' : 'ctr'}" style="left:${DIR === 5 ? 150 : 160}px;top:${DIR === 4 ? 470 : 430}px;width:${DIR === 5 ? 1000 : 1600}px;font-family:var(--fb);font-weight:700;font-size:44px;color:var(--ink)"><span class="estrella">★★★★★</span>&nbsp; ${String(R5).replace('.', ',')} de calificación</div>`); c.cam.appendChild(st); c.tl.from(st, {autoAlpha: 0, y: 30, duration: .6}, at + .6); }
   const wy = DIR === 4 ? 620 : 600;
   T.forEach((x, j) => {
     const left = DIR === 5 ? 150 + j * 820 : 160 + j * 820;
-    const card = $(`<div class="abs cita" style="left:${left}px;top:${wy}px;width:780px;padding:30px 36px;border-radius:${DIR === 4 ? 0 : 18}px;background:${DIR === 4 ? '#111' : 'var(--panel)'};${DIR === 4 ? 'color:#fff' : ''};border:2px solid var(--line)">“${esc(x.txt)}”<b>— ${esc(x.nombre)}</b></div>`);
+    const card = $(`<div class="abs cita" style="left:${left}px;top:${wy}px;width:780px;padding:30px 36px;border-radius:${DIR === 4 ? 0 : 18}px;background:${DIR === 4 ? CH.bg : 'var(--panel)'};${DIR === 4 ? 'color:' + CH.ink : ''};border:2px solid var(--line)">“${esc(x.txt)}”<b>— ${esc(x.nombre)}</b></div>`);
     c.cam.appendChild(card); c.tl.from(card, {autoAlpha: 0, y: 50, duration: .7, ease: 'expo.out'}, at + 1 + j * .5); c.fx(at + 1 + j * .5, 'pop');
   });
 };
@@ -370,7 +392,7 @@ S.k_garantia = (c) => {
     c.cam.appendChild(d);
     const at = .7 + j * Math.min(.35, (c.vz * .6) / n);
     c.tl.from(d, {autoAlpha: 0, y: 40, duration: .4, ease: 'back.out(2)'}, at);
-    c.tl.to(d, {background: DIR === 4 ? '#111' : 'var(--a)', color: DIR === 4 ? '#fff' : 'var(--sobre)', borderColor: 'var(--a)', duration: .25}, at + .25);
+    c.tl.to(d, {background: DIR === 4 ? CH.bg : 'var(--a)', color: DIR === 4 ? CH.ink : 'var(--sobre)', borderColor: 'var(--a)', duration: .25}, at + .25);
     c.fx(at + .25, 'tick');
   }
   if (sc.s) texto(c, {x: 160, y: 740, w: 1600, c: 1, s: sc.s, ss: 46, at: c.cue('devolvemos', .55, 1.4)});
@@ -381,7 +403,7 @@ S.k_cta = (c) => {
   const {sc} = c, items = (sc.items || []).slice(0, 4), M = mods();
   if (DIR === 4) cartel(c, 0);
   if (DIR === 5) { foto(c, fotos()[0], {centro: 1}); c.cam.appendChild($('<div class="abs franjas" style="inset:0"></div>')); }
-    if (DIR === 1) for (let i = 0; i < 6; i++) { const l = $(`<div class="laser${i % 2 ? ' c' : ''}" style="left:${200 + i * 300}px"></div>`); c.cam.insertBefore(l, c.cam.firstChild); c.tl.fromTo(l, {rotation: 30 - i * 10}, {rotation: -30 + i * 12, duration: c.D, ease: 'sine.inOut'}, 0); }
+  if (DIR === 1) rayos(c, true);
   const kx = 160, k = M[0] || 'logo';
   objeto(c, tiene('logo') ? 'logo' : k, {x: kx, y: 200, w: 640, h: 420, at: .2, halo: DIR !== 3});
   if (M.length) M.slice(0, 4).forEach((m, j) => objeto(c, m, {x: kx + 20 + j * 150, y: 640, w: 170, h: 240, at: .6 + j * .12, halo: false, sfx: false}));
@@ -400,6 +422,7 @@ S.k_texto = (c) => { const {sc} = c; if (DIR === 4) cartel(c, c.i); if (DIR === 
 // ================= FONDO DE CADA DIRECTOR =================
 const AMB = [];
 function fondo(bg) {
+  if (MU) { MU.fondo(DIR, bg, AMB, H); return; }
   if (DIR === 1) {
     bg.appendChild($('<div class="piso"></div>'));
     const eq = $('<div class="eq"></div>'); const bars = Array.from({length: 64}, () => { const i = document.createElement('i'); eq.appendChild(i); return i; }); bg.appendChild(eq);
@@ -425,7 +448,7 @@ function montar() {
   const gr = top.firstChild; AMB.push((t) => { gr.style.transform = `translate(${(t * 997) % 40 - 20}px,${(t * 773) % 40 - 20}px)`; });
   const M = gsap.timeline({paused: true});
   const tapa = $('<div class="abs" style="inset:0;opacity:0;background:#fff"></div>'); FX.appendChild(tapa);
-  const barras = [0, 1, 2].map((j) => { const b = $(`<div class="abs" style="left:-2200px;top:${j * 360}px;width:2000px;height:360px;background:${['#111', '#e62e2e', '#ffd400'][j]}"></div>`); FX.appendChild(b); return b; });
+  const barras = [0, 1, 2].map((j) => { const b = $(`<div class="abs" style="left:-2200px;top:${j * 360}px;width:2000px;height:360px;background:${((MU && MU.barras) || ['#111', '#e62e2e', '#ffd400'])[j]}"></div>`); FX.appendChild(b); return b; });
   V.escenas.forEach((sc, i) => {
     const el = $('<div class="sc"><div class="cam"></div></div>'); ESC.appendChild(el); sc.el = el;
     const tl = gsap.timeline(), vz = sc.vz || Math.max(1.2, sc.vd - .7), ade = i ? .14 : 0;
@@ -439,7 +462,7 @@ function montar() {
     let on = t - .02, off = t + .02;
     if (DIR === 1) {  // destello y corte con desfase de color
       M.fromTo(tapa, {opacity: 0}, {opacity: .9, duration: .06}, t - .06); M.to(tapa, {opacity: 0, duration: .28}, t);
-      M.fromTo(el, {x: 40, filter: 'hue-rotate(90deg) saturate(2)'}, {x: 0, filter: 'hue-rotate(0deg) saturate(1)', duration: .3, ease: 'power2.out'}, t);
+      if (MU) M.fromTo(el, {x: 40}, {x: 0, duration: .3, ease: 'power2.out'}, t); else M.fromTo(el, {x: 40, filter: 'hue-rotate(90deg) saturate(2)'}, {x: 0, filter: 'hue-rotate(0deg) saturate(1)', duration: .3, ease: 'power2.out'}, t);
     } else if (DIR === 2) {  // se abre en círculo desde el centro del disco
       on = t - .3; off = t + .25;
       M.fromTo(el, {clipPath: 'circle(0% at 70% 50%)'}, {clipPath: 'circle(150% at 70% 50%)', duration: .6, ease: 'power2.inOut'}, on); M.set(el, {clipPath: 'none'}, on + .62);
