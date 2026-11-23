@@ -105,9 +105,33 @@ def _media(x, w):  # promedio móvil rápido
     return ((c[w:] - c[:-w]) / w)[:len(x)]
 
 
+def _asegura_pista(ruta):
+    """22 nov 2026 (kit fotográfico del nicho): cada producto lleva música propia que ningún otro usa. Si la pista no está en el
+    repositorio, se baja sola de Mixkit (licencia gratuita) con la dirección que guarda musica/catalogo.json."""
+    if os.path.exists(ruta):
+        return ruta
+    import json, re, urllib.request
+    nombre = os.path.splitext(os.path.basename(ruta))[0]
+    try:
+        cat = json.load(open(os.path.join(MOTION, 'musica', 'catalogo.json')))
+    except Exception:
+        return ruta
+    for url, x in cat.items():
+        if x.get('licencia') == 'gratuita' and re.sub(r'[^a-z0-9]+', '-', str(x.get('titulo', '')).lower()).strip('-') == nombre:
+            try:
+                os.makedirs(os.path.dirname(ruta), exist_ok=True)
+                req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+                with urllib.request.urlopen(req, timeout=60) as r, open(ruta, 'wb') as f:
+                    f.write(r.read())
+            except Exception as e:
+                print('No se pudo bajar la pista', nombre, e)
+            break
+    return ruta
+
+
 def musica_archivo(dur, ruta):
     """Pista real (Mixkit, licencia gratuita): empieza donde ya suena fuerte; si es corta, se repite con un cruce suave."""
-    a = _decodifica(ruta if os.path.isabs(ruta) else os.path.join(MOTION, ruta))
+    a = _decodifica(_asegura_pista(ruta if os.path.isabs(ruta) else os.path.join(MOTION, ruta)))
     w = SR // 2
     r = np.sqrt(np.maximum(_media(a ** 2, w), 0)) + 1e-6
     fuerte = 20 * np.log10(r) > 20 * np.log10(np.median(r)) - 6

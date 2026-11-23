@@ -9,7 +9,9 @@ ASSETS = os.path.join(os.path.dirname(AQUI), 'assets')
 
 # materiales del panel -> archivo que usa el motor
 NOMBRES = {'pack': 'pack_5.png', 'prop1': 'prop1.png', 'f_cuarto': 'f_cuarto.jpg', 'f_evento': 'f_evento.jpg',
-           **{f'c{i}': f'c{i}_5.png' for i in range(12)}, **{f'x{i}': f'x{i}.jpg' for i in range(1, 13)}, **{f'j_{x}': f'j_{x}.png' for x in ('estudia', 'practica', 'celular', 'trato', 'cabina', 'feliz', 'ref')}}
+           **{f'c{i}': f'c{i}_5.png' for i in range(12)}, **{f'x{i}': f'x{i}.jpg' for i in range(1, 13)},
+           **{f'kf{i}': f'kf{i}.jpg' for i in range(9)}, **{f'ko{i}': f'ko{i}.png' for i in range(1, 9)},  # kf/ko: kit fotográfico del nicho (22 nov)
+           **{f'j_{x}': f'j_{x}.png' for x in ('estudia', 'practica', 'celular', 'trato', 'cabina', 'feliz', 'ref')}}
 CURSO = {**{f'm{i}': f'm{i}.png' for i in range(1, 13)}, 'cert': 'cert.png', 'consola': 'consola.png', 'logo': 'logo.png'}
 PIDE = {'recorrido': ['j_estudia', 'j_celular', 'j_cabina'], 'gracias': ['m1'], 'revela': ['pack'], 'todas': ['pack'], 'cta2': ['pack'], 'porque': ['pack', 'm1']}
 
@@ -152,6 +154,8 @@ def armar(r, bajar):
     kit = kit_de(prod, E)
     if kit:  # 20 nov: kit del nicho (fondos, elementos, animaciones, letras, colores y música del nicho; ver pro/kit.js)
         E['kit'], E['kitv'] = kit['nicho'], kit['v']
+        if kit.get('foto'):  # 22 nov: kit fotográfico (pro/kit-foto.js): fotos del Laboratorio, paleta, letras y transiciones del nicho
+            E['kitf'] = kit['foto']
         if not str(st.get('musica') or '').startswith('!'):
             E['musica'] = kit['musica']
     if E.get('tema'):

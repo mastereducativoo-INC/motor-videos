@@ -1,0 +1,837 @@
+{
+  "_que_es": "KIT FOTOGRÁFICO DEL NICHO (Christian, 22 nov 2026: «cada video debe tener una identidad visual completamente relacionada con su nicho… imágenes hiperrealistas… no reutilices fondos, objetos, música o estilos de otros cursos»). Un nicho nuevo se agrega aquí: lo leen temas.py (motor), kit-foto.js (video) y fabrica.js / fabrica-ia.js (nombres de los 9 diseños y fotos que se piden al Laboratorio). Fondos kf0–kf8 = una foto 16:9 por diseño; objetos ko1–ko8 = objetos recortados que flotan en las escenas. Música: pistas de Mixkit (licencia gratuita) que ningún otro producto usa; el motor las baja solo de vsl/motion/musica/catalogo.json.",
+  "canto": {
+    "nombre": "Canto",
+    "detecta": "\\bcanto\\b|aprende a cantar|cantar|tecnica vocal|\\bvocal",
+    "disenos": [
+      "Estudio de grabación",
+      "Escenario",
+      "Cabina vocal",
+      "Lounge de karaoke",
+      "Concierto acústico",
+      "Salón de ensayo",
+      "Radio en vivo",
+      "Estudio en casa",
+      "Gran final"
+    ],
+    "firma": "ondas",
+    "emblema": "microfono",
+    "paletas": [
+      [
+        "#1a0b2e",
+        "#2a1347",
+        "#fbf2ff",
+        "#c9b3e0",
+        "#ff7ac8",
+        "#ffb3dd",
+        "#4a2a73",
+        "#1a0b2e",
+        "rgba(10,0,20,.62)"
+      ],
+      [
+        "#22093a",
+        "#34105a",
+        "#fff4fb",
+        "#d6b8ea",
+        "#ff5fae",
+        "#ffd1ea",
+        "#5a2b88",
+        "#22093a",
+        "rgba(12,0,22,.62)"
+      ],
+      [
+        "#170a2b",
+        "#251243",
+        "#f7efff",
+        "#bfa9dc",
+        "#f48fd0",
+        "#c8a8ff",
+        "#3d2563",
+        "#170a2b",
+        "rgba(8,0,18,.64)"
+      ],
+      [
+        "#2a0f3f",
+        "#3b1757",
+        "#fff0f8",
+        "#ddbde9",
+        "#ff86c2",
+        "#f6c27a",
+        "#61307f",
+        "#2a0f3f",
+        "rgba(14,0,24,.6)"
+      ],
+      [
+        "#1e0f33",
+        "#2d1a4a",
+        "#fff6fb",
+        "#ccb6e2",
+        "#f7a1d1",
+        "#ffd6a8",
+        "#4b3070",
+        "#1e0f33",
+        "rgba(10,2,20,.6)"
+      ],
+      [
+        "#261040",
+        "#361a58",
+        "#fdf3ff",
+        "#d2b9e6",
+        "#ff6fb5",
+        "#b78cff",
+        "#5b3486",
+        "#261040",
+        "rgba(12,2,24,.62)"
+      ],
+      [
+        "#140823",
+        "#22103a",
+        "#f6efff",
+        "#b5a0d2",
+        "#ff8fcf",
+        "#ff5c8a",
+        "#3a2058",
+        "#140823",
+        "rgba(6,0,14,.66)"
+      ],
+      [
+        "#2b1240",
+        "#3d1c58",
+        "#fff4f9",
+        "#dcc0e8",
+        "#ffa6d5",
+        "#ffd9ec",
+        "#643b88",
+        "#2b1240",
+        "rgba(14,2,24,.58)"
+      ],
+      [
+        "#1c0830",
+        "#2e0f4d",
+        "#ffffff",
+        "#c7a9e4",
+        "#ff4fa7",
+        "#ffc2e2",
+        "#57288a",
+        "#1c0830",
+        "rgba(10,0,20,.62)"
+      ]
+    ],
+    "letras": [
+      {
+        "ft": "Outfit",
+        "fw": 700,
+        "fb": "Manrope",
+        "fn": "Outfit",
+        "fk": "Caveat",
+        "ls": "-.012em"
+      },
+      {
+        "ft": "Sora",
+        "fw": 700,
+        "fb": "Manrope",
+        "fn": "Sora",
+        "fk": "Caveat",
+        "ls": "-.015em"
+      },
+      {
+        "ft": "Playfair",
+        "fw": 700,
+        "fb": "DMSans",
+        "fn": "Outfit",
+        "fk": "Caveat",
+        "ls": "-.01em"
+      }
+    ],
+    "trs": [
+      [
+        "onda",
+        "fundido",
+        "reflector",
+        "sube"
+      ],
+      [
+        "reflector",
+        "lateral",
+        "onda",
+        "zoom"
+      ],
+      [
+        "fundido",
+        "onda",
+        "sube",
+        "reflector"
+      ],
+      [
+        "onda",
+        "reflector",
+        "zoom",
+        "fundido"
+      ],
+      [
+        "reflector",
+        "sube",
+        "onda",
+        "lateral"
+      ],
+      [
+        "onda",
+        "zoom",
+        "reflector",
+        "barrido"
+      ],
+      [
+        "fundido",
+        "reflector",
+        "onda",
+        "sube"
+      ],
+      [
+        "reflector",
+        "onda",
+        "lateral",
+        "fundido"
+      ],
+      [
+        "sube",
+        "onda",
+        "reflector",
+        "zoom"
+      ]
+    ],
+    "musica": [
+      "i-do",
+      "one-more-dance",
+      "follow-me-home",
+      "golden-storm",
+      "curiosity",
+      "motivating-mornings",
+      "running-out-of-time",
+      "bridge-n-98",
+      "night-sky-hip-hop"
+    ],
+    "vocab": [
+      [
+        "expediente\\s*n[ºo°]",
+        "Sesión Nº"
+      ],
+      [
+        "índice de anexos",
+        "Lista de pistas"
+      ],
+      [
+        "\\banexo\\b",
+        "Pista"
+      ],
+      [
+        "(recibo|nota) de honorarios",
+        "Nota de la clase"
+      ],
+      [
+        "honorarios",
+        "clases"
+      ],
+      [
+        "agenda del despacho",
+        "Agenda de ensayos"
+      ],
+      [
+        "confidencial",
+        "Exclusivo"
+      ],
+      [
+        "firma del titular",
+        "Firma del coach vocal"
+      ],
+      [
+        "constancia de compra",
+        "Inscripción confirmada"
+      ],
+      [
+        "registro de miembros",
+        "Registro de cantantes"
+      ],
+      [
+        "\\bdespacho\\b",
+        "estudio"
+      ]
+    ],
+    "fondos": [
+      "Estudio de grabación profesional visto desde la consola: un micrófono de condensador dorado con filtro antipop en primer plano a la derecha, paneles acústicos y la consola de mezcla desenfocados al fondo. Fondo morado profundo con iluminación rosa suave. Espacio libre a la izquierda.",
+      "Escenario de concierto visto desde el público: un micrófono vintage en su pedestal al centro bajo un reflector rosa suave, humo ligero, luces moradas al fondo y siluetas desenfocadas del público en primer plano.",
+      "Cabina de voz de un estudio: micrófono de condensador con araña y filtro antipop, audífonos de estudio colgados, atril con una hoja de letra (sin texto legible), paredes de espuma acústica moradas y luz rosa suave de lado.",
+      "Sala lounge elegante para cantar: dos micrófonos inalámbricos sobre una mesa de cristal, sofá de terciopelo morado, luces rosas difusas y una pantalla grande desenfocada al fondo, sin texto.",
+      "Escenario íntimo de concierto acústico: guitarra acústica de madera en su soporte, banco de madera, micrófono vintage, guirnaldas de luces cálidas, fondo morado con luz rosa suave.",
+      "Salón de ensayo vocal: piano de cola negro abierto, partitura en el atril (sin texto legible), micrófono en pedestal, cortinas moradas y luz rosa suave que entra de lado.",
+      "Cabina de radio moderna: micrófono de transmisión en brazo articulado, consola con perillas, una luz roja encendida de 'en vivo' sin letras, paredes moradas con luz rosa suave.",
+      "Rincón de estudio en casa para aprender a cantar: teclado electrónico, audífonos, micrófono sobre el escritorio, monitor con la forma de onda de una voz, lámpara rosa suave y pared morada con paneles acústicos hexagonales.",
+      "Gran escenario de concierto visto desde detrás del micrófono: cañones de luz rosa y morada, confeti suave en el aire y el público desenfocado con luces a lo lejos."
+    ],
+    "objetos": [
+      "Micrófono de condensador de estudio, dorado, con filtro antipop redondo.",
+      "Micrófono vintage plateado de los años 50 sobre un pedestal.",
+      "Audífonos de estudio profesionales, negros con detalles rosas.",
+      "Teclado de piano compacto de 25 teclas, blanco y negro.",
+      "Guitarra acústica de madera natural.",
+      "Atril con una partitura de notas musicales (sin palabras legibles).",
+      "Metrónomo clásico de madera.",
+      "Micrófono inalámbrico de mano, negro con aro rosa."
+    ]
+  },
+  "recetas-bebes": {
+    "nombre": "Recetas para bebés",
+    "detecta": "recetas?( para| de)? beb|papillas?|alimentacion (infantil|complementaria)|comida para beb",
+    "disenos": [
+      "Cocina de mamá",
+      "Papillas",
+      "Cuarto del bebé",
+      "Hora de comer",
+      "Recetario",
+      "Paseo en carriola",
+      "Picnic familiar",
+      "Peluches",
+      "Dulce hogar"
+    ],
+    "firma": "burbujas",
+    "emblema": "biberon",
+    "paletas": [
+      [
+        "#fff6ec",
+        "#ffffff",
+        "#4a3428",
+        "#8c7466",
+        "#f39c7a",
+        "#ffc966",
+        "#f0dcc8",
+        "#ffffff",
+        "rgba(140,100,70,.16)"
+      ],
+      [
+        "#fdf1e4",
+        "#fffaf3",
+        "#4b3326",
+        "#8f7563",
+        "#ee8a5b",
+        "#f6c453",
+        "#ecd6bf",
+        "#ffffff",
+        "rgba(140,100,70,.16)"
+      ],
+      [
+        "#26324a",
+        "#323f5c",
+        "#fff8f2",
+        "#c9d3e4",
+        "#9cc8f2",
+        "#f7b3c4",
+        "#45557a",
+        "#26324a",
+        "rgba(10,16,30,.6)"
+      ],
+      [
+        "#3a2a26",
+        "#4a3631",
+        "#fff6ee",
+        "#dcc5b8",
+        "#f6a27d",
+        "#ffd27a",
+        "#6a4f45",
+        "#3a2a26",
+        "rgba(20,12,10,.58)"
+      ],
+      [
+        "#fbf4e6",
+        "#fffdf7",
+        "#43352a",
+        "#85755f",
+        "#e5935e",
+        "#9cc3e6",
+        "#e9dcc4",
+        "#ffffff",
+        "rgba(120,100,70,.15)"
+      ],
+      [
+        "#372c48",
+        "#46395a",
+        "#fbf6ff",
+        "#d3c8e6",
+        "#c4aef5",
+        "#ffb98f",
+        "#5d4d7a",
+        "#372c48",
+        "rgba(16,10,26,.58)"
+      ],
+      [
+        "#40301f",
+        "#503d29",
+        "#fff8ea",
+        "#e0cdb0",
+        "#f6c35a",
+        "#f59a8c",
+        "#73593d",
+        "#40301f",
+        "rgba(22,14,6,.58)"
+      ],
+      [
+        "#3f2630",
+        "#50323e",
+        "#fff4f6",
+        "#e3c2cc",
+        "#f7a8bd",
+        "#9cc8ec",
+        "#73485a",
+        "#3f2630",
+        "rgba(22,10,14,.58)"
+      ],
+      [
+        "#2f2a3d",
+        "#3c364d",
+        "#fffaf4",
+        "#d0c9de",
+        "#f8a68e",
+        "#ffd37a",
+        "#56506e",
+        "#2f2a3d",
+        "rgba(14,12,22,.58)"
+      ]
+    ],
+    "letras": [
+      {
+        "ft": "Fraunces",
+        "fw": 600,
+        "fb": "Manrope",
+        "fn": "Fraunces",
+        "fk": "Caveat",
+        "ls": "-.012em"
+      },
+      {
+        "ft": "Outfit",
+        "fw": 700,
+        "fb": "Manrope",
+        "fn": "Outfit",
+        "fk": "Kalam",
+        "ls": "-.01em"
+      },
+      {
+        "ft": "Bricolage",
+        "fw": 700,
+        "fb": "DMSans",
+        "fn": "Bricolage",
+        "fk": "Caveat",
+        "ls": "-.012em"
+      }
+    ],
+    "trs": [
+      [
+        "nube",
+        "fundido",
+        "burbuja",
+        "sube"
+      ],
+      [
+        "burbuja",
+        "lateral",
+        "nube",
+        "zoom"
+      ],
+      [
+        "fundido",
+        "nube",
+        "sube",
+        "burbuja"
+      ],
+      [
+        "nube",
+        "burbuja",
+        "zoom",
+        "fundido"
+      ],
+      [
+        "burbuja",
+        "sube",
+        "nube",
+        "lateral"
+      ],
+      [
+        "nube",
+        "zoom",
+        "burbuja",
+        "fundido"
+      ],
+      [
+        "fundido",
+        "burbuja",
+        "nube",
+        "sube"
+      ],
+      [
+        "burbuja",
+        "nube",
+        "lateral",
+        "fundido"
+      ],
+      [
+        "sube",
+        "nube",
+        "burbuja",
+        "zoom"
+      ]
+    ],
+    "musica": [
+      "a-happy-child",
+      "owies-ukulele",
+      "happy-home",
+      "fun-at-the-farm",
+      "dance-with-me",
+      "magical-moment",
+      "summer-s-here",
+      "dreaming-big",
+      "wedding-music"
+    ],
+    "vocab": [
+      [
+        "expediente\\s*n[ºo°]",
+        "Receta Nº"
+      ],
+      [
+        "índice de anexos",
+        "Índice de recetas"
+      ],
+      [
+        "\\banexo\\b",
+        "Receta"
+      ],
+      [
+        "(recibo|nota) de honorarios",
+        "Nota de la cocina"
+      ],
+      [
+        "honorarios",
+        "recetas"
+      ],
+      [
+        "agenda del despacho",
+        "Menú de la semana"
+      ],
+      [
+        "confidencial",
+        "Exclusivo"
+      ],
+      [
+        "firma del titular",
+        "Hecho con amor"
+      ],
+      [
+        "constancia de compra",
+        "Compra confirmada"
+      ],
+      [
+        "registro de miembros",
+        "Registro de familias"
+      ],
+      [
+        "\\bdespacho\\b",
+        "cocina"
+      ]
+    ],
+    "fondos": [
+      "Cocina luminosa y cálida con barra de madera clara: frascos de vidrio con papillas de colores, una licuadora pequeña, frutas frescas (plátano, manzana, zanahoria, aguacate) y un plato de silicona con divisiones. Luz suave de mañana, colores pastel. Espacio libre a la izquierda.",
+      "Primer plano de tazones con purés de zanahoria, calabaza y camote, una cuchara de silicona y un babero doblado sobre una mesa de madera clara. Luz natural suave, colores cálidos.",
+      "Habitación infantil tierna: cuna blanca, osito de peluche, móvil de nubes, canasta con biberones; colores azul cielo y rosa pastel, luz suave de ventana.",
+      "Silla alta de bebé con bandeja: plato de silicona con trozos de fruta, vaso entrenador y babero, en una cocina luminosa con colores rosa pastel y crema.",
+      "Mesa de madera clara con un recetario abierto (sin texto legible), ingredientes en tazones pequeños, cucharas medidoras y frascos de papilla. Luz cálida.",
+      "Carriola moderna color lavanda en un parque soleado, con una pañalera y una lonchera con snacks de bebé. Luz dorada de tarde, fondo desenfocado.",
+      "Manta de picnic en el pasto con loncheras infantiles, recipientes con fruta picada, galletas de avena caseras y un peluche. Luz cálida de tarde.",
+      "Estante de un cuarto infantil con peluches suaves, biberones y vasos de transición en tonos pastel. Luz cálida y acogedora.",
+      "Comedor familiar cálido: biberones recién esterilizados, frutas en un frutero, platos de silicona apilados en colores pastel y luz de atardecer."
+    ],
+    "objetos": [
+      "Biberón de vidrio con tapa color durazno pastel.",
+      "Plato de silicona para bebé con divisiones, con papillas de colores servidas.",
+      "Frasco de vidrio con papilla de zanahoria y una cuchara de silicona.",
+      "Carriola moderna color lavanda pastel.",
+      "Osito de peluche suave color crema.",
+      "Vaso entrenador para bebé con asas, rosa pastel.",
+      "Set de cuchara y tenedor infantiles de silicona, color azul cielo.",
+      "Procesador de alimentos para bebé pequeño, blanco con detalles pastel."
+    ]
+  },
+  "matematicas": {
+    "nombre": "Matemáticas",
+    "detecta": "matematic|algebra|geometri|aritmetic|trigonometr|calculo diferencial",
+    "disenos": [
+      "Pizarrón",
+      "Geometría",
+      "Calculadora",
+      "Plano cartesiano",
+      "Cuaderno cuadriculado",
+      "Álgebra",
+      "Fórmulas",
+      "Examen aprobado",
+      "Escuadra y compás"
+    ],
+    "firma": "formulas",
+    "emblema": "compas",
+    "paletas": [
+      [
+        "#1b2330",
+        "#263244",
+        "#f4f1e8",
+        "#a9b2bf",
+        "#ffd24a",
+        "#ff8a5c",
+        "#34445c",
+        "#1b2330",
+        "rgba(6,10,18,.62)"
+      ],
+      [
+        "#12182b",
+        "#1c2440",
+        "#eef2ff",
+        "#9aa5c7",
+        "#ffb020",
+        "#7aa2ff",
+        "#2b3760",
+        "#12182b",
+        "rgba(4,8,20,.64)"
+      ],
+      [
+        "#101318",
+        "#1a1f27",
+        "#f2f4f7",
+        "#98a1ad",
+        "#ff9f1c",
+        "#2ec4ff",
+        "#2b313b",
+        "#101318",
+        "rgba(0,0,0,.66)"
+      ],
+      [
+        "#0e1a2e",
+        "#172742",
+        "#eaf2ff",
+        "#93a8c6",
+        "#4cc3ff",
+        "#ffcc4d",
+        "#24395e",
+        "#0e1a2e",
+        "rgba(2,8,20,.62)"
+      ],
+      [
+        "#f7f8fb",
+        "#ffffff",
+        "#1d2433",
+        "#5d6678",
+        "#2f6bff",
+        "#ff5a5f",
+        "#d6dce8",
+        "#ffffff",
+        "rgba(40,60,100,.14)"
+      ],
+      [
+        "#1a1330",
+        "#261c45",
+        "#f6f2ff",
+        "#b3a8d6",
+        "#ff7a59",
+        "#ffd166",
+        "#3a2d66",
+        "#1a1330",
+        "rgba(8,4,20,.62)"
+      ],
+      [
+        "#0b0f1a",
+        "#151b2b",
+        "#ffffff",
+        "#9aa3b8",
+        "#ffe14d",
+        "#ff6b9a",
+        "#27304a",
+        "#0b0f1a",
+        "rgba(0,0,8,.66)"
+      ],
+      [
+        "#1d1a2e",
+        "#2a2642",
+        "#fff7ec",
+        "#c3b9d6",
+        "#ffb703",
+        "#fb8500",
+        "#403a63",
+        "#1d1a2e",
+        "rgba(8,6,18,.6)"
+      ],
+      [
+        "#16213a",
+        "#1f2c4a",
+        "#f7f3ea",
+        "#a9b4cc",
+        "#ff7b3a",
+        "#5aa9ff",
+        "#2f3f66",
+        "#16213a",
+        "rgba(4,8,20,.62)"
+      ]
+    ],
+    "letras": [
+      {
+        "ft": "SpaceG",
+        "fw": 700,
+        "fb": "Manrope",
+        "fn": "JetBrains",
+        "fk": "Kalam",
+        "ls": "-.015em"
+      },
+      {
+        "ft": "Epilogue",
+        "fw": 800,
+        "fb": "DMSans",
+        "fn": "SpaceG",
+        "fk": "Caveat",
+        "ls": "-.02em"
+      },
+      {
+        "ft": "Sora",
+        "fw": 700,
+        "fb": "Manrope",
+        "fn": "JetBrains",
+        "fk": "Kalam",
+        "ls": "-.015em"
+      }
+    ],
+    "trs": [
+      [
+        "tiza",
+        "fundido",
+        "cuadricula",
+        "sube"
+      ],
+      [
+        "cuadricula",
+        "lateral",
+        "tiza",
+        "zoom"
+      ],
+      [
+        "fundido",
+        "tiza",
+        "sube",
+        "cuadricula"
+      ],
+      [
+        "tiza",
+        "cuadricula",
+        "zoom",
+        "fundido"
+      ],
+      [
+        "cuadricula",
+        "sube",
+        "tiza",
+        "lateral"
+      ],
+      [
+        "tiza",
+        "zoom",
+        "cuadricula",
+        "barrido"
+      ],
+      [
+        "fundido",
+        "cuadricula",
+        "tiza",
+        "sube"
+      ],
+      [
+        "cuadricula",
+        "tiza",
+        "lateral",
+        "fundido"
+      ],
+      [
+        "sube",
+        "tiza",
+        "cuadricula",
+        "zoom"
+      ]
+    ],
+    "musica": [
+      "driving-ambition",
+      "games-worldbeat",
+      "just-keep-walking",
+      "upbeat-jazz",
+      "hip-hop-02",
+      "your-breath",
+      "new-bass-01",
+      "epical-drums-02",
+      "lo-fi-04"
+    ],
+    "vocab": [
+      [
+        "expediente\\s*n[ºo°]",
+        "Ejercicio Nº"
+      ],
+      [
+        "índice de anexos",
+        "Índice de temas"
+      ],
+      [
+        "\\banexo\\b",
+        "Tema"
+      ],
+      [
+        "(recibo|nota) de honorarios",
+        "Nota del profesor"
+      ],
+      [
+        "honorarios",
+        "estudio"
+      ],
+      [
+        "agenda del despacho",
+        "Plan de estudio"
+      ],
+      [
+        "confidencial",
+        "Exclusivo"
+      ],
+      [
+        "firma del titular",
+        "Firma del profesor"
+      ],
+      [
+        "constancia de compra",
+        "Inscripción confirmada"
+      ],
+      [
+        "registro de miembros",
+        "Lista de alumnos"
+      ],
+      [
+        "\\bdespacho\\b",
+        "aula"
+      ]
+    ],
+    "fondos": [
+      "Pizarrón de gis color gris pizarra (no verde) con fórmulas matemáticas escritas con gis blanco y amarillo (a²+b²=c², y=mx+b, un triángulo rectángulo dibujado), gises y un borrador en la repisa. Luz cálida lateral. Espacio libre a la izquierda.",
+      "Mesa de dibujo técnico con escuadras, compás, transportador y cuerpos geométricos de madera (cubo, pirámide, esfera, cilindro). Fondo azul noche con una lámpara de luz cálida.",
+      "Calculadora científica en primer plano sobre una hoja de ejercicios de matemáticas, con profundidad de campo y luz dramática de estudio.",
+      "Hoja de papel milimétrico grande con la gráfica de una parábola dibujada en azul, una regla y un lápiz, sobre un fondo azul oscuro.",
+      "Escritorio de estudio visto desde arriba: cuaderno cuadriculado abierto con ejercicios de álgebra resueltos a lápiz, calculadora científica, lápiz, goma y regla. Luz de día suave.",
+      "Hojas con ecuaciones resueltas a mano, plumas de colores, notas adhesivas y una taza de café sobre una mesa oscura, fondo morado oscuro con luz cálida.",
+      "Aula moderna vacía de noche con un pizarrón gris lleno de fórmulas de álgebra y geometría, lámparas cálidas encendidas.",
+      "Escritorio de estudiante al atardecer: un examen de matemáticas corregido con palomitas rojas (sin texto legible), libros, mochila y luz cálida.",
+      "Vista cenital de un compás, escuadra, transportador y lápices de colores sobre papel crema con circunferencias y ángulos trazados."
+    ],
+    "objetos": [
+      "Calculadora científica negra con teclas grises.",
+      "Compás metálico de dibujo técnico abierto.",
+      "Escuadra y transportador transparentes.",
+      "Cuaderno cuadriculado abierto con ejercicios de matemáticas a lápiz.",
+      "Cuerpos geométricos de madera: cubo, pirámide y esfera.",
+      "Lápiz amarillo con goma rosa.",
+      "Regla metálica de 30 cm.",
+      "Libro de matemáticas cerrado de pasta dura azul marino, sin texto en la portada."
+    ]
+  }
+}

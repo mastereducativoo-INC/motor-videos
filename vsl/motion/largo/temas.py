@@ -168,14 +168,35 @@ KIT_MUSICA = {
 }
 
 
+def nichos_foto():
+    """Kits fotográficos del nicho (vsl/motion/pro/nichos.json, 22 nov 2026): fotos hiperrealistas del Laboratorio, 9 paletas,
+    letras, transiciones y 9 pistas propias por nicho. Un nicho nuevo solo se agrega en ese archivo."""
+    import json
+    try:
+        N = json.load(open(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), '..', 'pro', 'nichos.json'), encoding='utf-8'))
+    except Exception:
+        return {}
+    return {k: x for k, x in N.items() if not k.startswith('_') and isinstance(x, dict)}
+
+
 def kit_de(prod, E):
-    """Nicho con kit para este producto y diseño: {'nicho', 'v', 'musica'} o None (sin kit: el diseño queda como está)."""
+    """Nicho con kit para este producto y diseño: {'nicho', 'v', 'musica'[, 'foto']} o None (sin kit: el diseño queda como está)."""
     import re, unicodedata
     t = ' '.join(str((prod or {}).get(k) or '') for k in ('nicho', 'curso', 'oferta', 'producto'))
     t = unicodedata.normalize('NFD', t.lower()); t = ''.join(ch for ch in t if unicodedata.category(ch) != 'Mn')
     nicho = 'mecanica' if re.search(r'mecanic|automotr|motocicl|\bmotos?\b', t) else 'dibujo' if re.search(r'dibuj|ilustrac|boceto|acuarel', t) else None
+    foto = None
+    if not nicho:
+        for k, x in nichos_foto().items():
+            if x.get('detecta') and re.search(x['detecta'], t):
+                nicho, foto = k, x
+                break
     if not nicho or not E or not E.get('dir'):
         return None
     d = int(E.get('dir'))
     v = KIT_ORDEN.index(d) if d in KIT_ORDEN else 0
+    if foto:
+        conf = {k: foto.get(k) for k in ('nombre', 'firma', 'emblema', 'letras', 'vocab')}
+        conf.update(paleta=foto['paletas'][v % len(foto['paletas'])], trs=foto['trs'][v % len(foto['trs'])], diseno=foto['disenos'][v % len(foto['disenos'])])
+        return dict(nicho=nicho, v=v, musica='musica/%s.mp3' % foto['musica'][v % len(foto['musica'])], foto=conf)
     return dict(nicho=nicho, v=v, musica='musica/%s.mp3' % KIT_MUSICA[nicho][v])
