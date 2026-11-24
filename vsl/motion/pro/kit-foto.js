@@ -14,9 +14,6 @@ const X = window.PRO; if (!X) return;
 const {E, P, IM, $, rgba} = X;
 const K = E.kitf; if (!K || !E.kit || !Array.isArray(K.paleta)) return;
 const NICHO = E.kit, v = +E.kitv || 0;
-// Corrección de UN video (ajustes-video.json → E.kitAj). «ilustrado» (Recetas de bebés #10, 23 nov 2026): colores pastel,
-// Montserrat ultranegrita, objetos 3D animados recortados que flotan y rebotan, y fondo ilustrado (no fotos realistas).
-const AJ = E.kitAj || null, ILUS = !!(AJ && AJ.estilo === 'ilustrado');
 let sd = 29 + v * 157 + NICHO.length * 13;
 const r = () => { sd |= 0; sd = sd + 0x6D2B79F5 | 0; let t = Math.imul(sd ^ sd >>> 15, 1 | sd); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
 const lum = (h) => { const n = parseInt(String(h).slice(1), 16); return ((n >> 16) * .3 + ((n >> 8) & 255) * .59 + (n & 255) * .11); };
@@ -26,7 +23,13 @@ const [bg, sup, ink, mut, a, c, b, sobre, vig] = K.paleta;
 const PL = Object.assign({bg, sup, ink, mut, a, c, b, sobre, vig}, E.colores && typeof E.colores === 'object' ? E.colores : {});  // V6: colores pedidos mandan
 Object.assign(P, PL);
 const CLARO = lum(P.bg) > 150;
-const LET = (K.letras || [])[v % Math.max(1, (K.letras || []).length)] || {ft: 'Outfit', fw: 700, fb: 'Manrope', fn: 'Outfit', fk: 'Caveat', ls: '-.01em'};
+// Estilo pedido para ESTA versión en una corrección (E.ver, viene de v.estilo del panel). 23 nov, Recetas para bebés #13 (Christian):
+// «colores pastel… tipografía más amigable como la Montserrat ultranegrita… gráficos e ilustraciones más animados, que no se vean tan
+// realistas… cuidado con el fondo de las ilustraciones… 3D y flotantes en PNG». letra = familia de títulos; fondo 'pastel' = fondo
+// gráfico animado (sin foto); ilus = objetos 3D ilustrados (ki1–ki8) en lugar de las fotos reales (ko1–ko8).
+const VER = E.ver && typeof E.ver === 'object' ? E.ver : {};
+let LET = (K.letras || [])[v % Math.max(1, (K.letras || []).length)] || {ft: 'Outfit', fw: 700, fb: 'Manrope', fn: 'Outfit', fk: 'Caveat', ls: '-.01em'};
+if (VER.letra) LET = Object.assign({}, LET, {ft: VER.letra, fw: VER.peso || 900, fb: VER.letra, fn: VER.letra, ls: '-.02em'});
 Object.assign(E, {dirFt: LET.ft, dirFw: LET.fw, dirLs: LET.ls, fb: LET.fb});
 if (Array.isArray(K.trs) && K.trs.length) E.trs = K.trs;
 if (X.PAPEL) Object.assign(X.PAPEL, {bg: CLARO ? '#ffffff' : '#fbf7f2', sup: CLARO ? P.sup : '#efe8df', ink: CLARO ? P.ink : '#211c22', mut: CLARO ? P.mut : '#6d6470', a: P.a, c: P.c, b: CLARO ? P.b : '#d9cfc4', sobre: '#ffffff'});
@@ -36,15 +39,7 @@ Object.entries({bg: P.bg, a: P.a, b: P.b, c: P.c, sup: P.sup, ink: P.ink, mut: P
   mutB: rgba(P.mut, .3), inkB: rgba(P.ink, .42), ft: LET.ft, fb: LET.fb, fw: LET.fw, ls: LET.ls, fn: LET.fn, fk: LET.fk, vig: PL.vig || 'rgba(0,0,0,.5)', trazo: SUB(P.a), goma: P.c, kst: 'normal'})
   .forEach(([k, val]) => R.setProperty('--' + k, val));
 document.body.classList.add('kit', 'kit-foto', 'kit-' + NICHO, 'kitv' + v, CLARO ? 'kf-claro' : 'kf-oscuro');
-if (ILUS) { document.body.classList.add('kf-ilus');
-  const css = document.createElement('style');
-  css.textContent = `.kf-ilus .T,.kf-ilus .num,.kf-ilus .big,.kf-ilus .call,.kf-ilus .chip,.kf-ilus .btn,.kf-ilus .bt,.kf-ilus .ped b,.kf-ilus .sello,.kf-ilus .cinta,.kf-ilus .etq,.kf-ilus [style*="var(--ft)"]{font-family:Montserrat,sans-serif!important;font-weight:900!important;font-style:normal!important}
-.kf-ilus .P,.kf-ilus .fila,.kf-ilus .ped,.kf-ilus [style*="var(--fb)"]{font-family:Montserrat,sans-serif!important;font-weight:700!important}
-.kf-ilus .P.s{font-style:normal!important;font-weight:800!important}
-.kf-ilus .K{font-family:Montserrat,sans-serif!important;font-weight:800!important;letter-spacing:.14em!important}
-.kf-ilus .chip,.kf-ilus .btn,.kf-ilus .bt{border-radius:999px!important}`;
-  document.head.appendChild(css); }
-X.precarga.push(() => Promise.all([LET.ft, LET.fb, LET.fn, LET.fk].flatMap((f) => [400, 600, 700, 800].map((w) => document.fonts.load(`${w} 60px ${f}`).catch(() => null)))));
+X.precarga.push(() => Promise.all([LET.ft, LET.fb, LET.fn, LET.fk].flatMap((f) => [400, 600, 700, 800, 900].map((w) => document.fonts.load(`${w} 60px ${f}`).catch(() => null)))));
 
 // ---------------- emblema del nicho (en lugar de repetir el logo) ----------------
 const svg = (w, h, inner, vb) => `<svg width="${w}" height="${h}" viewBox="${vb || `0 0 ${w} ${h}`}" style="overflow:visible">${inner}</svg>`;
@@ -57,8 +52,7 @@ X.KIT = {nicho: NICHO, v, foto: true, icono: (h, col) => (EMB[K.emblema] || EMB.
 
 // ---------------- FONDO: la foto del nicho, viva ----------------
 const capa = (L, html, st = '') => { const e = $(`<div style="position:absolute;${st}">${html}</div>`); L.appendChild(e); return e; };
-const fotoFondo = () => { if (AJ && AJ.fondo && IM[AJ.fondo] && IM[AJ.fondo].ok) return AJ.fondo;
-  const k = 'kf' + (v % 9); if (IM[k] && IM[k].ok) return k;
+const fotoFondo = () => { const k = 'kf' + (v % 9); if (IM[k] && IM[k].ok) return k;
   for (let j = 1; j < 9; j++) { const q = 'kf' + ((v + j) % 9); if (IM[q] && IM[q].ok) return q; } return null; };
 const ups = [];
 const FIRMA = {
@@ -84,6 +78,27 @@ const FIRMA = {
     return (t) => {
       bs.forEach((q) => { const y = ((q.y0 - t * q.vel) % 1320 + 1320) % 1320 - 200; q.e.style.transform = `translate(${Math.sin(t * .6 + q.y0) * 26}px,${y}px)`; });
       fs.forEach((q) => { const y = ((q.y0 - t * q.vel) % 1260 + 1260) % 1260 - 120; q.e.style.transform = `translate(${Math.sin(t + q.f) * 18}px,${y}px) rotate(${Math.sin(t * .8 + q.f) * 16}deg)`; });
+    };
+  },
+  pastel: (L) => { // fondo gráfico pastel (sin foto): degradado suave que respira, manchas de color, nubes 3D, lunares y figuras tiernas que flotan
+    L.style.background = `linear-gradient(160deg,${P.bg} 0%,${P.sup} 46%,${P.bg} 100%)`;
+    const cols = [P.a, P.c, P.b, '#ffe7a8', '#d9c7f5'];
+    const manchas = [[-260, -220, 900], [1240, -300, 980], [-200, 640, 820], [1300, 620, 900], [620, 300, 760]].map(([x, y, s], j) => ({e: capa(L, '', `left:${x}px;top:${y}px;width:${s}px;height:${s}px;border-radius:50%;background:radial-gradient(circle,${rgba(cols[j % cols.length], .42)},${rgba(cols[j % cols.length], 0)} 68%);filter:blur(10px)`), f: j * 1.7}));
+    const lun = capa(L, '', `inset:-80px;background-image:radial-gradient(${rgba(P.a, .16)} 7px,transparent 8px),radial-gradient(${rgba(P.c, .14)} 5px,transparent 6px);background-size:150px 150px,150px 150px;background-position:0 0,75px 75px`);
+    const nube = (s, col) => svg(s, s * .62, `<defs><linearGradient id="gn${Math.round(s)}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="${col}"/></linearGradient></defs><path d="M30 92c-22 0-30-26-12-38-4-24 22-38 40-26 8-22 44-26 54 0 22-6 40 14 32 34 18 8 12 30-8 30z" fill="url(#gn${Math.round(s)})"/><path d="M30 92h106" stroke="${rgba('#000000', .06)}" stroke-width="5" stroke-linecap="round"/>`, '0 0 160 100');
+    const nubes = [[60, 120, 260], [1500, 90, 300], [1580, 860, 240], [90, 840, 230], [760, 40, 190]].map(([x, y, s], j) => ({e: capa(L, nube(s, rgba(j % 2 ? P.c : P.a, .5)), `left:${x}px;top:${y}px;opacity:.85;filter:drop-shadow(0 18px 18px ${rgba(P.a, .18)})`), x, f: j * 1.3}));
+    const bola = (s, col) => `<div style="width:${s}px;height:${s}px;border-radius:50%;background:radial-gradient(circle at 32% 28%,#ffffff,${col} 52%,${rgba(col, .95)});box-shadow:inset -6px -10px 0 ${rgba('#000000', .06)},0 14px 22px ${rgba(col, .35)}"></div>`;
+    const cor = (s, col) => svg(s, s, `<defs><radialGradient id="gc${Math.round(s)}" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#ffffff"/><stop offset=".45" stop-color="${col}"/><stop offset="1" stop-color="${col}"/></radialGradient></defs><path d="M12 21s-7-4.6-9.5-9C.6 8.4 2.6 4 6.6 4 9 4 10.6 5.5 12 7.4 13.4 5.5 15 4 17.4 4c4 0 6 4.4 4.1 8-2.5 4.4-9.5 9-9.5 9z" fill="url(#gc${Math.round(s)})"/>`, '0 0 24 24');
+    const est = (s, col) => svg(s, s, `<path d="M12 2l2.6 6.4 6.9.5-5.3 4.4 1.7 6.7L12 16.3 6.1 20l1.7-6.7L2.5 8.9l6.9-.5z" fill="${col}" stroke="#ffffff" stroke-width="1.6" stroke-linejoin="round"/>`, '0 0 24 24');
+    const fig = Array.from({length: 14}, (_, j) => { const s = 34 + r() * 46, col = cols[j % cols.length], x = j % 2 ? 1500 + r() * 380 : 10 + r() * 380;
+      const html = j % 3 === 0 ? cor(s, col) : j % 3 === 1 ? bola(s * .8, col) : est(s, col);
+      return {e: capa(L, html, `left:${x}px;top:0;filter:drop-shadow(0 10px 12px ${rgba(col, .3)})`), y0: r() * 1300, vel: 16 + r() * 22, f: r() * 6}; });
+    return (t) => {
+      L.style.backgroundPosition = `${Math.sin(t * .1) * 40}px 0`;
+      manchas.forEach((q) => { q.e.style.transform = `translate(${Math.sin(t * .22 + q.f) * 70}px,${Math.cos(t * .18 + q.f) * 50}px) scale(${1 + .08 * Math.sin(t * .3 + q.f)})`; });
+      lun.style.transform = `translate(${(t * 10) % 150}px,${(t * 6) % 150}px)`;
+      nubes.forEach((q) => { q.e.style.transform = `translate(${Math.sin(t * .25 + q.f) * 40}px,${Math.sin(t * .5 + q.f) * 12}px)`; });
+      fig.forEach((q) => { const y = ((q.y0 - t * q.vel) % 1340 + 1340) % 1340 - 160; q.e.style.transform = `translate(${Math.sin(t * .7 + q.f) * 20}px,${y}px) rotate(${Math.sin(t * .9 + q.f) * 18}deg)`; });
     };
   },
   formulas: (L) => { // matemáticas: fórmulas de gis que aparecen y se borran, y figuras que se trazan solas
@@ -133,14 +148,13 @@ const FIRMA = {
 };
 X.alMontar.push(({bg: B}) => {
   const L = $('<div class="kbg"></div>'); B.appendChild(L); L.style.background = P.bg;
+  if (VER.fondo === 'pastel') { const fp = FIRMA.pastel(L), fi2 = FIRMA[K.firma] ? FIRMA[K.firma](L) : null; L.appendChild($('<div class="vig" style="opacity:.25"></div>')); ups.push((t) => { fp(t); if (fi2) fi2(t); }); return; }
   const GRAF = K.fondo === 'grafico';  // 23 nov: Matemáticas no lleva foto de fondo, lleva un fondo gráfico vivo del nicho (colores del curso principal)
   if (GRAF) L.style.background = `radial-gradient(1500px 1000px at 28% 18%,${P.sup},${P.bg} 72%)`;
   const k = GRAF ? null : fotoFondo(); let foto = null;
-  if (k) foto = capa(L, '', `left:-60px;top:-40px;width:2040px;height:1160px;background:url("${IM[k].src}") center/cover no-repeat;filter:blur(${ILUS ? 3 : CLARO ? 2 : 1.5}px) saturate(${ILUS ? .92 : 1.06})`);
+  if (k) foto = capa(L, '', `left:-60px;top:-40px;width:2040px;height:1160px;background:url("${IM[k].src}") center/cover no-repeat;filter:blur(${CLARO ? 2 : 1.5}px) saturate(1.06)`);
   // velo: la foto se ve y el texto se lee (más denso del lado donde suelen ir los títulos)
-  if (!GRAF) capa(L, '', ILUS ? `inset:0;background:radial-gradient(1150px 720px at 50% 48%,${rgba(P.bg, .8)},${rgba(P.bg, .42)} 75%)`
-    : `inset:0;background:linear-gradient(100deg,${rgba(P.bg, CLARO ? .86 : .82)} 0%,${rgba(P.bg, CLARO ? .62 : .5)} 48%,${rgba(P.bg, CLARO ? .74 : .66)} 100%)`);
-  if (ILUS && !k) L.style.background = `radial-gradient(900px 700px at 18% 22%,${rgba(P.b, .9)},transparent 70%),radial-gradient(900px 700px at 82% 78%,${rgba(P.c, .28)},transparent 70%),radial-gradient(800px 600px at 80% 15%,${rgba(P.a, .22)},transparent 70%),${P.bg}`;
+  if (!GRAF) capa(L, '', `inset:0;background:linear-gradient(100deg,${rgba(P.bg, CLARO ? .86 : .82)} 0%,${rgba(P.bg, CLARO ? .62 : .5)} 48%,${rgba(P.bg, CLARO ? .74 : .66)} 100%)`);
   const fi = FIRMA[K.firma] ? FIRMA[K.firma](L) : null;
   L.appendChild($('<div class="vig"></div>'));
   ups.push((t) => { if (foto) foto.style.transform = `scale(${1.04 + .035 * Math.sin(t * .07)}) translate(${Math.sin(t * .05) * 22}px,${Math.cos(t * .04) * 12}px)`; if (fi) fi(t); });
@@ -154,7 +168,7 @@ const ocupado = (cam) => [...cam.querySelectorAll('.T,.P,.K,.chip,.fila,.btn,.bt
 const PAL = (K.vocab || []).map(([re, nv]) => [new RegExp(re, 'gi'), nv]);
 const vocab = (raiz) => { if (!PAL.length) return; const w = document.createTreeWalker(raiz, NodeFilter.SHOW_TEXT); let n;
   while ((n = w.nextNode())) { let t = n.nodeValue; if (!t || t.length < 4) continue; PAL.forEach(([re, nv]) => { t = t.replace(re, (m) => (m === m.toUpperCase() ? nv.toUpperCase() : nv)); }); if (t !== n.nodeValue) n.nodeValue = t; } };
-const objetos = () => (AJ && Array.isArray(AJ.objetos) && AJ.objetos.length ? AJ.objetos : Array.from({length: 8}, (_, j) => 'ko' + (j + 1))).filter((k) => IM[k] && IM[k].ok);  // se miden al armar cada escena (las imágenes cargan después)
+const objetos = () => Array.from({length: 8}, (_, j) => (VER.ilus ? 'ki' : 'ko') + (j + 1)).filter((k) => IM[k] && IM[k].ok);  // ilus: solo las ilustraciones 3D (nunca se mezclan con fotos)  // se miden al armar cada escena (las imágenes cargan después)
 const SIMB = {ondas: ['♪', '♫', '♬', '♩'], burbujas: ['♥', '★', '♥', '✿'], formulas: ['+', '×', '=', 'π', '√', '÷', '∑'], mates: ['+', '×', '=', 'π', '√', '÷', '%', '∑', '★']}[K.firma] || ['★'];
 function rafaga(c, x, y, at) { const {cam, tl} = c;
   for (let j = 0; j < 14; j++) { const e = $(`<i class="kel" style="position:absolute;left:${x}px;top:${y}px;font-style:normal;font-family:${LET.fk},serif;font-weight:700;font-size:${34 + r() * 40}px;color:${[P.a, P.c, P.ink][j % 3]};z-index:3;pointer-events:none">${SIMB[j % SIMB.length]}</i>`);
@@ -179,25 +193,16 @@ X.alEscena.push((c) => {
   if (OBJ.length) {
     tl.time(Math.min(2.6, c.D * .62), true); const ocup = ocupado(cam); tl.time(0, true);
     const lugares = [[-40, 790, 300], [1660, 800, 290], [-30, -20, 250], [1690, -30, 250], [1700, 380, 230], [-50, 390, 230]];  // nunca abajo al centro: ahí suelen ir el precio y los textos
-    const n = ILUS ? 3 : 2 + (i % 2); let puestos = 0;
+    const n = 2 + (i % 2); let puestos = 0;
     for (let j = 0; j < lugares.length && puestos < n; j++) {
       const [x, y, s] = lugares[(j + i) % lugares.length], box = {l: x, t: y, r: x + s, b: y + s};
       if (ocup.some((q) => choca(q, box))) continue;
       const k = OBJ[(i * 2 + j + v) % OBJ.length];
-      const sombra = ILUS ? `drop-shadow(0 30px 26px ${rgba(P.a, .28)}) drop-shadow(0 8px 10px rgba(80,40,70,.12))` : `drop-shadow(0 26px 30px rgba(0,0,0,${CLARO ? .22 : .5}))`;
-      const e = $(`<div class="kel" style="left:${x}px;top:${y}px;width:${s}px;height:${s}px;display:flex;align-items:center;justify-content:center;z-index:1"><img src="${IM[k].src}" style="max-width:100%;max-height:100%;filter:${sombra}"></div>`);
+      const e = $(`<div class="kel" style="left:${x}px;top:${y}px;width:${s}px;height:${s}px;display:flex;align-items:center;justify-content:center;z-index:1"><img src="${IM[k].src}" style="max-width:100%;max-height:100%;filter:drop-shadow(0 26px 30px rgba(0,0,0,${CLARO ? .22 : .5}))"></div>`);
       cam.insertBefore(e, cam.firstChild); puestos++;
       const rot = (j % 2 ? 1 : -1) * (6 + j * 4);
-      if (ILUS) {  // animado: entra con rebote, flota, se balancea y «respira» como dibujo animado
-        const im = e.firstChild;
-        tl.fromTo(e, {scale: .2, opacity: 0, rotation: rot * 3, y: 120}, {scale: 1, opacity: 1, rotation: rot, y: 0, duration: 1, ease: 'elastic.out(1, .55)'}, .12 + j * .16);
-        tl.to(e, {y: '-=26', duration: 1.6 + j * .25, ease: 'sine.inOut', yoyo: true, repeat: Math.ceil(c.D / 1.6) + 1}, 1.1);
-        tl.to(e, {rotation: rot + (j % 2 ? 7 : -7), duration: 2.1 + j * .3, ease: 'sine.inOut', yoyo: true, repeat: Math.ceil(c.D / 2.1) + 1}, 1.1);
-        tl.to(im, {scaleX: 1.06, scaleY: .95, duration: .8, ease: 'sine.inOut', yoyo: true, repeat: Math.ceil(c.D / .8) + 1, transformOrigin: '50% 100%'}, 1.2 + j * .2);
-      } else {
       tl.fromTo(e, {scale: .4, opacity: 0, rotation: rot * 2.5, y: 40}, {scale: 1, opacity: 1, rotation: rot, y: 0, duration: .9, ease: 'back.out(1.5)'}, .15 + j * .14);
       tl.to(e, {y: '-=14', rotation: rot + (j % 2 ? 3 : -3), duration: 2.4, ease: 'sine.inOut', yoyo: true, repeat: Math.ceil(c.D / 2.4) + 1}, 1.1);
-      }
     }
   }
   // 3) ráfaga del nicho en los momentos clave (compra, revelación del pack, precio y cierre)

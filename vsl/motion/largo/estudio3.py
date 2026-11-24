@@ -11,6 +11,7 @@ ASSETS = os.path.join(os.path.dirname(AQUI), 'assets')
 NOMBRES = {'pack': 'pack_5.png', 'prop1': 'prop1.png', 'f_cuarto': 'f_cuarto.jpg', 'f_evento': 'f_evento.jpg',
            **{f'c{i}': f'c{i}_5.png' for i in range(12)}, **{f'x{i}': f'x{i}.jpg' for i in range(1, 13)},
            **{f'kf{i}': f'kf{i}.jpg' for i in range(9)}, **{f'ko{i}': f'ko{i}.png' for i in range(1, 9)},  # kf/ko: kit fotográfico del nicho (22 nov)
+           **{f'ki{i}': f'ki{i}.png' for i in range(1, 9)},  # ki: objetos 3D ilustrados (23 nov, versiones con estilo «ilus»)
            **{f'j_{x}': f'j_{x}.png' for x in ('estudia', 'practica', 'celular', 'trato', 'cabina', 'feliz', 'ref')}}
 CURSO = {**{f'm{i}': f'm{i}.png' for i in range(1, 13)}, 'cert': 'cert.png', 'consola': 'consola.png', 'logo': 'logo.png'}
 PIDE = {'recorrido': ['j_estudia', 'j_celular', 'j_cabina'], 'gracias': ['m1'], 'revela': ['pack'], 'todas': ['pack'], 'cta2': ['pack'], 'porque': ['pack', 'm1']}
@@ -80,25 +81,9 @@ def preset(nombre):
     return dict(FINAL[4]['estilo'])
 
 
-def ajuste_video(r):
-    """Corrección pedida para ESTE video (pro/ajustes-video.json, clave <proyecto>:<número>) o {} si no hay."""
-    import json
-    try:
-        A = json.load(open(os.path.join(os.path.dirname(AQUI), 'pro', 'ajustes-video.json'), encoding='utf-8'))
-    except Exception:
-        return {}
-    n = str(os.environ.get('VSL_N') or r.get('n') or '')
-    for pid in (os.environ.get('VSL_ID'), r.get('proy'), r.get('id')):
-        if pid and f'{pid}:{n}' in A:
-            return A[f'{pid}:{n}']
-    return {}
-
-
 def armar(r, bajar):
     """r = receta['motion']; bajar(blob_id) -> PIL.Image o None. Devuelve (video, avisos)."""
     avisos = []
-    AJ = ajuste_video(r)
-    AJ_OBJ = {k: f'ki{j + 1}.png' for j, k in enumerate(AJ.get('objetos') or [])}
     carpeta = os.path.join(ASSETS, 'est', r['id']); curso = carpeta + '-curso'
     for c in (carpeta, curso):
         shutil.rmtree(c, ignore_errors=True); os.makedirs(c)
@@ -110,13 +95,6 @@ def armar(r, bajar):
         im = bajar(blob)
         if im is None:
             avisos.append(f'No se pudo bajar el material «{k}».'); continue
-        if k in AJ_OBJ:  # corrección de un video: objeto ilustrado 3D que flota; solo entra si quedó recortado (nunca con su fondo)
-            ob, ok = quitar_fondo(im)
-            if ok:
-                ob.thumbnail((1400, 1400)); ob.save(os.path.join(carpeta, AJ_OBJ[k])); tiene.add(AJ_OBJ[k][:-4])
-            else:
-                avisos.append(f'ERROR IMAGEN: el objeto ilustrado «{k}» llegó con fondo (no es un color liso): no se usa. Pídelo otra vez.')
-            continue
         if dest.endswith('.png') and k == 'cert':
             im = im.convert('RGBA')  # el certificado es una hoja: su propio papel no se recorta
         elif dest.endswith('.png'):
@@ -124,6 +102,8 @@ def armar(r, bajar):
             if not ok and k not in ('f_cuarto', 'f_evento'):
                 # 23 nov (Matemáticas): la caja, los cursos y los objetos que llegan con escenario (escritorio, pared) salen como un cuadro
                 # con fondo en el video. Eso es ERROR (regla F9), no aviso: hay que pedir la imagen otra vez.
+                if re.match(r'^ki\d$', k):  # una ilustración con fondo no entra al video (se vería el recuadro): se omite
+                    avisos.append(f'ERROR IMAGEN: «{k}» llegó con fondo (no es un color liso): no se usa en el video. Pídela otra vez.'); continue
                 if k == 'pack' or re.match(r'^(c\d+|ko\d)$', k):
                     avisos.append(f'ERROR IMAGEN: «{k}» llegó con fondo o escenario (no es un color liso): se ve como un cuadro en el video. Pídela otra vez.')
                 else:
@@ -178,6 +158,13 @@ def armar(r, bajar):
             E['colores'] = col
             if isinstance(E.get('pal'), dict):
                 E['pal'] = {**E['pal'], **col}
+    # 23 nov: estilo pedido para ESTA versión en una corrección (v.estilo del panel): letra de títulos, fondo gráfico pastel, objetos ilustrados
+    ver = st.get('ver')
+    if isinstance(ver, dict):
+        ver = {k: v for k, v in ver.items() if (k == 'letra' and v in ('Montserrat', 'Outfit', 'Sora', 'Fraunces', 'Manrope')) or (k == 'peso' and v in (600, 700, 800, 900))
+               or (k == 'fondo' and v in ('pastel',)) or (k == 'ilus' and v is True)}
+        if ver:
+            E['ver'] = ver
     from temas import kit_de
     kit = kit_de(prod, E)
     if kit:  # 20 nov: kit del nicho (fondos, elementos, animaciones, letras, colores y música del nicho; ver pro/kit.js)
@@ -186,17 +173,6 @@ def armar(r, bajar):
             E['kitf'] = kit['foto']
         if not str(st.get('musica') or '').startswith('!'):
             E['musica'] = kit['musica']
-        if AJ and E.get('kitf'):  # corrección de ESTE video (pro/ajustes-video.json): paleta, letras, objetos y fondo propios
-            kf = dict(E['kitf'])
-            if isinstance(AJ.get('paleta'), list) and len(AJ['paleta']) == 9:
-                kf['paleta'] = AJ['paleta']
-            if isinstance(AJ.get('letras'), dict):
-                kf['letras'] = [AJ['letras']]
-            E['kitf'] = kf
-            E['kitAj'] = dict(estilo=AJ.get('estilo') or '', objetos=[n[:-4] for n in AJ_OBJ.values() if n[:-4] in tiene],
-                              fondo=AJ.get('fondo') if AJ.get('fondo') in tiene else None)
-            if AJ_OBJ and len(E['kitAj']['objetos']) < 3:
-                avisos.append(f'ERROR IMAGEN: solo {len(E["kitAj"]["objetos"])} objetos ilustrados quedaron recortados (hacen falta al menos 3).')
     if E.get('tema'):
         E['cinta'] = (prod.get('oferta') or '').upper()
     cont = [dict(titulo=c.get('titulo'), valor=c.get('valor'), corto=c.get('corto') or c.get('titulo')) for c in (prod.get('contenidos') or []) if c.get('titulo')]
