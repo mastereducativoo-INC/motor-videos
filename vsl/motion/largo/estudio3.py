@@ -95,6 +95,10 @@ def armar(r, bajar):
         im = bajar(blob)
         if im is None:
             avisos.append(f'No se pudo bajar el material «{k}».'); continue
+        if re.match(r'^x\d+$', k) and quitar_fondo(im)[1]:
+            # 23 nov: una imagen extra con fondo liso es un OBJETO recortado (pedido como «objeto»), no una foto de escena:
+            # si entrara como foto se vería el objeto en un recuadro negro o verde a pantalla completa. Se omite.
+            avisos.append(f'La imagen extra «{k}» es un objeto con fondo liso, no una foto de escena: no se usó como foto.'); continue
         if dest.endswith('.png') and k == 'cert':
             im = im.convert('RGBA')  # el certificado es una hoja: su propio papel no se recorta
         elif dest.endswith('.png'):
