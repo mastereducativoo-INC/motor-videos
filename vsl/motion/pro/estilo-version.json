@@ -1,0 +1,4 @@
+{
+  "_que_es": "Estilo pedido en una corrección para UNA versión, cuando el panel no lo manda en la receta (estilo.ver). Clave: <id del proyecto>:<número del video>. Mismos campos que v.estilo del panel: letra, peso, fondo ('pastel'), ilus (objetos 3D ilustrados ki1–ki8). Si la receta ya trae estilo.ver, manda la receta.",
+  "c0e27c3203fb4eabb21e08a4bf1f00cb:10": {"letra": "Montserrat", "peso": 900, "fondo": "pastel", "ilus": true, "_pedido": "Christian, 23 nov 2026 6:00 p.m. (Recetas de bebés #10 · Cocina de mamá): colores pastel, Montserrat ultranegrita, ilustraciones 3D animadas y flotantes sin fondo visible; igual que el #13"}
+}

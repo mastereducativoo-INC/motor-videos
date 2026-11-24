@@ -166,6 +166,13 @@ def armar(r, bajar):
                 E['pal'] = {**E['pal'], **col}
     # 23 nov: estilo pedido para ESTA versión en una corrección (v.estilo del panel): letra de títulos, fondo gráfico pastel, objetos ilustrados
     ver = st.get('ver')
+    if not isinstance(ver, dict):  # el panel no lo mandó: estilo guardado aquí para esta versión (pro/estilo-version.json)
+        try:
+            import json
+            EV = json.load(open(os.path.join(os.path.dirname(AQUI), 'pro', 'estilo-version.json'), encoding='utf-8'))
+            ver = EV.get(f"{os.environ.get('VSL_ID')}:{os.environ.get('VSL_N')}")
+        except Exception:
+            ver = None
     if isinstance(ver, dict):
         ver = {k: v for k, v in ver.items() if (k == 'letra' and v in ('Montserrat', 'Outfit', 'Sora', 'Fraunces', 'Manrope')) or (k == 'peso' and v in (600, 700, 800, 900))
                or (k == 'fondo' and v in ('pastel',)) or (k == 'ilus' and v is True)}
