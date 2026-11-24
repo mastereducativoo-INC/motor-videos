@@ -80,9 +80,25 @@ def preset(nombre):
     return dict(FINAL[4]['estilo'])
 
 
+def ajuste_video(r):
+    """Corrección pedida para ESTE video (pro/ajustes-video.json, clave <proyecto>:<número>) o {} si no hay."""
+    import json
+    try:
+        A = json.load(open(os.path.join(os.path.dirname(AQUI), 'pro', 'ajustes-video.json'), encoding='utf-8'))
+    except Exception:
+        return {}
+    n = str(os.environ.get('VSL_N') or r.get('n') or '')
+    for pid in (os.environ.get('VSL_ID'), r.get('proy'), r.get('id')):
+        if pid and f'{pid}:{n}' in A:
+            return A[f'{pid}:{n}']
+    return {}
+
+
 def armar(r, bajar):
     """r = receta['motion']; bajar(blob_id) -> PIL.Image o None. Devuelve (video, avisos)."""
     avisos = []
+    AJ = ajuste_video(r)
+    AJ_OBJ = {k: f'ki{j + 1}.png' for j, k in enumerate(AJ.get('objetos') or [])}
     carpeta = os.path.join(ASSETS, 'est', r['id']); curso = carpeta + '-curso'
     for c in (carpeta, curso):
         shutil.rmtree(c, ignore_errors=True); os.makedirs(c)
@@ -94,6 +110,13 @@ def armar(r, bajar):
         im = bajar(blob)
         if im is None:
             avisos.append(f'No se pudo bajar el material «{k}».'); continue
+        if k in AJ_OBJ:  # corrección de un video: objeto ilustrado 3D que flota; solo entra si quedó recortado (nunca con su fondo)
+            ob, ok = quitar_fondo(im)
+            if ok:
+                ob.thumbnail((1400, 1400)); ob.save(os.path.join(carpeta, AJ_OBJ[k])); tiene.add(AJ_OBJ[k][:-4])
+            else:
+                avisos.append(f'ERROR IMAGEN: el objeto ilustrado «{k}» llegó con fondo (no es un color liso): no se usa. Pídelo otra vez.')
+            continue
         if dest.endswith('.png') and k == 'cert':
             im = im.convert('RGBA')  # el certificado es una hoja: su propio papel no se recorta
         elif dest.endswith('.png'):
@@ -163,6 +186,17 @@ def armar(r, bajar):
             E['kitf'] = kit['foto']
         if not str(st.get('musica') or '').startswith('!'):
             E['musica'] = kit['musica']
+        if AJ and E.get('kitf'):  # corrección de ESTE video (pro/ajustes-video.json): paleta, letras, objetos y fondo propios
+            kf = dict(E['kitf'])
+            if isinstance(AJ.get('paleta'), list) and len(AJ['paleta']) == 9:
+                kf['paleta'] = AJ['paleta']
+            if isinstance(AJ.get('letras'), dict):
+                kf['letras'] = [AJ['letras']]
+            E['kitf'] = kf
+            E['kitAj'] = dict(estilo=AJ.get('estilo') or '', objetos=[n[:-4] for n in AJ_OBJ.values() if n[:-4] in tiene],
+                              fondo=AJ.get('fondo') if AJ.get('fondo') in tiene else None)
+            if AJ_OBJ and len(E['kitAj']['objetos']) < 3:
+                avisos.append(f'ERROR IMAGEN: solo {len(E["kitAj"]["objetos"])} objetos ilustrados quedaron recortados (hacen falta al menos 3).')
     if E.get('tema'):
         E['cinta'] = (prod.get('oferta') or '').upper()
     cont = [dict(titulo=c.get('titulo'), valor=c.get('valor'), corto=c.get('corto') or c.get('titulo')) for c in (prod.get('contenidos') or []) if c.get('titulo')]

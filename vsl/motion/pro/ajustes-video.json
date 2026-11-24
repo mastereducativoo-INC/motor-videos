@@ -1,0 +1,13 @@
+{
+  "_que_es": "Correcciones que Christian pidió para UN SOLO video (regla P3: una corrección cambia solo lo pedido y solo en ese video). Clave: <id del proyecto de video>:<número del video>. Lo lee estudio3.py (aplicar_ajustes) y lo dibuja kit-foto.js (E.kitAj). Campos: estilo ('ilustrado' = objetos 3D animados recortados y fondo ilustrado en lugar de fotos), paleta (9 colores, mismo orden que nichos.json), letras (como en nichos.json), objetos (imágenes x# del producto, pedidas como «objeto recortado»; se recortan y se guardan como ki1..ki8), fondo (imagen x# pedida como «escena completa»).",
+  "c0e27c3203fb4eabb21e08a4bf1f00cb:10": {
+    "producto": "Recetas de bebés",
+    "video": "#10 · El siguiente objetivo · Cocina de mamá",
+    "pedido": "Christian, 23 nov 2026 6:00 p.m.: colores pastel, tipografía más amigable (Montserrat ultranegrita), gráficos e ilustraciones más animados y menos realistas, ilustraciones en 3D flotantes en PNG sin que se vea su fondo",
+    "estilo": "ilustrado",
+    "paleta": ["#fdf0f3", "#ffffff", "#47304d", "#6f5a78", "#ef7f9c", "#9a7ee8", "#ffd8bd", "#ffffff", "rgba(190,120,150,.16)"],
+    "letras": {"ft": "Montserrat", "fw": 900, "fb": "Montserrat", "fn": "Montserrat", "fk": "Montserrat", "ls": "-.02em"},
+    "objetos": ["x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8"],
+    "fondo": "x9"
+  }
+}

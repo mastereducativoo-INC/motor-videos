@@ -14,6 +14,9 @@ const X = window.PRO; if (!X) return;
 const {E, P, IM, $, rgba} = X;
 const K = E.kitf; if (!K || !E.kit || !Array.isArray(K.paleta)) return;
 const NICHO = E.kit, v = +E.kitv || 0;
+// Corrección de UN video (ajustes-video.json → E.kitAj). «ilustrado» (Recetas de bebés #10, 23 nov 2026): colores pastel,
+// Montserrat ultranegrita, objetos 3D animados recortados que flotan y rebotan, y fondo ilustrado (no fotos realistas).
+const AJ = E.kitAj || null, ILUS = !!(AJ && AJ.estilo === 'ilustrado');
 let sd = 29 + v * 157 + NICHO.length * 13;
 const r = () => { sd |= 0; sd = sd + 0x6D2B79F5 | 0; let t = Math.imul(sd ^ sd >>> 15, 1 | sd); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
 const lum = (h) => { const n = parseInt(String(h).slice(1), 16); return ((n >> 16) * .3 + ((n >> 8) & 255) * .59 + (n & 255) * .11); };
@@ -33,6 +36,14 @@ Object.entries({bg: P.bg, a: P.a, b: P.b, c: P.c, sup: P.sup, ink: P.ink, mut: P
   mutB: rgba(P.mut, .3), inkB: rgba(P.ink, .42), ft: LET.ft, fb: LET.fb, fw: LET.fw, ls: LET.ls, fn: LET.fn, fk: LET.fk, vig: PL.vig || 'rgba(0,0,0,.5)', trazo: SUB(P.a), goma: P.c, kst: 'normal'})
   .forEach(([k, val]) => R.setProperty('--' + k, val));
 document.body.classList.add('kit', 'kit-foto', 'kit-' + NICHO, 'kitv' + v, CLARO ? 'kf-claro' : 'kf-oscuro');
+if (ILUS) { document.body.classList.add('kf-ilus');
+  const css = document.createElement('style');
+  css.textContent = `.kf-ilus .T,.kf-ilus .num,.kf-ilus .big,.kf-ilus .call,.kf-ilus .chip,.kf-ilus .btn,.kf-ilus .bt,.kf-ilus .ped b,.kf-ilus .sello,.kf-ilus .cinta,.kf-ilus .etq,.kf-ilus [style*="var(--ft)"]{font-family:Montserrat,sans-serif!important;font-weight:900!important;font-style:normal!important}
+.kf-ilus .P,.kf-ilus .fila,.kf-ilus .ped,.kf-ilus [style*="var(--fb)"]{font-family:Montserrat,sans-serif!important;font-weight:700!important}
+.kf-ilus .P.s{font-style:normal!important;font-weight:800!important}
+.kf-ilus .K{font-family:Montserrat,sans-serif!important;font-weight:800!important;letter-spacing:.14em!important}
+.kf-ilus .chip,.kf-ilus .btn,.kf-ilus .bt{border-radius:999px!important}`;
+  document.head.appendChild(css); }
 X.precarga.push(() => Promise.all([LET.ft, LET.fb, LET.fn, LET.fk].flatMap((f) => [400, 600, 700, 800].map((w) => document.fonts.load(`${w} 60px ${f}`).catch(() => null)))));
 
 // ---------------- emblema del nicho (en lugar de repetir el logo) ----------------
@@ -46,7 +57,8 @@ X.KIT = {nicho: NICHO, v, foto: true, icono: (h, col) => (EMB[K.emblema] || EMB.
 
 // ---------------- FONDO: la foto del nicho, viva ----------------
 const capa = (L, html, st = '') => { const e = $(`<div style="position:absolute;${st}">${html}</div>`); L.appendChild(e); return e; };
-const fotoFondo = () => { const k = 'kf' + (v % 9); if (IM[k] && IM[k].ok) return k;
+const fotoFondo = () => { if (AJ && AJ.fondo && IM[AJ.fondo] && IM[AJ.fondo].ok) return AJ.fondo;
+  const k = 'kf' + (v % 9); if (IM[k] && IM[k].ok) return k;
   for (let j = 1; j < 9; j++) { const q = 'kf' + ((v + j) % 9); if (IM[q] && IM[q].ok) return q; } return null; };
 const ups = [];
 const FIRMA = {
@@ -124,9 +136,11 @@ X.alMontar.push(({bg: B}) => {
   const GRAF = K.fondo === 'grafico';  // 23 nov: Matemáticas no lleva foto de fondo, lleva un fondo gráfico vivo del nicho (colores del curso principal)
   if (GRAF) L.style.background = `radial-gradient(1500px 1000px at 28% 18%,${P.sup},${P.bg} 72%)`;
   const k = GRAF ? null : fotoFondo(); let foto = null;
-  if (k) foto = capa(L, '', `left:-60px;top:-40px;width:2040px;height:1160px;background:url("${IM[k].src}") center/cover no-repeat;filter:blur(${CLARO ? 2 : 1.5}px) saturate(1.06)`);
+  if (k) foto = capa(L, '', `left:-60px;top:-40px;width:2040px;height:1160px;background:url("${IM[k].src}") center/cover no-repeat;filter:blur(${ILUS ? 3 : CLARO ? 2 : 1.5}px) saturate(${ILUS ? .92 : 1.06})`);
   // velo: la foto se ve y el texto se lee (más denso del lado donde suelen ir los títulos)
-  if (!GRAF) capa(L, '', `inset:0;background:linear-gradient(100deg,${rgba(P.bg, CLARO ? .86 : .82)} 0%,${rgba(P.bg, CLARO ? .62 : .5)} 48%,${rgba(P.bg, CLARO ? .74 : .66)} 100%)`);
+  if (!GRAF) capa(L, '', ILUS ? `inset:0;background:radial-gradient(1150px 720px at 50% 48%,${rgba(P.bg, .8)},${rgba(P.bg, .42)} 75%)`
+    : `inset:0;background:linear-gradient(100deg,${rgba(P.bg, CLARO ? .86 : .82)} 0%,${rgba(P.bg, CLARO ? .62 : .5)} 48%,${rgba(P.bg, CLARO ? .74 : .66)} 100%)`);
+  if (ILUS && !k) L.style.background = `radial-gradient(900px 700px at 18% 22%,${rgba(P.b, .9)},transparent 70%),radial-gradient(900px 700px at 82% 78%,${rgba(P.c, .28)},transparent 70%),radial-gradient(800px 600px at 80% 15%,${rgba(P.a, .22)},transparent 70%),${P.bg}`;
   const fi = FIRMA[K.firma] ? FIRMA[K.firma](L) : null;
   L.appendChild($('<div class="vig"></div>'));
   ups.push((t) => { if (foto) foto.style.transform = `scale(${1.04 + .035 * Math.sin(t * .07)}) translate(${Math.sin(t * .05) * 22}px,${Math.cos(t * .04) * 12}px)`; if (fi) fi(t); });
@@ -140,7 +154,7 @@ const ocupado = (cam) => [...cam.querySelectorAll('.T,.P,.K,.chip,.fila,.btn,.bt
 const PAL = (K.vocab || []).map(([re, nv]) => [new RegExp(re, 'gi'), nv]);
 const vocab = (raiz) => { if (!PAL.length) return; const w = document.createTreeWalker(raiz, NodeFilter.SHOW_TEXT); let n;
   while ((n = w.nextNode())) { let t = n.nodeValue; if (!t || t.length < 4) continue; PAL.forEach(([re, nv]) => { t = t.replace(re, (m) => (m === m.toUpperCase() ? nv.toUpperCase() : nv)); }); if (t !== n.nodeValue) n.nodeValue = t; } };
-const objetos = () => Array.from({length: 8}, (_, j) => 'ko' + (j + 1)).filter((k) => IM[k] && IM[k].ok);  // se miden al armar cada escena (las imágenes cargan después)
+const objetos = () => (AJ && Array.isArray(AJ.objetos) && AJ.objetos.length ? AJ.objetos : Array.from({length: 8}, (_, j) => 'ko' + (j + 1))).filter((k) => IM[k] && IM[k].ok);  // se miden al armar cada escena (las imágenes cargan después)
 const SIMB = {ondas: ['♪', '♫', '♬', '♩'], burbujas: ['♥', '★', '♥', '✿'], formulas: ['+', '×', '=', 'π', '√', '÷', '∑'], mates: ['+', '×', '=', 'π', '√', '÷', '%', '∑', '★']}[K.firma] || ['★'];
 function rafaga(c, x, y, at) { const {cam, tl} = c;
   for (let j = 0; j < 14; j++) { const e = $(`<i class="kel" style="position:absolute;left:${x}px;top:${y}px;font-style:normal;font-family:${LET.fk},serif;font-weight:700;font-size:${34 + r() * 40}px;color:${[P.a, P.c, P.ink][j % 3]};z-index:3;pointer-events:none">${SIMB[j % SIMB.length]}</i>`);
@@ -165,16 +179,25 @@ X.alEscena.push((c) => {
   if (OBJ.length) {
     tl.time(Math.min(2.6, c.D * .62), true); const ocup = ocupado(cam); tl.time(0, true);
     const lugares = [[-40, 790, 300], [1660, 800, 290], [-30, -20, 250], [1690, -30, 250], [1700, 380, 230], [-50, 390, 230]];  // nunca abajo al centro: ahí suelen ir el precio y los textos
-    const n = 2 + (i % 2); let puestos = 0;
+    const n = ILUS ? 3 : 2 + (i % 2); let puestos = 0;
     for (let j = 0; j < lugares.length && puestos < n; j++) {
       const [x, y, s] = lugares[(j + i) % lugares.length], box = {l: x, t: y, r: x + s, b: y + s};
       if (ocup.some((q) => choca(q, box))) continue;
       const k = OBJ[(i * 2 + j + v) % OBJ.length];
-      const e = $(`<div class="kel" style="left:${x}px;top:${y}px;width:${s}px;height:${s}px;display:flex;align-items:center;justify-content:center;z-index:1"><img src="${IM[k].src}" style="max-width:100%;max-height:100%;filter:drop-shadow(0 26px 30px rgba(0,0,0,${CLARO ? .22 : .5}))"></div>`);
+      const sombra = ILUS ? `drop-shadow(0 30px 26px ${rgba(P.a, .28)}) drop-shadow(0 8px 10px rgba(80,40,70,.12))` : `drop-shadow(0 26px 30px rgba(0,0,0,${CLARO ? .22 : .5}))`;
+      const e = $(`<div class="kel" style="left:${x}px;top:${y}px;width:${s}px;height:${s}px;display:flex;align-items:center;justify-content:center;z-index:1"><img src="${IM[k].src}" style="max-width:100%;max-height:100%;filter:${sombra}"></div>`);
       cam.insertBefore(e, cam.firstChild); puestos++;
       const rot = (j % 2 ? 1 : -1) * (6 + j * 4);
+      if (ILUS) {  // animado: entra con rebote, flota, se balancea y «respira» como dibujo animado
+        const im = e.firstChild;
+        tl.fromTo(e, {scale: .2, opacity: 0, rotation: rot * 3, y: 120}, {scale: 1, opacity: 1, rotation: rot, y: 0, duration: 1, ease: 'elastic.out(1, .55)'}, .12 + j * .16);
+        tl.to(e, {y: '-=26', duration: 1.6 + j * .25, ease: 'sine.inOut', yoyo: true, repeat: Math.ceil(c.D / 1.6) + 1}, 1.1);
+        tl.to(e, {rotation: rot + (j % 2 ? 7 : -7), duration: 2.1 + j * .3, ease: 'sine.inOut', yoyo: true, repeat: Math.ceil(c.D / 2.1) + 1}, 1.1);
+        tl.to(im, {scaleX: 1.06, scaleY: .95, duration: .8, ease: 'sine.inOut', yoyo: true, repeat: Math.ceil(c.D / .8) + 1, transformOrigin: '50% 100%'}, 1.2 + j * .2);
+      } else {
       tl.fromTo(e, {scale: .4, opacity: 0, rotation: rot * 2.5, y: 40}, {scale: 1, opacity: 1, rotation: rot, y: 0, duration: .9, ease: 'back.out(1.5)'}, .15 + j * .14);
       tl.to(e, {y: '-=14', rotation: rot + (j % 2 ? 3 : -3), duration: 2.4, ease: 'sine.inOut', yoyo: true, repeat: Math.ceil(c.D / 2.4) + 1}, 1.1);
+      }
     }
   }
   // 3) ráfaga del nicho en los momentos clave (compra, revelación del pack, precio y cierre)
