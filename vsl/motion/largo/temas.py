@@ -168,6 +168,8 @@ MKT_MUNDOS = {
                    musica=['sounds-good', 'light-it-up-boy', 'funky-martian', 'year-2001', 'dirty-thinkin']),
     'mecanica': dict(nombres=['Pista', 'Velocímetro', 'Escáner', 'Orden de servicio', 'Taller'],
                      musica=['ko', 'sports-rock', 'caught-on-tape', 'rock-the-game', 'im-all-heart']),
+    'canto': dict(nombres=['Escenario', 'Estudio de grabación', 'Afinador', 'Cancionero', 'Concierto'],
+                  musica=['it-s-love', 'tears-of-joy', 'talent-in-the-air', 'expressive-courage', 'possible-dreams']),
 }
 
 

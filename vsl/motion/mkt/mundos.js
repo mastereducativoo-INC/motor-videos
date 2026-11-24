@@ -24,6 +24,10 @@ const ICO = {
   bujia: (s, col) => svg(s * .36, s, `<rect x="14" y="0" width="22" height="40" rx="4" fill="#e9e9ea"/><rect x="6" y="40" width="38" height="34" rx="3" fill="${col}"/><path d="M6 46h38M6 54h38M6 62h38" stroke="rgba(0,0,0,.35)" stroke-width="3"/><rect x="12" y="74" width="26" height="40" fill="#c9ccd1"/><path d="M12 82h26M12 92h26M12 102h26" stroke="#8b9097" stroke-width="3"/><path d="M25 114v14h10" fill="none" stroke="#c9ccd1" stroke-width="4"/>`, '', '0 0 50 140'),
   llanta: (s, col) => svg(s, s, `<circle cx="50" cy="50" r="46" fill="#151618"/><circle cx="50" cy="50" r="46" fill="none" stroke="#2a2c30" stroke-width="8" stroke-dasharray="6 5"/><circle cx="50" cy="50" r="28" fill="${col}"/><g class="gira" style="transform-origin:50px 50px">${[0, 72, 144, 216, 288].map((a) => `<rect x="47" y="25" width="6" height="22" rx="3" fill="rgba(0,0,0,.45)" transform="rotate(${a} 50 50)"/>`).join('')}</g><circle cx="50" cy="50" r="7" fill="#151618"/>`, '', '0 0 100 100'),
   carro: (w, col) => svg(w, w * .36, `<ellipse cx="210" cy="140" rx="196" ry="9" fill="rgba(0,0,0,.45)"/><path d="M18 108L26 82Q32 68 52 64L122 57Q152 30 198 24L262 22Q302 24 332 52L374 60Q400 65 406 86L410 106Q410 118 398 120L24 120Q12 118 18 108Z" fill="${col}"/><path d="M140 57Q164 36 200 32L254 31Q286 33 306 55Z" fill="#0f151c"/><rect x="392" y="72" width="16" height="12" rx="4" fill="#fff3c4"/><rect x="18" y="74" width="12" height="14" rx="3" fill="#ff3b30"/>${[100, 322].map((cx) => `<g class="rueda" style="transform-origin:${cx}px 114px"><circle cx="${cx}" cy="114" r="31" fill="#111214"/><circle cx="${cx}" cy="114" r="19" fill="#c9ccd1"/>${[0, 72, 144, 216, 288].map((a) => `<rect x="${cx - 3}" y="97" width="6" height="15" rx="3" fill="#6d727a" transform="rotate(${a} ${cx} 114)"/>`).join('')}</g>`).join('')}`, '', '0 0 420 150'),
+  // canto (23 nov 2026)
+  micro: (s, col) => svg(s * .42, s, `<rect x="6" y="2" width="72" height="104" rx="36" fill="#2a2a2e"/><g fill="rgba(255,255,255,.16)">${Array.from({length: 40}, (_, j) => `<circle cx="${16 + (j % 5) * 13}" cy="${14 + Math.floor(j / 5) * 11}" r="2.6"/>`).join('')}</g><rect x="4" y="58" width="76" height="10" rx="5" fill="${col}"/><path d="M42 106v44" stroke="${col}" stroke-width="10"/><path d="M14 92c0 22 12 34 28 34s28-12 28-34" fill="none" stroke="${col}" stroke-width="7"/><rect x="18" y="150" width="48" height="10" rx="5" fill="${col}"/>`, '', '0 0 84 200'),
+  audifonos: (s, col) => svg(s, s * .9, `<path d="M18 82V60a52 52 0 0 1 104 0v22" fill="none" stroke="#2b2b30" stroke-width="12" stroke-linecap="round"/><rect x="4" y="70" width="30" height="46" rx="12" fill="${col}"/><rect x="106" y="70" width="30" height="46" rx="12" fill="${col}"/>`, '', '0 0 140 126'),
+  nota: (s, col) => svg(s * .7, s, `<ellipse cx="22" cy="84" rx="20" ry="14" fill="${col}" transform="rotate(-20 22 84)"/><path d="M40 80V8c18 6 30 16 30 34" fill="none" stroke="${col}" stroke-width="8" stroke-linecap="round"/>`, '', '0 0 72 100'),
 };
 const P = (bg, ink, mut, a, b, c, sobre, panel, line, sombra, ft, fw, fb, fm, tt, ls, rad) => ({bg, ink, mut, a, b, c, sobre, panel, line, sombra, ft, fw, fb, fm, tt, ls, rad, acc: `linear-gradient(90deg,${a},${c},${a})`});
 
@@ -194,9 +198,103 @@ body.mu-mecanica .fuga{background:radial-gradient(closest-side,rgba(255,138,31,.
   chip: {bg: '#111', ink: '#fff', font: 'BarlowC', tt: 'uppercase'},
 };
 
-window.MKT_MUNDOS = {dibujo: DIBUJO, mecanica: MECANICA};
+// ======================= CANTO (23 nov 2026) =======================
+// Mundo hecho desde cero para el nicho de canto (regla V8: nada de DJ). Escenario con telón y focos, estudio de grabación con
+// paneles acústicos y luz ON AIR, afinador de voz con aguja y línea de tono, cancionero con pentagramas y concierto con público.
+// El objeto que gira del director 2 es la rejilla de un micrófono visto de frente (en DJ era el disco).
+const CANTO = {
+  nombres: ['Escenario', 'Estudio de grabación', 'Afinador', 'Cancionero', 'Concierto'],
+  pal: [
+    P('#0d0608', '#fff4ea', '#c9b3a6', '#e0263a', '#f5b83d', '#ffd97a', '#ffffff', 'rgba(255,255,255,.05)', 'rgba(224,38,58,.45)', 'rgba(224,38,58,.3)', 'Outfit', 800, 'Manrope', 'Manrope', 'none', '-.015em', '999px'),
+    P('#120d0a', '#f7efe6', '#c7b8a8', '#ff3b3b', '#d9a24a', '#ffcf6b', '#120d0a', 'rgba(247,239,230,.06)', 'rgba(217,162,74,.42)', 'rgba(0,0,0,.6)', 'DMSerif', 400, 'DMSans', 'DMSans', 'none', '-.01em', '14px'),
+    P('#0f1016', '#f2f3f8', '#9da1b3', '#ff4f8b', '#3ee0c2', '#ffd166', '#ffffff', '#1a1c26', '#2a2d3b', 'rgba(255,79,139,.25)', 'Unbounded', 700, 'Manrope', 'SpaceG', 'none', '-.02em', '12px'),
+    P('#f7efe3', '#1c1412', '#3a2e2a', '#c8102e', '#1c1412', '#f2b632', '#ffffff', '#1c1412', '#1c1412', 'rgba(60,30,20,.3)', 'Fraunces', 800, 'DMSans', 'DMSans', 'none', '-.02em', '6px'),
+    P('#0b0710', '#f7f0fb', '#c9bcd6', '#f5b83d', '#b0387a', '#ffe08a', '#0b0710', 'rgba(255,255,255,.06)', 'rgba(245,184,61,.45)', 'rgba(0,0,0,.6)', 'Instrument', 400, 'DMSans', 'DMSans', 'none', '-.01em', '6px'),
+  ],
+  musica: ['it-s-love', 'tears-of-joy', 'talent-in-the-air', 'expressive-courage', 'possible-dreams'],
+  txt: {deck: (i) => 'PISTA ' + (i + 1), bpm: 'TONO · LA 440 HZ', error: (j) => 'NOTA ' + (j + 1), registro: 'ENSAYOS', biblioteca: 'MIS CANCIONES', nuevas: 'NUEVAS TÉCNICAS', desbloq: 'DOMINADAS', cert: 'CERTIFICADO.PDF', modulo: 'MÓDULO'},
+  // director 4: cada escena es otra hoja del cancionero
+  cartel: [['#f7efe3', '#1c1412', '#c8102e'], ['#c8102e', '#ffffff', '#f2b632'], ['#f2b632', '#1c1412', '#c8102e'], ['#1c1412', '#f7efe3', '#f2b632']],
+  barras: ['#f7efe3', '#f2b632', '#c8102e'],
+  css: `
+body.mu-canto .trama{background-image:repeating-linear-gradient(180deg,transparent 0 60px,rgba(28,20,18,.17) 60px 62px,transparent 62px 80px,rgba(28,20,18,.17) 80px 82px,transparent 82px 100px,rgba(28,20,18,.17) 100px 102px,transparent 102px 120px,rgba(28,20,18,.17) 120px 122px,transparent 122px 140px,rgba(28,20,18,.17) 140px 142px,transparent 142px 220px);opacity:.95}
+body.mu-canto .franja{height:96px;background:rgba(200,16,46,.88);background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.14) 0 14px,transparent 14px 34px);opacity:.95}
+body.mu-canto .ui{background:#151722;border:2px solid #2a2d3b;border-radius:16px;box-shadow:0 30px 60px rgba(0,0,0,.4)}
+body.mu-canto .ui .bar{background:#1b1e2b;border-bottom:2px solid #2a2d3b;color:#9da1b3;font-family:SpaceG}
+body.mu-canto.d3 .fila{background:#1a1c26;border:2px solid #2a2d3b}
+body.mu-canto .disco{background:radial-gradient(circle,rgba(255,255,255,.22) 0 1.6px,transparent 2.2px) 0 0/22px 22px,radial-gradient(circle,#3a3a40 0 60%,#1d1d21 100%);box-shadow:0 40px 120px rgba(0,0,0,.6),inset 0 0 0 22px #2a2a2e,inset 0 0 0 30px var(--b)}
+body.mu-canto .disco::before{background:radial-gradient(closest-side at 35% 30%,rgba(255,255,255,.35),transparent 60%);mix-blend-mode:normal}
+body.mu-canto .disco .lab{left:44%;top:44%;width:12%;height:12%;background:var(--a);font-size:0;box-shadow:0 0 30px var(--a)}
+body.mu-canto .disco .lab::after{display:none}
+body.mu-canto .fuga{background:radial-gradient(closest-side,rgba(224,38,58,.32),transparent 70%)}
+body.mu-canto .cita b{font-family:Caveat;font-size:40px;letter-spacing:0}`,
+  fondo(DIR, bg, AMB, H) {
+    const {capa, linea, pal} = H, p = pal;
+    // notas que suben despacio y se desvanecen (las usan varios directores)
+    const notas = (lista, col) => { const ns = lista.map(([x, y, s, v, d]) => ({e: capa(bg, ICO.nota(s, col), `left:${x}px;top:${y}px`), x, y, v, d}));
+      return (t) => ns.forEach((n) => { const f = ((t * n.v + n.d) % 1); n.e.style.transform = `translate(${Math.sin(t + n.d * 6) * 18}px,${-f * 260}px) rotate(${Math.sin(t * .8 + n.d) * 10}deg)`; n.e.style.opacity = String(Math.sin(f * Math.PI) * .5); }); };
+    if (DIR === 1) { // escenario: telón rojo a los lados, focos que barren desde arriba y un círculo de luz en el piso
+      bg.style.background = `radial-gradient(900px 260px at 50% 100%,${rgba(p.c, .22)},transparent 70%),linear-gradient(180deg,#14080b 0%,${p.bg} 60%,#050203 100%)`;
+      const tel = (lado) => capa(bg, '', `${lado}:-30px;top:-20px;width:300px;height:1120px;background:repeating-linear-gradient(90deg,#6e0d1a 0 26px,#3c0710 26px 52px),linear-gradient(90deg,rgba(0,0,0,.4),transparent);box-shadow:inset ${lado === 'left' ? '-' : ''}60px 0 80px rgba(0,0,0,.6);transform-origin:50% 0`);
+      const t1 = tel('left'), t2 = tel('right');
+      capa(bg, '', `left:0;right:0;top:-10px;height:120px;background:repeating-linear-gradient(90deg,#7a0f1e 0 40px,#4a0812 40px 80px);clip-path:polygon(0 0,100% 0,100% 70%,95% 100%,90% 70%,85% 100%,80% 70%,75% 100%,70% 70%,65% 100%,60% 70%,55% 100%,50% 70%,45% 100%,40% 70%,35% 100%,30% 70%,25% 100%,20% 70%,15% 100%,10% 70%,5% 100%,0 70%)`);
+      const focos = [520, 960, 1400].map((x, j) => capa(bg, '', `left:${x - 260}px;top:-60px;width:520px;height:1200px;background:linear-gradient(180deg,${rgba(j === 1 ? p.c : p.a, .2)},transparent 75%);clip-path:polygon(45% 0,55% 0,100% 100%,0 100%);transform-origin:50% 0;filter:blur(3px)`));
+      const n = notas([[300, 760, 70, .09, .1], [1560, 700, 60, .07, .5], [880, 820, 50, .08, .8]], rgba(p.c, .9));
+      AMB.push((t) => { focos.forEach((f, j) => { f.style.transform = `rotate(${Math.sin(t * .5 + j * 2) * 16}deg)`; }); t1.style.transform = `skewX(${Math.sin(t * .6) * 1.2}deg)`; t2.style.transform = `skewX(${-Math.sin(t * .6 + 1) * 1.2}deg)`; n(t); });
+    } else if (DIR === 2) { // estudio de grabación: pared de madera, paneles acústicos, luz ON AIR, micrófono y audífonos
+      bg.style.background = `repeating-linear-gradient(90deg,rgba(0,0,0,0) 0 64px,rgba(0,0,0,.22) 64px 68px),linear-gradient(180deg,#2a1b12,${p.bg} 70%)`;
+      [[0, 140], [1690, 140], [0, 600], [1690, 600]].forEach(([x, y]) => capa(bg, '', `left:${x}px;top:${y}px;width:230px;height:380px;background:conic-gradient(from 45deg,#1b1b1f 25%,#26262b 0 50%,#1b1b1f 0 75%,#26262b 0) 0 0/46px 46px;box-shadow:inset 0 0 0 6px #111;opacity:.9`));
+      const air = capa(bg, `<div style="padding:12px 26px;border-radius:10px;border:3px solid ${p.a};color:${p.a};font-family:SpaceG;font-weight:700;font-size:34px;letter-spacing:6px">● ON AIR</div>`, 'right:300px;top:60px');
+      const mic = capa(bg, ICO.micro(380, p.b), 'left:330px;top:640px;transform-origin:50% 100%;filter:drop-shadow(0 20px 30px rgba(0,0,0,.6))');
+      capa(bg, ICO.audifonos(220, p.a), 'left:1430px;top:860px;transform:rotate(-12deg);opacity:.85');
+      AMB.push((t) => { const on = Math.sin(t * 2.2) > -.2; air.style.opacity = on ? '1' : '.45'; air.firstChild.style.boxShadow = on ? `0 0 40px ${rgba(p.a, .7)}` : 'none'; mic.style.transform = `rotate(${Math.sin(t * .7) * 2}deg)`; });
+    } else if (DIR === 3) { // afinador de voz: cuadrícula, aguja que oscila sobre el arco y la línea de tono que se dibuja
+      bg.style.background = `linear-gradient(${rgba(p.b, .05)} 1px,transparent 1px) 0 0/48px 48px,linear-gradient(90deg,${rgba(p.b, .05)} 1px,transparent 1px) 0 0/48px 48px,radial-gradient(1200px 700px at 50% 55%,#191b27,${p.bg} 72%)`;
+      const cx = 1700, cy = 980, rr = 300;
+      const tk = Array.from({length: 21}, (_, j) => { const a = (-160 + j * 7) * Math.PI / 180, l = j % 5 ? 20 : 40; return `<path d="M${cx + Math.cos(a) * rr} ${cy + Math.sin(a) * rr}L${cx + Math.cos(a) * (rr - l)} ${cy + Math.sin(a) * (rr - l)}" stroke="${j === 10 ? p.b : rgba(p.ink, .4)}" stroke-width="${j % 5 ? 3 : 6}"/>`; }).join('');
+      const af = capa(bg, `<svg width="1920" height="1080">${tk}<text x="${cx - 120}" y="${cy - 120}" text-anchor="middle" font-family="SpaceG" font-weight="700" font-size="44" fill="${rgba(p.ink, .35)}">LA 440</text><g class="ag"><path d="M${cx - 6} ${cy}L${cx} ${cy - rr + 30}L${cx + 6} ${cy}Z" fill="${p.a}"/></g></svg>`, 'inset:0;opacity:.8');
+      const ag = af.querySelector('.ag');
+      let d = 'M-20 860'; [[160, 860], [160, 800], [420, 800], [420, 740], [700, 740], [700, 820], [980, 820], [980, 700], [1260, 700], [1260, 780]].forEach(([x, y]) => { d += `L${x} ${y}`; });
+      const tono = linea(bg, d, rgba(p.a, .45), 10, 9);
+      const n = notas([[220, 300, 60, .08, .2], [1500, 260, 54, .06, .6]], rgba(p.b, .9));
+      AMB.push((t) => { ag.setAttribute('transform', `rotate(${-70 + Math.sin(t * 1.3) * 30 + Math.sin(t * 3.1) * 6} ${cx} ${cy})`); tono(t); n(t); });
+    } else if (DIR === 4) { // hoja del cancionero con pentagramas (se ve detrás de las hojas de cada escena)
+      bg.style.background = p.bg; bg.appendChild(H.$('<div class="trama"></div>'));
+    } else { // concierto: escenario morado, haces de luz que barren, público y luces de celulares
+      bg.style.background = `radial-gradient(1400px 800px at 50% 0%,#2a1236,${p.bg} 70%)`;
+      const f = H.$('<div class="fuga" style="left:-300px;top:-400px"></div>'); bg.appendChild(f);
+      const haz = [300, 760, 1160, 1620].map((x, j) => capa(bg, '', `left:${x - 200}px;top:-80px;width:400px;height:1200px;background:linear-gradient(180deg,${rgba(j % 2 ? p.b : p.a, .2)},transparent 72%);clip-path:polygon(44% 0,56% 0,100% 100%,0 100%);transform-origin:50% 0;filter:blur(4px)`));
+      let pub = ''; for (let x = -40; x < 1960; x += 70) { const h = 90 + ((x * 37) % 60); pub += `<ellipse cx="${x}" cy="${1080 - h + 30}" rx="30" ry="34" fill="#07040a"/><rect x="${x - 40}" y="${1080 - h + 52}" width="80" height="${h}" rx="30" fill="#07040a"/>`; }
+      capa(bg, `<svg width="1920" height="1080">${pub}</svg>`, 'inset:0');
+      const cel = Array.from({length: 26}, (_, j) => capa(bg, '', `left:${(j * 151) % 1880 + 20}px;top:${900 + (j * 53) % 120}px;width:8px;height:12px;border-radius:2px;background:#fff7d6;box-shadow:0 0 18px #fff3b0`));
+      AMB.push((t) => { haz.forEach((h, j) => { h.style.transform = `rotate(${Math.sin(t * .45 + j * 1.7) * 22}deg)`; }); cel.forEach((c, j) => { c.style.opacity = String(.35 + .65 * Math.abs(Math.sin(t * 1.4 + j))); }); f.style.transform = `translate(${Math.sin(t * .2) * 600 + 700}px,${Math.cos(t * .15) * 200}px)`; f.style.opacity = .5 + .4 * Math.sin(t * .7); });
+    }
+  },
+  // director 1: focos del escenario que cruzan desde las esquinas (en DJ eran láseres)
+  rayos(c, H, inverso) {
+    const {pal} = H;
+    [[-120, 1], [2040, -1], [600, 1], [1320, -1]].forEach(([x, s], i) => {
+      const l = H.$(`<div class="abs" style="left:${x - 160}px;top:-160px;width:320px;height:1600px;background:linear-gradient(${rgba(i % 2 ? pal.c : pal.a, .24)},transparent 72%);clip-path:polygon(42% 0,58% 0,100% 100%,0 100%);transform-origin:50% 0;filter:blur(5px)"></div>`);
+      c.cam.insertBefore(l, c.cam.firstChild);
+      c.tl.fromTo(l, {rotation: s * (inverso ? -1 : 1) * (32 - i * 6)}, {rotation: s * (inverso ? 1 : -1) * (14 - i * 3), duration: c.D, ease: 'sine.inOut'}, 0);
+    });
+  },
+  // director 3: la línea de tono sobre un pentagrama (en DJ era la onda de audio)
+  onda(c, o, H) {
+    const {pal} = H, col = o.b ? pal.b : pal.a, w = o.w, h = o.h; let d = `M0 ${h * .7}`, x = 0, k = 0;
+    while (x < w) { const y = h * (.2 + .6 * ((Math.sin(k * 1.7 + (o.b ? 2 : 0)) + 1) / 2)); d += `L${x} ${y.toFixed(1)}L${Math.min(w, x + 70)} ${y.toFixed(1)}`; x += 70; k++; }
+    const pent = [0, 1, 2, 3, 4].map((j) => `<path d="M0 ${h * (.2 + j * .15)}H${w}" stroke="${rgba(col, .22)}" stroke-width="2"/>`).join('');
+    const e = H.$(`<div class="abs" style="left:${o.x}px;top:${o.y}px;width:${w}px;height:${h}px"><svg width="${w}" height="${h}" style="overflow:visible">${pent}<path d="${d}" fill="none" stroke="${col}" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1"/></svg></div>`);
+    (o.en || c.cam).appendChild(e);
+    c.tl.fromTo(e.querySelectorAll('path')[5], {strokeDashoffset: 1}, {strokeDashoffset: 0, duration: 1.4, ease: 'power1.inOut'}, .3);
+    return e;
+  },
+  chip: {bg: '#1c1412', ink: '#f7efe3', font: 'DMSans', tt: 'none'},
+};
+
+window.MKT_MUNDOS = {dibujo: DIBUJO, mecanica: MECANICA, canto: CANTO};
 // el nicho del curso por su nombre (igual que temas.kit_de en Python)
 window.MKT_NICHO_DE = (txt) => { const t = String(txt || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
-  return /\bdj\b|disc ?jockey/.test(t) ? 'dj' : /mecanic|automotr|motocicl|\bmotos?\b/.test(t) ? 'mecanica' : /dibuj|ilustrac|boceto|acuarel/.test(t) ? 'dibujo' : ''; };
+  return /\bdj\b|disc ?jockey/.test(t) ? 'dj' : /mecanic|automotr|motocicl|\bmotos?\b/.test(t) ? 'mecanica' : /dibuj|ilustrac|boceto|acuarel/.test(t) ? 'dibujo' : /\bcanto\b|aprende a cantar|\bcantar\b|tecnica vocal|afinando voces/.test(t) ? 'canto' : ''; };
 window.MKT_RGBA = rgba;
 })();
