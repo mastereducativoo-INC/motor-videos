@@ -103,7 +103,7 @@ def armar(r, bajar):
                 # 23 nov (Matemáticas): la caja, los cursos y los objetos que llegan con escenario (escritorio, pared) salen como un cuadro
                 # con fondo en el video. Eso es ERROR (regla F9), no aviso: hay que pedir la imagen otra vez.
                 if re.match(r'^ki\d$', k):  # una ilustración con fondo no entra al video (se vería el recuadro): se omite
-                    avisos.append(f'ERROR IMAGEN: «{k}» llegó con fondo (no es un color liso): no se usa en el video. Pídela otra vez.'); continue
+                    avisos.append(f'La ilustración «{k}» llegó con fondo: no se usó (se vería el recuadro). Pídela otra vez.'); continue
                 if re.match(r'^ko\d$', k):  # un objeto decorativo con fondo no se usa (el video sigue con los demás)
                     avisos.append(f'El objeto «{k}» llegó con fondo: no se usó. Pídelo otra vez.'); continue
                 if k == 'pack' or re.match(r'^c\d+$', k):
