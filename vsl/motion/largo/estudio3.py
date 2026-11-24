@@ -104,13 +104,9 @@ def armar(r, bajar):
                 # con fondo en el video. Eso es ERROR (regla F9), no aviso: hay que pedir la imagen otra vez.
                 if re.match(r'^ki\d$', k):  # una ilustración con fondo no entra al video (se vería el recuadro): se omite
                     avisos.append(f'ERROR IMAGEN: «{k}» llegó con fondo (no es un color liso): no se usa en el video. Pídela otra vez.'); continue
-<<<<<<< Updated upstream
-                if k == 'pack' or re.match(r'^(c\d+|ko\d)$', k):
-=======
                 if re.match(r'^ko\d$', k):  # un objeto decorativo con fondo no se usa (el video sigue con los demás)
                     avisos.append(f'El objeto «{k}» llegó con fondo: no se usó. Pídelo otra vez.'); continue
                 if k == 'pack' or re.match(r'^c\d+$', k):
->>>>>>> Stashed changes
                     avisos.append(f'ERROR IMAGEN: «{k}» llegó con fondo o escenario (no es un color liso): se ve como un cuadro en el video. Pídela otra vez.')
                 else:
                     avisos.append(f'La imagen «{k}» no tiene fondo liso: no se pudo recortar.')
