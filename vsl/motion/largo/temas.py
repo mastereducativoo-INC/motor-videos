@@ -172,6 +172,9 @@ MKT_MUNDOS = {
                   musica=['it-s-love', 'tears-of-joy', 'talent-in-the-air', 'expressive-courage', 'possible-dreams']),
     'ajedrez': dict(nombres=['Torneo', 'Tablero de madera', 'Análisis', 'Planilla', 'Gran maestro'],  # 24 nov 2026
                     musica=['close-up', 'special-days', 'digital-clouds', 'pop-track-03', 'romantic-getaway']),
+    # 24 nov 2026 (Abogados): mundo legal hecho desde cero; música seria de metales y cuerdas (Mixkit, licencia gratuita)
+    'legal': dict(nombres=['Tribunal', 'Biblioteca jurídica', 'Expediente', 'Contrato', 'Despacho'],
+                  musica=['welcome-to-the-games', 'a-new-life', 'golden-storm', 'epical-drums-05', 'motivating-mornings']),
 }
 
 

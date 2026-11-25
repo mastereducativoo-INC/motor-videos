@@ -45,6 +45,14 @@ const ICO = {
     ${[78, 222].map((cx, j) => `<circle cx="${cx}" cy="110" r="52" fill="${cara}" stroke="rgba(0,0,0,.35)" stroke-width="4"/>${Array.from({length: 12}, (_, k) => { const a = k * Math.PI / 6; return `<path d="M${cx + Math.cos(a) * 44} ${110 + Math.sin(a) * 44}L${cx + Math.cos(a) * 50} ${110 + Math.sin(a) * 50}" stroke="#222" stroke-width="3"/>`; }).join('')}<g class="ag${j + 1}" style="transform-origin:${cx}px 110px"><path d="M${cx - 3} 110L${cx} 66L${cx + 3} 110Z" fill="#c0392b"/></g><circle cx="${cx}" cy="110" r="5" fill="#222"/>`).join('')}`, '', '0 0 300 186'),
   // tablero 8×8 visto de arriba (claras, oscuras), con o sin coordenadas
   tablero: (s, cl, os, coord) => svg(s, s, `${Array.from({length: 64}, (_, k) => { const f = Math.floor(k / 8), c = k % 8; return `<rect x="${c * 100}" y="${f * 100}" width="100" height="100" fill="${(f + c) % 2 ? os : cl}"/>`; }).join('')}${coord ? 'abcdefgh'.split('').map((l, j) => `<text x="${j * 100 + 88}" y="794" font-family="Manrope" font-weight="700" font-size="20" fill="${j % 2 ? cl : os}">${l}</text>`).join('') + Array.from({length: 8}, (_, j) => `<text x="6" y="${j * 100 + 24}" font-family="Manrope" font-weight="700" font-size="20" fill="${j % 2 ? cl : os}">${8 - j}</text>`).join('') : ''}`, '', '0 0 800 800'),
+  // legal (24 nov 2026): mazo de juez, bloque de sonido, balanza, columna, sello de lacre, pluma y carpeta de expediente
+  mazo: (s, wood, gold) => svg(s, s * 1.25, `<g class="golpe" style="transform-origin:80px 190px"><rect x="71" y="62" width="18" height="128" rx="9" fill="${wood}"/><rect x="71" y="62" width="18" height="128" rx="9" fill="url(#vt)" opacity=".5"/><rect x="8" y="16" width="144" height="56" rx="16" fill="${wood}"/><rect x="8" y="16" width="144" height="18" rx="9" fill="rgba(255,255,255,.12)"/><rect x="8" y="16" width="22" height="56" rx="8" fill="${gold}"/><rect x="130" y="16" width="22" height="56" rx="8" fill="${gold}"/><rect x="62" y="20" width="10" height="48" fill="${gold}" opacity=".85"/><rect x="88" y="20" width="10" height="48" fill="${gold}" opacity=".85"/></g><defs><linearGradient id="vt" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".4"/><stop offset=".5" stop-color="#fff" stop-opacity=".25"/><stop offset="1" stop-color="#000" stop-opacity=".4"/></linearGradient></defs>`, '', '0 0 160 200'),
+  bloque: (s, wood, gold) => svg(s, s * .32, `<ellipse cx="100" cy="52" rx="96" ry="12" fill="rgba(0,0,0,.45)"/><rect x="18" y="18" width="164" height="30" rx="8" fill="${wood}"/><ellipse cx="100" cy="18" rx="82" ry="14" fill="${wood}"/><ellipse cx="100" cy="18" rx="82" ry="14" fill="none" stroke="${gold}" stroke-width="4"/>`, '', '0 0 200 64'),
+  balanza: (s, col, base) => svg(s, s * .9, `<rect x="96" y="34" width="8" height="128" fill="${col}"/><path d="M62 172h76l-10-14H72z" fill="${base || col}"/><circle cx="100" cy="26" r="10" fill="${col}"/><g class="brazo" style="transform-origin:100px 40px"><path d="M14 40H186" stroke="${col}" stroke-width="7" stroke-linecap="round"/><g class="pi"><path d="M14 40L-6 104M14 40L34 104" stroke="${col}" stroke-width="2.5"/><path d="M-14 104h56c-4 16-16 22-28 22s-24-6-28-22z" fill="${col}"/></g><g class="pd"><path d="M186 40L166 104M186 40L206 104" stroke="${col}" stroke-width="2.5"/><path d="M158 104h56c-4 16-16 22-28 22s-24-6-28-22z" fill="${col}"/></g></g>`, '', '-20 0 240 180'),
+  columna: (s, col, sombra) => svg(s * .3, s, `<rect x="0" y="0" width="120" height="22" fill="${col}"/><path d="M6 22h108l-8 18H14z" fill="${col}"/><circle cx="14" cy="34" r="11" fill="none" stroke="${col}" stroke-width="6"/><circle cx="106" cy="34" r="11" fill="none" stroke="${col}" stroke-width="6"/><rect x="18" y="40" width="84" height="320" fill="${col}"/>${[30, 46, 62, 78, 94].map((x) => `<path d="M${x} 46v308" stroke="${sombra}" stroke-width="5" stroke-linecap="round"/>`).join('')}<path d="M10 360h100v14H10zM2 374h116v26H2z" fill="${col}"/>`, '', '0 0 120 400'),
+  sello: (s, col, ink) => svg(s, s, `<path d="${Array.from({length: 24}, (_, j) => { const a = j / 24 * Math.PI * 2, r = j % 2 ? 46 : 50; return (j ? 'L' : 'M') + (50 + Math.cos(a) * r).toFixed(1) + ' ' + (50 + Math.sin(a) * r).toFixed(1); }).join('')}Z" fill="${col}"/><circle cx="50" cy="50" r="34" fill="none" stroke="${ink}" stroke-width="2.5" opacity=".7"/><path d="M50 30v34M34 38h32M34 38l-7 15h14zM66 38l-7 15h14zM42 66h16" fill="none" stroke="${ink}" stroke-width="3" stroke-linejoin="round" opacity=".85"/>`, '', '0 0 100 100'),
+  pluma: (s, col, gold) => svg(s, s * .16, `<path d="M0 16L150 6Q168 6 168 16T150 26L0 16Z" fill="${col}"/><rect x="40" y="10" width="10" height="12" fill="${gold}"/><path d="M168 10l34 6-34 6z" fill="${gold}"/><path d="M178 16h20" stroke="rgba(0,0,0,.4)" stroke-width="1.5"/>`, '', '0 0 204 32'),
+  carpeta: (s, col, papel) => svg(s, s * .78, `<path d="M4 18h70l14 14h108v126H4z" fill="${col}"/><rect x="14" y="30" width="172" height="118" fill="${papel}" transform="rotate(-2 100 90)"/>${[52, 70, 88, 106, 124].map((y) => `<path d="M30 ${y}h${y === 124 ? 80 : 140}" stroke="rgba(0,0,0,.18)" stroke-width="4" transform="rotate(-2 100 90)"/>`).join('')}<path d="M4 44h192v114H4z" fill="${col}" opacity=".92"/><rect x="70" y="80" width="60" height="14" rx="3" fill="rgba(255,255,255,.75)"/>`, '', '0 0 200 160'),
 };
 const P = (bg, ink, mut, a, b, c, sobre, panel, line, sombra, ft, fw, fb, fm, tt, ls, rad) => ({bg, ink, mut, a, b, c, sobre, panel, line, sombra, ft, fw, fb, fm, tt, ls, rad, acc: `linear-gradient(90deg,${a},${c},${a})`});
 
@@ -402,9 +410,107 @@ body.mu-ajedrez .cita b{font-family:Manrope;letter-spacing:.04em}`,
   chip: {bg: '#17140f', ink: '#efede6', font: 'Manrope', tt: 'none'},
 };
 
-window.MKT_MUNDOS = {dibujo: DIBUJO, mecanica: MECANICA, canto: CANTO, ajedrez: AJEDREZ};
+// ======================= LEGAL (24 nov 2026) =======================
+// Christian (23 nov, Abogados): «no están bien los diseños de los videos ya que tienen diseño de DJ… tienes que crear el video por
+// completo respecto al nicho, no te bases en ningún video anterior». Mundo hecho desde cero para Derecho: vino/burdeos, dorado y
+// crema; letras serif clásicas con Montserrat para leer; tribunal con columnas y mazo que golpea, biblioteca jurídica con lomos de
+// libros, expediente en papel con sello que se estampa y firma que se traza, contrato con sellos y despacho con la balanza.
+// Nada de láseres, vinilos, ondas de audio ni ecualizadores. Música seria: metales y cuerdas, nada electrónico.
+const LEGAL = {
+  nombres: ['Tribunal', 'Biblioteca jurídica', 'Expediente', 'Contrato', 'Despacho'],
+  pal: [
+    P('#150a0c', '#f6efe3', '#cdbfae', '#c9a24a', '#8e1b2c', '#f0d58c', '#150a0c', 'rgba(246,239,227,.06)', 'rgba(201,162,74,.45)', 'rgba(0,0,0,.6)', 'Playfair', 800, 'Montserrat', 'Montserrat', 'none', '-.01em', '8px'),
+    P('#0e1611', '#f3ecdd', '#c3baa6', '#d4af5a', '#7a1a2a', '#ecd28e', '#0e1611', 'rgba(243,236,221,.06)', 'rgba(212,175,90,.42)', 'rgba(0,0,0,.6)', 'DMSerif', 400, 'Montserrat', 'Montserrat', 'none', '0', '999px'),
+    P('#f2ebdd', '#1e1a17', '#4a423a', '#7a1428', '#1f3b5c', '#b8892e', '#ffffff', '#fffaf0', 'rgba(122,20,40,.32)', 'rgba(60,40,20,.25)', 'Fraunces', 700, 'Montserrat', 'Montserrat', 'none', '-.015em', '6px'),
+    P('#5a0f1e', '#f7f0e3', '#ead9c0', '#d9b45a', '#f7f0e3', '#ffffff', '#ffffff', '#2a070e', '#d9b45a', 'rgba(0,0,0,.45)', 'Playfair', 800, 'Montserrat', 'Montserrat', 'uppercase', '.005em', '2px'),
+    P('#0b0c12', '#f5efe4', '#c9c0b2', '#e0bd6e', '#8a2433', '#f3dc9c', '#0b0c12', 'rgba(255,255,255,.06)', 'rgba(224,189,110,.45)', 'rgba(0,0,0,.6)', 'Instrument', 400, 'Montserrat', 'Montserrat', 'none', '-.01em', '6px'),
+  ],
+  musica: ['welcome-to-the-games', 'a-new-life', 'golden-storm', 'epical-drums-05', 'motivating-mornings'],
+  txt: {deck: (i) => 'TOMO ' + ['I', 'II', 'III', 'IV', 'V', 'VI'][i % 6], bpm: 'AUDIENCIA · 10:00 H', error: (j) => 'PENDIENTE ' + (j + 1), registro: 'EXPEDIENTE', biblioteca: 'MI BIBLIOTECA JURÍDICA', nuevas: 'NUEVAS COMPETENCIAS', desbloq: 'DOMINADAS', cert: 'CERTIFICADO.PDF', modulo: 'MÓDULO'},
+  // director 4: cada escena es otra hoja del contrato (papel, vino, oro y tinta)
+  cartel: [['#f4ecdc', '#3a0a14', '#7a1428'], ['#5a0f1e', '#f7f0e3', '#d9b45a'], ['#d9b45a', '#2a070e', '#5a0f1e'], ['#1b1a22', '#f4ecdc', '#d9b45a']],
+  barras: ['#f4ecdc', '#d9b45a', '#5a0f1e'],
+  css: `
+body.mu-legal .trama{background-image:linear-gradient(90deg,transparent 0 140px,rgba(122,20,40,.55) 140px 143px,transparent 143px 150px,rgba(122,20,40,.55) 150px 153px,transparent 153px),repeating-linear-gradient(180deg,transparent 0 58px,rgba(58,10,20,.12) 58px 60px);opacity:.9}
+body.mu-legal .franja{height:96px;background:linear-gradient(180deg,#d9b45a 0 6px,#5a0f1e 6px calc(100% - 6px),#d9b45a calc(100% - 6px));opacity:.95}
+body.mu-legal .ui{background:#fffaf0;border:2px solid rgba(122,20,40,.28);border-radius:6px;box-shadow:0 30px 60px rgba(60,40,20,.25)}
+body.mu-legal .ui .bar{background:#7a1428;border-bottom:3px solid #b8892e;color:#f4ecdc;font-family:Montserrat;letter-spacing:.12em}
+body.mu-legal .ui .bar b{color:#f0d58c}
+body.mu-legal.d3 .fila{background:#ffffff;border:2px solid rgba(122,20,40,.18);color:#1e1a17}
+body.mu-legal .disco{background:radial-gradient(circle at 38% 32%,#f6e3a6 0,#d4af5a 34%,#9b7a32 70%,#6d5420 100%);box-shadow:0 40px 120px rgba(0,0,0,.65),inset 0 0 0 16px rgba(110,84,32,.85),inset 0 0 0 22px #e8c877,inset 0 0 0 30px rgba(110,84,32,.6)}
+body.mu-legal .disco::before{background:repeating-conic-gradient(from 0deg,rgba(255,255,255,.16) 0 2deg,transparent 2deg 6deg);-webkit-mask:radial-gradient(circle,transparent 0 62%,#000 63% 72%,transparent 73%);mask:radial-gradient(circle,transparent 0 62%,#000 63% 72%,transparent 73%)}
+body.mu-legal .disco .lab{left:30%;top:30%;width:40%;height:40%;background:url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><g fill='none' stroke='%23f0d58c' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'><path d='M50 22v54M30 30h40M30 30l-9 20h18zM70 30l-9 20h18zM38 78h24'/></g><circle cx='50' cy='20' r='4' fill='%23f0d58c'/></svg>\") center/62% no-repeat,#7a1a2a;color:transparent;font-size:0;box-shadow:inset 0 0 0 6px #d4af5a,0 0 0 4px rgba(0,0,0,.25)}
+body.mu-legal .disco .lab::after{display:none}
+body.mu-legal .fuga{background:radial-gradient(closest-side,rgba(224,189,110,.3),transparent 70%)}
+body.mu-legal .cita b{font-family:Playfair;font-style:italic;font-size:40px;letter-spacing:0}`,
+  fondo(DIR, bg, AMB, H) {
+    const {capa, linea, pal} = H, p = pal;
+    if (DIR === 1) { // tribunal: madera oscura, columnas, ventanales con luz, estrado con el mazo que golpea
+      bg.style.background = `repeating-linear-gradient(90deg,rgba(0,0,0,0) 0 118px,rgba(0,0,0,.28) 118px 122px),linear-gradient(180deg,#2a1510 0%,${p.bg} 62%,#070304 100%)`;
+      const ven = [430, 960, 1490].map((x) => capa(bg, `<div style="position:absolute;left:-110px;top:0;width:220px;height:330px;border-radius:110px 110px 0 0;background:linear-gradient(180deg,${rgba(p.c, .28)},${rgba(p.c, .06)});box-shadow:inset 0 0 0 10px rgba(0,0,0,.35)"></div><div style="position:absolute;left:-4px;top:0;width:8px;height:330px;background:rgba(0,0,0,.35)"></div><div style="position:absolute;left:-110px;top:150px;width:220px;height:8px;background:rgba(0,0,0,.35)"></div><div style="position:absolute;left:-260px;top:300px;width:520px;height:900px;background:linear-gradient(180deg,${rgba(p.c, .16)},transparent 75%);clip-path:polygon(28% 0,72% 0,100% 100%,0 100%);filter:blur(8px)"></div>`, `left:${x}px;top:40px`));
+      capa(bg, ICO.columna(760, '#3a2418', 'rgba(0,0,0,.35)'), 'left:-20px;top:330px;opacity:.9');
+      capa(bg, ICO.columna(760, '#3a2418', 'rgba(0,0,0,.35)'), 'left:1712px;top:330px;opacity:.9');
+      capa(bg, '', `left:0;right:0;top:930px;height:150px;background:linear-gradient(180deg,#3a1f14,#1a0c08);border-top:6px solid ${rgba(p.a, .6)}`);
+      capa(bg, ICO.bloque(260, '#4a2a1a', p.a), 'left:1500px;top:900px');
+      const mz = capa(bg, ICO.mazo(170, '#5b3420', p.a), 'left:1600px;top:690px;transform-origin:85px 212px');
+      const pol = Array.from({length: 18}, (_, j) => capa(bg, '', `left:${(j * 113) % 1880 + 20}px;top:${(j * 271) % 900 + 60}px;width:4px;height:4px;border-radius:50%;background:${rgba(p.c, .7)};filter:blur(.5px)`));
+      AMB.push((t) => { const f = (t % 4) / 4, g = f < .08 ? -32 * (f / .08) : f < .14 ? -32 + 32 * ((f - .08) / .06) : 0; mz.style.transform = `rotate(${-58 + g}deg)`;
+        ven.forEach((v, j) => { v.style.opacity = String(.85 + .15 * Math.sin(t * .6 + j)); });
+        pol.forEach((d, j) => { d.style.transform = `translate(${Math.sin(t * .3 + j) * 30}px,${((t * 14 + j * 40) % 200) - 100}px)`; d.style.opacity = String(.25 + .35 * Math.sin(t + j)); }); });
+    } else if (DIR === 2) { // biblioteca jurídica: estantes con lomos de libros de derecho y una lámpara cálida
+      bg.style.background = `radial-gradient(1100px 700px at 50% 45%,${rgba(p.c, .14)},transparent 70%),linear-gradient(180deg,#14100c,${p.bg} 55%,#060806)`;
+      const cols = ['#5a0f1e', '#1f3b2a', '#1f2e4a', '#4a2a16', '#6b1424', '#2a2a2a'];
+      const estante = (y, sem) => { let x = 0, s = ''; let k = sem; while (x < 1920) { const w = 34 + (k * 17) % 30, h = 150 + (k * 29) % 60, c = cols[k % cols.length];
+          s += `<rect x="${x}" y="${190 - h}" width="${w}" height="${h}" rx="3" fill="${c}"/><rect x="${x + 4}" y="${190 - h + 18}" width="${w - 8}" height="6" fill="${rgba(p.a, .75)}"/><rect x="${x + 4}" y="${190 - h + 34}" width="${w - 8}" height="3" fill="${rgba(p.a, .55)}"/><rect x="${x + 4}" y="${170}" width="${w - 8}" height="4" fill="${rgba(p.a, .5)}"/>`; x += w + 3; k++; }
+        return capa(bg, `<svg width="1920" height="210">${s}<rect x="0" y="190" width="1920" height="20" fill="#2b1a10"/></svg>`, `left:0;top:${y}px;opacity:.55`); };
+      const e1 = estante(-30, 1), e2 = estante(890, 4);
+      const lam = capa(bg, '', `left:660px;top:120px;width:600px;height:600px;border-radius:50%;background:radial-gradient(closest-side,${rgba(p.c, .28)},transparent 70%)`);
+      AMB.push((t) => { e1.style.transform = `translateX(${Math.sin(t * .12) * 30 - 30}px)`; e2.style.transform = `translateX(${-Math.sin(t * .12) * 30 - 30}px)`; lam.style.opacity = String(.8 + .2 * Math.sin(t * 1.1)); });
+    } else if (DIR === 3) { // expediente: escritorio de papel, carpetas, pluma que firma y sello que se estampa
+      bg.style.background = `linear-gradient(${rgba(p.a, .05)} 1px,transparent 1px) 0 0/100% 56px,radial-gradient(1300px 800px at 50% 50%,#fbf6ea,${p.bg} 75%)`;
+      capa(bg, ICO.carpeta(300, '#c9a86a', '#fffaf0'), 'left:-60px;top:40px;transform:rotate(-9deg);opacity:.75');
+      capa(bg, ICO.carpeta(220, '#1f3b5c', '#fffaf0'), 'left:1720px;top:40px;transform:rotate(-6deg);opacity:.6');
+      const pl = capa(bg, ICO.pluma(380, '#1e1a17', p.c), 'left:1500px;top:960px;transform:rotate(-14deg);opacity:.8');
+      const firma = linea(bg, 'M1240 1030c30-70 60-90 70-60s-30 70-10 60 40-70 70-50-10 50 20 40 50-40 80-30', rgba('#1e1a17', .4), 4, 8, 2);
+      const se = capa(bg, ICO.sello(150, '#8e1b2c', '#f0d58c'), 'left:50px;top:880px;filter:drop-shadow(0 10px 14px rgba(60,20,10,.35))');
+      AMB.push((t) => { firma(t); pl.style.transform = `rotate(${-14 + Math.sin(t * .8) * 3}deg) translateX(${Math.sin(t * .5) * 14}px)`;
+        const f = (t % 5) / 5; se.style.transform = f < .06 ? `scale(${1.6 - f / .06 * .6})` : 'scale(1)'; se.style.opacity = f < .02 ? '0' : '1'; });
+    } else if (DIR === 4) { // hoja del contrato (se ve detrás de las hojas de cada escena)
+      bg.style.background = p.bg; bg.appendChild(H.$('<div class="trama"></div>'));
+    } else { // despacho de noche: ventanal, la balanza grande que se equilibra y una luz dorada que recorre
+      bg.style.background = `radial-gradient(1400px 900px at 50% 0%,#1b1c26,${p.bg} 70%)`;
+      capa(bg, '', `left:160px;top:60px;width:560px;height:700px;background:linear-gradient(90deg,transparent 0 268px,rgba(0,0,0,.5) 268px 292px,transparent 292px),linear-gradient(180deg,transparent 0 338px,rgba(0,0,0,.5) 338px 362px,transparent 362px),linear-gradient(180deg,#1c2a44,#10131c);box-shadow:inset 0 0 0 16px #2a1a14;opacity:.55`);
+      const f = H.$('<div class="fuga" style="left:-300px;top:-400px"></div>'); bg.appendChild(f);
+      const bz = capa(bg, ICO.balanza(760, rgba(p.a, .28), rgba(p.a, .22)), 'left:1100px;top:250px');
+      const br = bz.querySelector('.brazo'), pi = bz.querySelector('.pi'), pd = bz.querySelector('.pd');
+      AMB.push((t) => { const a = Math.sin(t * .6) * 8; br.style.transform = `rotate(${a}deg)`; pi.style.transform = `rotate(${-a}deg)`; pi.style.transformOrigin = '14px 40px'; pd.style.transform = `rotate(${-a}deg)`; pd.style.transformOrigin = '186px 40px';
+        f.style.transform = `translate(${Math.sin(t * .2) * 600 + 700}px,${Math.cos(t * .15) * 200}px)`; f.style.opacity = .5 + .4 * Math.sin(t * .7); });
+    }
+  },
+  // director 1: haces de luz de los ventanales del tribunal (en DJ eran láseres)
+  rayos(c, H, inverso) {
+    const {pal} = H;
+    [[300, 1], [960, -1], [1620, 1]].forEach(([x, s], i) => {
+      const l = H.$(`<div class="abs" style="left:${x - 230}px;top:-120px;width:460px;height:1500px;background:linear-gradient(${rgba(i === 1 ? pal.c : pal.a, .2)},transparent 70%);clip-path:polygon(36% 0,64% 0,100% 100%,0 100%);transform-origin:50% 0;filter:blur(6px)"></div>`);
+      c.cam.insertBefore(l, c.cam.firstChild);
+      c.tl.fromTo(l, {rotation: s * (inverso ? -1 : 1) * (14 - i * 3), opacity: 0}, {rotation: s * (inverso ? 1 : -1) * 6, opacity: 1, duration: c.D, ease: 'sine.inOut'}, 0);
+    });
+  },
+  // director 3: una firma que se traza sobre la línea del documento (en DJ era la onda de audio)
+  onda(c, o, H) {
+    const {pal} = H, col = o.b ? pal.b : pal.a, w = o.w, h = o.h; let d = `M10 ${h * .62}`, x = 10, k = 0;
+    while (x < w * .62) { const dx = 46 + (k * 13) % 30; d += `c${dx * .3} ${-h * (.42 + (k % 3) * .08)} ${dx * .7} ${-h * .1} ${dx * .45} ${h * .18}s${dx * .2} ${h * .22} ${dx * .55} ${-h * .12}`; x += dx; k++; }
+    const e = H.$(`<div class="abs" style="left:${o.x}px;top:${o.y}px;width:${w}px;height:${h}px"><svg width="${w}" height="${h}" style="overflow:visible"><path d="M0 ${h * .82}H${w}" stroke="${rgba(col, .35)}" stroke-width="2" stroke-dasharray="4 8"/><path d="${d}" fill="none" stroke="${col}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1"/></svg></div>`);
+    (o.en || c.cam).appendChild(e);
+    c.tl.fromTo(e.querySelectorAll('path')[1], {strokeDashoffset: 1}, {strokeDashoffset: 0, duration: 1.4, ease: 'power1.inOut'}, .3);
+    return e;
+  },
+  chip: {bg: '#5a0f1e', ink: '#f4ecdc', font: 'Montserrat', tt: 'uppercase'},
+};
+
+window.MKT_MUNDOS = {dibujo: DIBUJO, mecanica: MECANICA, canto: CANTO, ajedrez: AJEDREZ, legal: LEGAL};
 // el nicho del curso por su nombre (igual que temas.kit_de en Python)
 window.MKT_NICHO_DE = (txt) => { const t = String(txt || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
-  return /\bdj\b|disc ?jockey/.test(t) ? 'dj' : /mecanic|automotr|motocicl|\bmotos?\b/.test(t) ? 'mecanica' : /dibuj|ilustrac|boceto|acuarel/.test(t) ? 'dibujo' : /\bcanto\b|aprende a cantar|\bcantar\b|tecnica vocal|afinando voces/.test(t) ? 'canto' : /ajedrez|\bchess\b/.test(t) ? 'ajedrez' : ''; };
+  return /\bdj\b|disc ?jockey/.test(t) ? 'dj' : /mecanic|automotr|motocicl|\bmotos?\b/.test(t) ? 'mecanica' : /dibuj|ilustrac|boceto|acuarel/.test(t) ? 'dibujo' : /\bcanto\b|aprende a cantar|\bcantar\b|tecnica vocal|afinando voces/.test(t) ? 'canto' : /ajedrez|\bchess\b/.test(t) ? 'ajedrez' : /abogad|\bderecho\b|juridic|\bleyes\b|litigac|notari/.test(t) ? 'legal' : ''; };
 window.MKT_RGBA = rgba;
 })();
