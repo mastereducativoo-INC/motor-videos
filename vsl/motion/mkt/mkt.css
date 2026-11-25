@@ -12,7 +12,7 @@
 @font-face{font-family:Instrument;src:url(../../fonts/InstrumentSerif.ttf);font-weight:400}
 @font-face{font-family:Instrument;src:url(../../fonts/InstrumentSerif-Italic.ttf);font-style:italic;font-weight:400}
 @font-face{font-family:Manrope;src:url(../../fonts/Manrope.ttf);font-weight:200 800}
-@font-face{font-family:Syne;src:url(../../fonts/Syne.ttf);font-weight:100 900}
+@font-face{font-family:Syne;src:url(../../fonts/Syne.ttf);font-weight:100 900}@font-face{font-family:Playfair;src:url(../../fonts/Playfair.ttf);font-weight:400 900}@font-face{font-family:Playfair;src:url(../../fonts/Playfair-Italic.ttf);font-style:italic;font-weight:400 900}@font-face{font-family:Sora;src:url(../../fonts/Sora.ttf);font-weight:100 800}@font-face{font-family:Epilogue;src:url(../../fonts/Epilogue.ttf);font-weight:100 900}
 @font-face{font-family:Outfit;src:url(../../fonts/Outfit.ttf);font-weight:100 900}
 /* 23 nov: letras de los mundos del nicho (mundos.js): dibujo y mecánica, las mismas del kit de la Fábrica */
 @font-face{font-family:Fraunces;src:url(../../fonts/Fraunces.ttf);font-weight:100 900}

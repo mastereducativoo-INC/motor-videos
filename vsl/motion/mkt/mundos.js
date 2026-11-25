@@ -28,6 +28,23 @@ const ICO = {
   micro: (s, col) => svg(s * .42, s, `<rect x="6" y="2" width="72" height="104" rx="36" fill="#2a2a2e"/><g fill="rgba(255,255,255,.16)">${Array.from({length: 40}, (_, j) => `<circle cx="${16 + (j % 5) * 13}" cy="${14 + Math.floor(j / 5) * 11}" r="2.6"/>`).join('')}</g><rect x="4" y="58" width="76" height="10" rx="5" fill="${col}"/><path d="M42 106v44" stroke="${col}" stroke-width="10"/><path d="M14 92c0 22 12 34 28 34s28-12 28-34" fill="none" stroke="${col}" stroke-width="7"/><rect x="18" y="150" width="48" height="10" rx="5" fill="${col}"/>`, '', '0 0 84 200'),
   audifonos: (s, col) => svg(s, s * .9, `<path d="M18 82V60a52 52 0 0 1 104 0v22" fill="none" stroke="#2b2b30" stroke-width="12" stroke-linecap="round"/><rect x="4" y="70" width="30" height="46" rx="12" fill="${col}"/><rect x="106" y="70" width="30" height="46" rx="12" fill="${col}"/>`, '', '0 0 140 126'),
   nota: (s, col) => svg(s * .7, s, `<ellipse cx="22" cy="84" rx="20" ry="14" fill="${col}" transform="rotate(-20 22 84)"/><path d="M40 80V8c18 6 30 16 30 34" fill="none" stroke="${col}" stroke-width="8" stroke-linecap="round"/>`, '', '0 0 72 100'),
+  // ajedrez (24 nov 2026): piezas Staunton de perfil (s = alto), el reloj de torneo y un tablero visto de arriba
+  pieza: (tipo, s, col, borde) => { const B = 'M18 156H82V146Q82 137 72 135', st = borde ? ` stroke="${borde}" stroke-width="2.5"` : '';
+    const D = {
+      peon: `${B}L64 132Q57 112 60 96H68V88H32V96H40Q43 112 36 132L28 135Q18 137 18 146Z M50 50a17 17 0 1 0 .1 0Z`,
+      torre: `${B}L67 96H74V62H64V72H56V62H44V72H36V62H26V96H33L28 135Q18 137 18 146Z`,
+      alfil: `${B}L62 104H70V96H30V104H38L28 135Q18 137 18 146Z M50 34C66 48 71 70 62 90H38C29 70 34 48 50 34Z M50 22a7 7 0 1 0 .1 0Z`,
+      dama: `${B}L62 100H70V92H30V100H38L28 135Q18 137 18 146Z M31 90L23 50L38 70L43 40L50 66L57 40L62 70L77 50L69 90Z M23 46a5 5 0 1 0 .1 0ZM43 36a5 5 0 1 0 .1 0ZM57 36a5 5 0 1 0 .1 0ZM77 46a5 5 0 1 0 .1 0Z`,
+      rey: `${B}L62 100H70V92H30V100H38L28 135Q18 137 18 146Z M33 90C27 72 30 56 50 52C70 56 73 72 67 90Z M46 18H54V30H64V38H54V50H46V38H36V30H46Z`,
+      caballo: 'M20 156H84V146Q84 137 74 135L72 118C79 96 77 70 62 50C55 40 44 33 34 31L36 42C27 45 19 56 15 69C13 76 18 80 25 78C32 76 37 73 42 75C35 87 29 101 31 118L29 135Q20 137 20 146Z',
+    };
+    const ojo = tipo === 'caballo' ? `<circle cx="38" cy="52" r="3.5" fill="rgba(0,0,0,.55)"/>` : '';
+    return svg(s * .64, s, `<path d="${D[tipo] || D.peon}" fill="${col}" fill-rule="nonzero"${st}/>${ojo}`, '', '0 0 100 160'); },
+  // reloj de ajedrez de dos caras; .ag1 y .ag2 son las agujas (se giran desde fondo())
+  reloj: (s, col, cara) => svg(s, s * .62, `<rect x="6" y="40" width="288" height="140" rx="18" fill="${col}"/><rect x="58" y="22" width="44" height="22" rx="6" fill="${col}"/><rect x="198" y="16" width="44" height="28" rx="6" fill="${col}"/>
+    ${[78, 222].map((cx, j) => `<circle cx="${cx}" cy="110" r="52" fill="${cara}" stroke="rgba(0,0,0,.35)" stroke-width="4"/>${Array.from({length: 12}, (_, k) => { const a = k * Math.PI / 6; return `<path d="M${cx + Math.cos(a) * 44} ${110 + Math.sin(a) * 44}L${cx + Math.cos(a) * 50} ${110 + Math.sin(a) * 50}" stroke="#222" stroke-width="3"/>`; }).join('')}<g class="ag${j + 1}" style="transform-origin:${cx}px 110px"><path d="M${cx - 3} 110L${cx} 66L${cx + 3} 110Z" fill="#c0392b"/></g><circle cx="${cx}" cy="110" r="5" fill="#222"/>`).join('')}`, '', '0 0 300 186'),
+  // tablero 8×8 visto de arriba (claras, oscuras), con o sin coordenadas
+  tablero: (s, cl, os, coord) => svg(s, s, `${Array.from({length: 64}, (_, k) => { const f = Math.floor(k / 8), c = k % 8; return `<rect x="${c * 100}" y="${f * 100}" width="100" height="100" fill="${(f + c) % 2 ? os : cl}"/>`; }).join('')}${coord ? 'abcdefgh'.split('').map((l, j) => `<text x="${j * 100 + 88}" y="794" font-family="Manrope" font-weight="700" font-size="20" fill="${j % 2 ? cl : os}">${l}</text>`).join('') + Array.from({length: 8}, (_, j) => `<text x="6" y="${j * 100 + 24}" font-family="Manrope" font-weight="700" font-size="20" fill="${j % 2 ? cl : os}">${8 - j}</text>`).join('') : ''}`, '', '0 0 800 800'),
 };
 const P = (bg, ink, mut, a, b, c, sobre, panel, line, sombra, ft, fw, fb, fm, tt, ls, rad) => ({bg, ink, mut, a, b, c, sobre, panel, line, sombra, ft, fw, fb, fm, tt, ls, rad, acc: `linear-gradient(90deg,${a},${c},${a})`});
 
@@ -292,9 +309,102 @@ body.mu-canto .cita b{font-family:Caveat;font-size:40px;letter-spacing:0}`,
   chip: {bg: '#1c1412', ink: '#f7efe3', font: 'DMSans', tt: 'none'},
 };
 
-window.MKT_MUNDOS = {dibujo: DIBUJO, mecanica: MECANICA, canto: CANTO};
+// ======================= AJEDREZ (24 nov 2026) =======================
+// Mundo hecho desde cero para el nicho de ajedrez (regla V8: nada de DJ ni de otros nichos). Christian, 24 nov: «prepara los 5 videos».
+// 1 Torneo: sala de torneo con tablero en perspectiva, focos y flechas de jugada. 2 Tablero de madera: mesa de nogal, piezas
+// talladas y reloj de torneo; lo que gira es un tablero redondo (en DJ era el disco). 3 Análisis: programa de análisis con tablero
+// verde, barra de evaluación y lista de jugadas. 4 Planilla: cada escena es otra planilla de anotación. 5 Gran maestro: fotos del
+// curso con luz dorada y un rey gigante que se recorta.
+const AJEDREZ = {
+  nombres: ['Torneo', 'Tablero de madera', 'Análisis', 'Planilla', 'Gran maestro'],
+  pal: [
+    P('#0c1712', '#f4efe3', '#bdb6a5', '#d6b25e', '#e9e4d8', '#f3dc9c', '#0c1712', 'rgba(255,255,255,.05)', 'rgba(214,178,94,.45)', 'rgba(214,178,94,.28)', 'Montserrat', 800, 'Manrope', 'Manrope', 'none', '-.025em', '12px'),
+    P('#1b120b', '#f6ead4', '#d4bd9b', '#e3a857', '#a5532a', '#f5d49a', '#1b120b', 'rgba(246,234,212,.06)', 'rgba(227,168,87,.45)', 'rgba(0,0,0,.6)', 'Playfair', 700, 'DMSans', 'DMSans', 'none', '-.01em', '999px'),
+    P('#262421', '#f3f0ea', '#aaa59c', '#81b64c', '#e05252', '#f7c631', '#1b1a17', '#302e2b', '#45423d', 'rgba(0,0,0,.45)', 'Sora', 800, 'Manrope', 'Manrope', 'none', '-.03em', '8px'),
+    P('#efede6', '#17140f', '#2e2a23', '#7d1d2c', '#17140f', '#b8902e', '#ffffff', '#17140f', '#17140f', 'rgba(40,30,20,.3)', 'Epilogue', 900, 'DMSans', 'DMSans', 'uppercase', '-.02em', '2px'),
+    P('#070605', '#f7f1e6', '#d6ccbb', '#c9a227', '#8c1c2b', '#f1dd9a', '#0e0b06', 'rgba(255,255,255,.06)', 'rgba(201,162,39,.45)', 'rgba(0,0,0,.6)', 'Fraunces', 500, 'Manrope', 'Manrope', 'none', '-.02em', '6px'),
+  ],
+  musica: ['close-up', 'special-days', 'digital-clouds', 'pop-track-03', 'romantic-getaway'],
+  txt: {deck: (i) => 'PARTIDA ' + (i + 1), bpm: 'EVALUACIÓN +1.4', error: (j) => 'ERROR ?? ' + (j + 1), registro: 'MIS PARTIDAS', biblioteca: 'MI REPERTORIO', nuevas: 'TU NUEVO NIVEL', desbloq: 'LOGRADAS', cert: 'CERTIFICADO.PDF', modulo: 'MÓDULO'},
+  // director 4: cada escena es otra planilla (papel, tinta, granate, oro)
+  cartel: [['#efede6', '#17140f', '#7d1d2c'], ['#17140f', '#efede6', '#d9b44a'], ['#7d1d2c', '#ffffff', '#f1d27a'], ['#d9b44a', '#17140f', '#17140f']],
+  barras: ['#17140f', '#efede6', '#7d1d2c'],
+  css: `
+body.mu-ajedrez .trama{background-image:repeating-linear-gradient(180deg,transparent 0 70px,rgba(23,20,15,.16) 70px 72px),linear-gradient(90deg,transparent 0 150px,rgba(125,29,44,.38) 150px 153px,transparent 153px 1010px,rgba(23,20,15,.16) 1010px 1012px,transparent 1012px);opacity:.9}
+body.mu-ajedrez .franja{height:96px;background:conic-gradient(#17140f 25%,#efede6 0 50%,#17140f 0 75%,#efede6 0) 0 0/96px 96px;opacity:.95}
+body.mu-ajedrez .ui{background:#302e2b;border:2px solid #45423d;border-radius:12px;box-shadow:0 30px 70px rgba(0,0,0,.45)}
+body.mu-ajedrez .ui .bar{background:#3a3835;border-bottom:2px solid #45423d;color:#bdb8ae;font-family:Manrope;font-weight:800}
+body.mu-ajedrez .ui .bar b{color:#81b64c}
+body.mu-ajedrez.d3 .fila{background:#2b2926;border:2px solid #45423d}
+body.mu-ajedrez .disco{background:radial-gradient(circle,transparent 0 69%,#5a3418 70% 76%,#2a170a 77% 100%),conic-gradient(#ead2a6 25%,#7b4a25 0 50%,#ead2a6 0 75%,#7b4a25 0) 50% 50%/25% 25%;box-shadow:0 40px 120px rgba(0,0,0,.6),inset 0 0 0 10px #1c0f06}
+body.mu-ajedrez .disco::before{background:radial-gradient(closest-side at 35% 30%,rgba(255,240,210,.28),transparent 60%);mix-blend-mode:normal}
+body.mu-ajedrez .disco .lab{left:36%;top:36%;width:28%;height:28%;background:#1c0f06;color:#f5d49a;font-family:Playfair;font-weight:700;box-shadow:0 0 0 8px #e3a857,0 20px 40px rgba(0,0,0,.5)}
+body.mu-ajedrez .disco .lab::after{display:none}
+body.mu-ajedrez .fuga{background:radial-gradient(closest-side,rgba(201,162,39,.32),transparent 70%)}
+body.mu-ajedrez .cita b{font-family:Manrope;letter-spacing:.04em}`,
+  fondo(DIR, bg, AMB, H) {
+    const {capa, linea, pal} = H, p = pal;
+    // piezas que flotan despacio (las usan varios directores)
+    const piezas = (lista) => { const ps = lista.map(([t, x, y, s, col, op, des]) => ({e: capa(bg, ICO.pieza(t, s, col), `left:${x}px;top:${y}px;opacity:${op};transform-origin:50% 100%`), des}));
+      return (tt) => ps.forEach((q) => { q.e.style.transform = `translateY(${Math.sin(tt * .5 + q.des) * 12}px) rotate(${Math.sin(tt * .35 + q.des) * 1.5}deg)`; }); };
+    if (DIR === 1) { // sala de torneo: tablero en perspectiva que avanza, focos dorados, rey y dama a los lados
+      bg.style.background = `radial-gradient(1100px 600px at 50% 0%,${rgba(p.a, .18)},transparent 70%),linear-gradient(180deg,#09120e 0%,${p.bg} 55%,#050b08 100%)`;
+      const piso = capa(bg, '', `left:-1200px;right:-1200px;top:560px;height:1400px;background:conic-gradient(${rgba(p.b, .2)} 25%,rgba(0,0,0,.25) 0 50%,${rgba(p.b, .2)} 0 75%,rgba(0,0,0,.25) 0) 0 0/240px 240px;transform:perspective(900px) rotateX(64deg);transform-origin:50% 0;-webkit-mask:linear-gradient(180deg,transparent,#000 35%);mask:linear-gradient(180deg,transparent,#000 35%)`);
+      const focos = [420, 960, 1500].map((x, j) => capa(bg, '', `left:${x - 230}px;top:-60px;width:460px;height:1200px;background:linear-gradient(180deg,${rgba(j === 1 ? p.c : p.a, .16)},transparent 72%);clip-path:polygon(45% 0,55% 0,100% 100%,0 100%);transform-origin:50% 0;filter:blur(4px)`));
+      const pz = piezas([['rey', -30, 420, 560, rgba(p.a, .13), 1, 0], ['dama', 1660, 470, 500, rgba(p.b, .1), 1, 2], ['caballo', 230, 700, 300, rgba(p.b, .08), 1, 4], ['torre', 1520, 780, 260, rgba(p.a, .1), 1, 1]]);
+      AMB.push((t) => { piso.style.backgroundPosition = `0 ${(t * 60) % 240}px`; focos.forEach((f, j) => { f.style.transform = `rotate(${Math.sin(t * .4 + j * 2) * 12}deg)`; f.style.opacity = String(.75 + .25 * Math.sin(t * 1.3 + j)); }); pz(t); });
+    } else if (DIR === 2) { // mesa de nogal: esquina de un tablero de madera, piezas talladas, reloj de torneo y luz cálida
+      bg.style.background = `repeating-linear-gradient(176deg,rgba(0,0,0,0) 0 36px,rgba(0,0,0,.18) 36px 39px,rgba(0,0,0,0) 39px 90px),radial-gradient(1300px 900px at 30% 40%,${rgba(p.a, .2)},transparent 65%),${p.bg}`;
+      capa(bg, ICO.tablero(900, '#d9bb8b', '#6e4021'), 'left:-260px;top:520px;transform:rotate(-14deg);opacity:.32;filter:blur(1.5px);box-shadow:0 0 0 22px #3a210f');
+      const pz = piezas([['caballo', 140, 300, 260, '#e9d3a8', .35, 0], ['peon', 420, 420, 170, '#2a170a', .5, 1.5], ['alfil', 1700, 120, 240, '#e9d3a8', .22, 3]]);
+      const rl = capa(bg, ICO.reloj(360, '#2a170a', '#f3e6cc'), 'left:1500px;top:780px;opacity:.75;filter:drop-shadow(0 20px 30px rgba(0,0,0,.5))');
+      const a1 = rl.querySelector('.ag1'), a2 = rl.querySelector('.ag2');
+      AMB.push((t) => { pz(t); a1.style.transform = `rotate(${t * 36}deg)`; a2.style.transform = `rotate(${(t * 6) % 360}deg)`; });
+    } else if (DIR === 3) { // programa de análisis: tablero verde con coordenadas, barra de evaluación y la lista de jugadas
+      bg.style.background = `radial-gradient(1200px 800px at 50% 50%,#2c2a27,${p.bg} 75%)`;
+      capa(bg, ICO.tablero(760, '#eeeed2', '#769656', true), 'left:-120px;top:160px;opacity:.16;transform:rotate(-6deg)');
+      const ev = capa(bg, `<div class="bl" style="position:absolute;left:0;right:0;bottom:0;height:50%;background:#f3f0ea"></div><div style="position:absolute;left:0;right:0;top:50%;height:3px;background:${p.c}"></div>`, 'left:18px;top:60px;width:34px;height:960px;border-radius:6px;overflow:hidden;background:#3c3a37;opacity:.6');
+      const bl = ev.querySelector('.bl');
+      const J = ['1. e4 e5', '2. Cf3 Cc6', '3. Ab5 a6', '4. Aa4 Cf6', '5. O-O Ae7', '6. Te1 b5', '7. Ab3 d6', '8. c3 O-O', '9. h3 Ca5', '10. Ac2 c5', '11. d4 Dc7', '12. Cbd2 Ad7', '13. Cf1 Tac8', '14. Ce3 cxd4'];
+      const lista = capa(bg, J.concat(J).map((x, j) => `<div style="height:58px;font-family:Manrope;font-weight:700;font-size:30px;color:${j % 7 === 3 ? p.a : 'rgba(243,240,234,.5)'}">${x}</div>`).join(''), 'right:40px;top:0;width:300px;opacity:.35');
+      const fl = linea(bg, 'M240 860L380 720L520 580', rgba(p.a, .55), 18, 7);
+      const f2 = linea(bg, 'M520 900V760H600', rgba(p.c, .5), 18, 9, 3);
+      AMB.push((t) => { bl.style.height = (50 + Math.sin(t * .6) * 14 + Math.sin(t * 1.7) * 4) + '%'; lista.style.transform = `translateY(${-((t * 30) % (J.length * 58))}px)`; fl(t); f2(t); });
+    } else if (DIR === 4) { // planilla de anotación (se ve detrás de las hojas de cada escena)
+      bg.style.background = p.bg; bg.appendChild(H.$('<div class="trama"></div>'));
+    } else { // gran maestro: penumbra dorada, un rey gigante que se recorta y luz que barre
+      bg.style.background = `radial-gradient(1400px 900px at 70% 30%,#1c160c,${p.bg} 70%)`;
+      const f = H.$('<div class="fuga" style="left:-300px;top:-400px"></div>'); bg.appendChild(f);
+      const rey = capa(bg, ICO.pieza('rey', 1150, rgba(p.a, .07), rgba(p.a, .22)), 'left:1260px;top:40px');
+      const pz = piezas([['dama', 40, 640, 380, rgba(p.c, .06), 1, 1], ['peon', 330, 860, 200, rgba(p.c, .05), 1, 3]]);
+      AMB.push((t) => { f.style.transform = `translate(${Math.sin(t * .2) * 600 + 700}px,${Math.cos(t * .15) * 200}px)`; f.style.opacity = .5 + .4 * Math.sin(t * .7); rey.style.transform = `translateY(${Math.sin(t * .3) * 18}px)`; pz(t); });
+    }
+  },
+  // director 1: flechas de jugada que se trazan detrás del texto (diagonal de alfil, salto de caballo, columna de torre)
+  rayos(c, H, inverso) {
+    const {pal} = H, R = [['M120 1000L620 500L1000 120', pal.a], ['M1780 980V560H1560', pal.b], ['M1500 120L1860 480', pal.c], ['M380 120V560H160', pal.b]];
+    R.forEach(([d, col], i) => {
+      const e = H.$(`<svg class="abs" width="1920" height="1080" style="left:0;top:0;overflow:visible"><defs><marker id="pu${i}" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0 0L10 5L0 10Z" fill="${rgba(col, .4)}"/></marker></defs><path d="${d}" fill="none" stroke="${rgba(col, .26)}" stroke-width="${26 - i * 3}" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#pu${i})" pathLength="1" stroke-dasharray="1 1"/></svg>`);
+      c.cam.insertBefore(e, c.cam.firstChild);
+      c.tl.fromTo(e.querySelector('path:last-child'), {strokeDashoffset: inverso ? -1 : 1}, {strokeDashoffset: 0, duration: 1.2, ease: 'power2.inOut'}, .05 + i * .2);
+    });
+  },
+  // director 3: la gráfica de evaluación de la partida (en DJ era la onda de audio)
+  onda(c, o, H) {
+    const {pal} = H, w = o.w, h = o.h, m = h / 2; let d = `M0 ${m}`;
+    for (let x = 0; x <= w; x += 20) d += `L${x} ${(m - (Math.sin(x * .006 + (o.b ? 2 : 0)) * .55 + Math.sin(x * .021) * .2 + x / w * .35) * h * .42).toFixed(1)}`;
+    const e = H.$(`<div class="abs" style="left:${o.x}px;top:${o.y}px;width:${w}px;height:${h}px"><svg width="${w}" height="${h}" style="overflow:visible"><path d="M0 ${m}H${w}" stroke="${rgba(pal.ink, .3)}" stroke-width="2"/><path d="${d}L${w} ${m}Z" fill="${rgba('#f3f0ea', .14)}"/><path d="${d}" fill="none" stroke="${o.b ? pal.c : pal.a}" stroke-width="5" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1"/></svg></div>`);
+    (o.en || c.cam).appendChild(e);
+    c.tl.fromTo(e.querySelectorAll('path')[2], {strokeDashoffset: 1}, {strokeDashoffset: 0, duration: 1.4, ease: 'power1.inOut'}, .3);
+    c.tl.from(e.querySelectorAll('path')[1], {autoAlpha: 0, duration: .8}, 1.1);
+    return e;
+  },
+  chip: {bg: '#17140f', ink: '#efede6', font: 'Manrope', tt: 'none'},
+};
+
+window.MKT_MUNDOS = {dibujo: DIBUJO, mecanica: MECANICA, canto: CANTO, ajedrez: AJEDREZ};
 // el nicho del curso por su nombre (igual que temas.kit_de en Python)
 window.MKT_NICHO_DE = (txt) => { const t = String(txt || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
-  return /\bdj\b|disc ?jockey/.test(t) ? 'dj' : /mecanic|automotr|motocicl|\bmotos?\b/.test(t) ? 'mecanica' : /dibuj|ilustrac|boceto|acuarel/.test(t) ? 'dibujo' : /\bcanto\b|aprende a cantar|\bcantar\b|tecnica vocal|afinando voces/.test(t) ? 'canto' : ''; };
+  return /\bdj\b|disc ?jockey/.test(t) ? 'dj' : /mecanic|automotr|motocicl|\bmotos?\b/.test(t) ? 'mecanica' : /dibuj|ilustrac|boceto|acuarel/.test(t) ? 'dibujo' : /\bcanto\b|aprende a cantar|\bcantar\b|tecnica vocal|afinando voces/.test(t) ? 'canto' : /ajedrez|\bchess\b/.test(t) ? 'ajedrez' : ''; };
 window.MKT_RGBA = rgba;
 })();

@@ -170,6 +170,8 @@ MKT_MUNDOS = {
                      musica=['ko', 'sports-rock', 'caught-on-tape', 'rock-the-game', 'im-all-heart']),
     'canto': dict(nombres=['Escenario', 'Estudio de grabación', 'Afinador', 'Cancionero', 'Concierto'],
                   musica=['it-s-love', 'tears-of-joy', 'talent-in-the-air', 'expressive-courage', 'possible-dreams']),
+    'ajedrez': dict(nombres=['Torneo', 'Tablero de madera', 'Análisis', 'Planilla', 'Gran maestro'],  # 24 nov 2026
+                    musica=['close-up', 'special-days', 'digital-clouds', 'pop-track-03', 'romantic-getaway']),
 }
 
 
