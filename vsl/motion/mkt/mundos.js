@@ -452,8 +452,8 @@ body.mu-legal .cita b{font-family:Playfair;font-style:italic;font-size:40px;lett
       capa(bg, ICO.columna(760, '#3a2418', 'rgba(0,0,0,.35)'), 'left:-20px;top:330px;opacity:.9');
       capa(bg, ICO.columna(760, '#3a2418', 'rgba(0,0,0,.35)'), 'left:1712px;top:330px;opacity:.9');
       capa(bg, '', `left:0;right:0;top:930px;height:150px;background:linear-gradient(180deg,#3a1f14,#1a0c08);border-top:6px solid ${rgba(p.a, .6)}`);
-      capa(bg, ICO.bloque(260, '#4a2a1a', p.a), 'left:1500px;top:900px');
-      const mz = capa(bg, ICO.mazo(170, '#5b3420', p.a), 'left:1600px;top:690px;transform-origin:85px 212px');
+      capa(bg, ICO.bloque(200, '#4a2a1a', p.a), 'left:1700px;top:922px');  // en la esquina: no tapa textos (24 nov)
+      const mz = capa(bg, ICO.mazo(130, '#5b3420', p.a), 'left:1790px;top:782px;transform-origin:65px 162px');
       const pol = Array.from({length: 18}, (_, j) => capa(bg, '', `left:${(j * 113) % 1880 + 20}px;top:${(j * 271) % 900 + 60}px;width:4px;height:4px;border-radius:50%;background:${rgba(p.c, .7)};filter:blur(.5px)`));
       AMB.push((t) => { const f = (t % 4) / 4, g = f < .08 ? -32 * (f / .08) : f < .14 ? -32 + 32 * ((f - .08) / .06) : 0; mz.style.transform = `rotate(${-58 + g}deg)`;
         ven.forEach((v, j) => { v.style.opacity = String(.85 + .15 * Math.sin(t * .6 + j)); });
