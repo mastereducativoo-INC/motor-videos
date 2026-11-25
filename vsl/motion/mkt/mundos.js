@@ -349,7 +349,8 @@ body.mu-ajedrez .disco::before{background:radial-gradient(closest-side at 35% 30
 body.mu-ajedrez .disco .lab{left:36%;top:36%;width:28%;height:28%;background:#1c0f06;color:#f5d49a;font-family:Playfair;font-weight:700;box-shadow:0 0 0 8px #e3a857,0 20px 40px rgba(0,0,0,.5)}
 body.mu-ajedrez .disco .lab::after{display:none}
 body.mu-ajedrez .fuga{background:radial-gradient(closest-side,rgba(201,162,39,.32),transparent 70%)}
-body.mu-ajedrez .cita b{font-family:Manrope;letter-spacing:.04em}`,
+body.mu-ajedrez .cita b{font-family:Manrope;letter-spacing:.04em}
+body.mu-ajedrez.d5 .T .k .wi{font-family:Playfair;padding-right:.16em;margin-right:-.12em}`,
   fondo(DIR, bg, AMB, H) {
     const {capa, linea, pal} = H, p = pal;
     // piezas que flotan despacio (las usan varios directores)

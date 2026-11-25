@@ -89,6 +89,9 @@ html,body{width:1920px;height:1080px;overflow:hidden;background:var(--bg);color:
 .franja{position:absolute;height:120px;left:-300px;right:-300px;background:repeating-linear-gradient(-45deg,var(--b) 0 40px,transparent 40px 80px);opacity:.9}
 .bloque{position:absolute;background:var(--b)}
 .d4 .T{text-shadow:none}
+/* 24 nov 2026 (Ajedrez, Planilla): en mayúsculas los acentos (Á, É, Í) salían cortados por el recuadro de cada palabra */
+.d4 .T .w{padding-top:.24em;margin-top:-.2em}
+.d4 .T .k .wi{padding-top:.24em;margin-top:-.24em}
 .d4 .sello{position:absolute;border-radius:50%;background:var(--b);color:var(--bg);display:flex;align-items:center;justify-content:center;text-align:center;font-family:var(--ft);font-size:44px;line-height:1;transform:rotate(-12deg)}
 .d4 .chip{background:var(--ink);color:var(--cbg,#ffd400);border:none;border-radius:0;font-family:var(--ft);font-weight:800;text-transform:uppercase;font-size:44px}
 /* ---------- D5 · cine ---------- */
