@@ -14,6 +14,10 @@
 @font-face{font-family:Manrope;src:url(../../fonts/Manrope.ttf);font-weight:200 800}
 @font-face{font-family:Syne;src:url(../../fonts/Syne.ttf);font-weight:100 900}@font-face{font-family:Playfair;src:url(../../fonts/Playfair.ttf);font-weight:400 900}@font-face{font-family:Playfair;src:url(../../fonts/Playfair-Italic.ttf);font-style:italic;font-weight:400 900}@font-face{font-family:Sora;src:url(../../fonts/Sora.ttf);font-weight:100 800}@font-face{font-family:Epilogue;src:url(../../fonts/Epilogue.ttf);font-weight:100 900}
 @font-face{font-family:Outfit;src:url(../../fonts/Outfit.ttf);font-weight:100 900}
+/* 25 nov 2026 (Matemáticas): Rubik para títulos y Kalam, letra a mano de gis */
+@font-face{font-family:Rubik;src:url(../../fonts/Rubik.ttf);font-weight:300 900}
+@font-face{font-family:Kalam;src:url(../../fonts/kalam-latin-400-normal.woff2);font-weight:400 500}
+@font-face{font-family:Kalam;src:url(../../fonts/kalam-latin-700-normal.woff2);font-weight:600 900}
 /* 23 nov: letras de los mundos del nicho (mundos.js): dibujo y mecánica, las mismas del kit de la Fábrica */
 @font-face{font-family:Playfair;src:url(../../fonts/Playfair.ttf);font-weight:400 900}
 @font-face{font-family:Playfair;src:url(../../fonts/Playfair-Italic.ttf);font-style:italic;font-weight:400 900}

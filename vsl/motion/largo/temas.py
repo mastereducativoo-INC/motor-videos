@@ -175,6 +175,9 @@ MKT_MUNDOS = {
     # 24 nov 2026 (Abogados): mundo legal hecho desde cero; música seria de metales y cuerdas (Mixkit, licencia gratuita)
     'legal': dict(nombres=['Tribunal', 'Biblioteca jurídica', 'Expediente', 'Contrato', 'Despacho'],
                   musica=['welcome-to-the-games', 'a-new-life', 'golden-storm', 'epical-drums-05', 'motivating-mornings']),
+    # 25 nov 2026 (Matemáticas): mundo hecho desde cero con el kit aprobado del nicho; música del kit de Matemáticas (Mixkit, gratuita)
+    'matematicas': dict(nombres=['Pizarrón', 'Geometría', 'Calculadora', 'Cuaderno cuadriculado', 'Plano cartesiano'],
+                        musica=['driving-ambition', 'just-keep-walking', 'new-bass-01', 'upbeat-jazz', 'epical-drums-02']),
 }
 
 
