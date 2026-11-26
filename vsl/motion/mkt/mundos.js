@@ -509,9 +509,118 @@ body.mu-legal .cita b{font-family:Playfair;font-style:italic;font-size:40px;lett
   chip: {bg: '#5a0f1e', ink: '#f4ecdc', font: 'Montserrat', tt: 'uppercase'},
 };
 
-window.MKT_MUNDOS = {dibujo: DIBUJO, mecanica: MECANICA, canto: CANTO, ajedrez: AJEDREZ, legal: LEGAL};
+// ======================= BEBÉS · RECETAS PARA BEBÉS (25 nov 2026) =======================
+// Mundo hecho desde cero para el nicho de alimentación y recetas para bebés (regla V8: nada de DJ ni de otros nichos).
+// Christian (22 nov): «cálido, tierno, familiar; biberones, platos de silicona, peluches, comida de bebé; colores suaves;
+// sobre todo recetas, preparación y nutrición infantil». 1 Cocina de papillas: pared de azulejos pastel, vapor que sube de un
+// tazón, cuchara y biberón. 2 Hora de comer: cuarto del bebé con lunares y nubes; lo que gira es un plato de silicona con
+// compartimentos (en DJ era el disco). 3 Mi menú: noche en el cuarto, estrellas, ventanas de un planificador de comidas y la
+// curva de crecimiento (en DJ era la onda de audio). 4 Recetario: cada escena es otra tarjeta de receta sobre un mantel de
+// cuadritos. 5 Álbum familiar: fotos del curso con bordes de álbum, luz cálida y corazones que flotan.
+ICO.biberon = (s, col, tapa) => svg(s * .46, s, `<path d="M40 8h20l4 16H36z" fill="${tapa}"/><rect x="28" y="22" width="44" height="18" rx="6" fill="${col}"/><rect x="22" y="38" width="56" height="110" rx="20" fill="rgba(255,255,255,.92)" stroke="${col}" stroke-width="4"/><rect x="26" y="88" width="48" height="56" rx="14" fill="#fff6dc"/>${[60, 76, 92, 108, 124].map((y) => `<path d="M24 ${y}h12" stroke="${col}" stroke-width="3"/>`).join('')}`, '', '0 0 100 156');
+ICO.cuchara = (s, col) => svg(s, s * .22, `<ellipse cx="34" cy="22" rx="32" ry="20" fill="${col}"/><ellipse cx="30" cy="18" rx="16" ry="8" fill="rgba(255,255,255,.4)"/><path d="M64 20L208 14Q218 14 218 22T208 30L64 24Z" fill="${col}"/>`, '', '0 0 220 44');
+ICO.plato = (s, a, b, c, borde) => svg(s, s, `<circle cx="100" cy="100" r="96" fill="${borde}"/><circle cx="100" cy="100" r="80" fill="#fffaf3"/><path d="M100 100V22A78 78 0 0 1 167.5 139Z" fill="${a}" opacity=".85"/><path d="M100 100L167.5 139A78 78 0 0 1 32.5 139Z" fill="${b}" opacity=".85"/><path d="M100 100L32.5 139A78 78 0 0 1 100 22Z" fill="${c}" opacity=".85"/><path d="M100 100V20M100 100L170 140M100 100L30 140" stroke="${borde}" stroke-width="7"/>`, '', '0 0 200 200');
+ICO.osito = (s, col, claro) => svg(s, s, `<circle cx="42" cy="38" r="22" fill="${col}"/><circle cx="158" cy="38" r="22" fill="${col}"/><circle cx="42" cy="38" r="11" fill="${claro}"/><circle cx="158" cy="38" r="11" fill="${claro}"/><circle cx="100" cy="92" r="66" fill="${col}"/><ellipse cx="100" cy="118" rx="30" ry="24" fill="${claro}"/><circle cx="76" cy="84" r="7" fill="#3a2a22"/><circle cx="124" cy="84" r="7" fill="#3a2a22"/><ellipse cx="100" cy="108" rx="10" ry="7" fill="#3a2a22"/><path d="M92 124q8 7 16 0" fill="none" stroke="#3a2a22" stroke-width="3" stroke-linecap="round"/><circle cx="64" cy="108" r="8" fill="#f7a8bd" opacity=".6"/><circle cx="136" cy="108" r="8" fill="#f7a8bd" opacity=".6"/><ellipse cx="100" cy="186" rx="54" ry="30" fill="${col}"/>`, '', '0 0 200 216');
+ICO.corazon = (s, col) => svg(s, s * .9, `<path d="M50 88C20 66 4 50 4 30A22 22 0 0 1 50 18A22 22 0 0 1 96 30C96 50 80 66 50 88Z" fill="${col}"/>`, '', '0 0 100 90');
+ICO.estrella = (s, col) => svg(s, s, `<path d="M50 6l12 30 32 2-25 20 9 32-28-18-28 18 9-32L6 38l32-2z" fill="${col}" stroke="${col}" stroke-width="6" stroke-linejoin="round"/>`, '', '0 0 100 100');
+ICO.nube = (s, col) => svg(s, s * .55, `<path d="M40 100a36 36 0 0 1 4-72a46 46 0 0 1 86-8a36 36 0 0 1 50 34a30 30 0 0 1-6 46z" fill="${col}"/>`, '', '0 0 200 110');
+ICO.sonaja = (s, col, b) => svg(s * .5, s, `<circle cx="50" cy="40" r="34" fill="${col}"/><circle cx="50" cy="40" r="20" fill="rgba(255,255,255,.5)"/><rect x="44" y="72" width="12" height="80" rx="6" fill="${b}"/><circle cx="50" cy="168" r="18" fill="${b}"/>`, '', '0 0 100 190');
+const BEBES = {
+  nombres: ['Cocina de papillas', 'Hora de comer', 'Mi menú', 'Recetario', 'Álbum familiar'],
+  pal: [
+    P('#fff6ec', '#4a3428', '#8c7466', '#ee7f56', '#6faee6', '#f6b93b', '#ffffff', 'rgba(238,127,86,.08)', 'rgba(238,127,86,.42)', 'rgba(140,100,70,.22)', 'Fraunces', 700, 'Manrope', 'Manrope', 'none', '-.015em', '22px'),
+    P('#eef5fc', '#2f3b52', '#5d6b83', '#ef7fa0', '#5b9fe0', '#f6b93b', '#ffffff', 'rgba(47,59,82,.06)', 'rgba(239,127,160,.5)', 'rgba(60,80,120,.2)', 'Outfit', 800, 'Manrope', 'Manrope', 'none', '-.02em', '999px'),
+    P('#2f2a3d', '#fffaf4', '#d0c9de', '#f8a68e', '#9cc8f2', '#ffd37a', '#2f2a3d', '#3c364d', '#56506e', 'rgba(248,166,142,.25)', 'Sora', 700, 'Manrope', 'Manrope', 'none', '-.02em', '18px'),
+    P('#fdf1e4', '#4b3326', '#6e5646', '#e07a48', '#4b3326', '#f6c453', '#ffffff', '#4b3326', '#4b3326', 'rgba(140,100,70,.25)', 'Fraunces', 800, 'DMSans', 'DMSans', 'none', '-.02em', '14px'),
+    P('#3f2630', '#fff4f6', '#e9cdd5', '#f7a8bd', '#9cc8ec', '#ffd37a', '#3f2630', 'rgba(255,255,255,.07)', 'rgba(247,168,189,.45)', 'rgba(0,0,0,.5)', 'Fraunces', 600, 'Manrope', 'Manrope', 'none', '-.01em', '20px'),
+  ],
+  musica: ['little-bells', 'smile', 'positive-energy', 'feeling-happy', 'a-baby-story'],
+  txt: {deck: (i) => ['DESAYUNO', 'COMIDA', 'MERIENDA', 'CENA'][i % 4], bpm: 'ETAPA · 6 A 12 MESES', error: (j) => 'DUDA ' + (j + 1), registro: 'MI MENÚ', biblioteca: 'MIS RECETAS', nuevas: 'LO QUE VAS A LOGRAR', desbloq: 'LISTAS', cert: 'CERTIFICADO.PDF', modulo: 'RECETARIO'},
+  // director 4: cada escena es otra tarjeta de receta
+  cartel: [['#fdf1e4', '#4b3326', '#e07a48'], ['#f7c3d0', '#3f2630', '#b23a5e'], ['#cfe3f7', '#26324a', '#2f6fb3'], ['#ffe3a3', '#40301f', '#c0602e']],
+  barras: ['#f7c3d0', '#ffe3a3', '#cfe3f7'],
+  css: `
+body.mu-bebes .trama{background-image:linear-gradient(90deg,rgba(224,122,72,.13) 50%,transparent 50%),linear-gradient(rgba(224,122,72,.13) 50%,transparent 50%);background-size:72px 72px;opacity:.9}
+body.mu-bebes .franja{height:96px;background:rgba(247,168,189,.9);background-image:radial-gradient(circle,rgba(255,255,255,.55) 0 9px,transparent 10px);background-size:46px 46px;opacity:.95}
+body.mu-bebes .ui{background:#3c364d;border:2px solid #56506e;border-radius:22px;box-shadow:0 30px 60px rgba(0,0,0,.35)}
+body.mu-bebes .ui .bar{background:#463f5a;border-bottom:2px solid #56506e;color:#d0c9de;font-family:Manrope;letter-spacing:.12em}
+body.mu-bebes .ui .bar b{color:#ffd37a}
+body.mu-bebes.d3 .fila{background:#3c364d;border:2px solid #56506e}
+body.mu-bebes .disco{background:conic-gradient(from -30deg,#ffe2a6 0 120deg,#fbcbd8 0 240deg,#cde2f7 0);box-shadow:0 40px 110px rgba(60,80,120,.35),inset 0 0 0 30px #f7c3d0,inset 0 0 0 36px #fff}
+body.mu-bebes .disco::before{background:conic-gradient(from -30deg,#f7c3d0 0 2deg,transparent 0 118deg,#f7c3d0 0 122deg,transparent 0 238deg,#f7c3d0 0 242deg,transparent 0 358deg,#f7c3d0 0)}
+body.mu-bebes .disco .lab{left:30%;top:30%;width:40%;height:40%;background:#fffaf3;color:#2f3b52;font-family:Outfit;font-weight:800;font-size:28px;padding:20px;box-shadow:inset 0 0 0 6px #f7c3d0}
+body.mu-bebes .disco .lab::after{display:none}
+body.mu-bebes .fuga{background:radial-gradient(closest-side,rgba(255,200,150,.32),transparent 70%)}
+body.mu-bebes .franjas::before,body.mu-bebes .franjas::after{background:#fff4f6;height:56px;box-shadow:0 0 0 2px rgba(247,168,189,.5)}
+body.mu-bebes .cita b{font-family:Caveat;font-size:40px;letter-spacing:0}`,
+  fondo(DIR, bg, AMB, H) {
+    const {capa, linea, pal} = H, p = pal;
+    // burbujas suaves que suben y corazones que flotan (las usan varios directores)
+    const burbujas = (n, cols, op) => { const bs = Array.from({length: n}, (_, j) => { const r = 14 + (j * 37) % 34, x = (j * 271) % 1880 + 20; return {e: capa(bg, '', `left:${x}px;top:1100px;width:${r * 2}px;height:${r * 2}px;border-radius:50%;background:radial-gradient(circle at 32% 30%,rgba(255,255,255,.9),${rgba(cols[j % cols.length], .35)} 60%);border:2px solid ${rgba(cols[j % cols.length], .45)}`), v: .05 + (j % 5) * .012, d: j * .137}; });
+      return (t) => bs.forEach((b) => { const f = (t * b.v + b.d) % 1; b.e.style.transform = `translate(${Math.sin(t * .9 + b.d * 9) * 30}px,${-f * 1300}px)`; b.e.style.opacity = String(Math.sin(f * Math.PI) * op); }); };
+    const corazones = (lista, col) => { const cs = lista.map(([x, y, s, v, d]) => ({e: capa(bg, ICO.corazon(s, col), `left:${x}px;top:${y}px`), v, d}));
+      return (t) => cs.forEach((c) => { const f = (t * c.v + c.d) % 1; c.e.style.transform = `translate(${Math.sin(t + c.d * 6) * 16}px,${-f * 240}px) rotate(${Math.sin(t * .8 + c.d) * 12}deg)`; c.e.style.opacity = String(Math.sin(f * Math.PI) * .6); }); };
+    if (DIR === 1) { // cocina de papillas: azulejos pastel, tazón con vapor, cuchara y biberón
+      bg.style.background = `linear-gradient(${rgba('#ffffff', .7)} 3px,transparent 3px) 0 0/120px 60px,linear-gradient(90deg,${rgba('#ffffff', .7)} 3px,transparent 3px) 0 0/120px 60px,linear-gradient(180deg,#fff3e4,${p.bg} 70%)`;
+      capa(bg, '', `left:0;right:0;bottom:0;height:170px;background:linear-gradient(180deg,#f2d9bf,#e9c9a8);box-shadow:0 -10px 30px rgba(140,100,70,.18)`);
+      capa(bg, `<svg width="300" height="150"><path d="M10 20h280c0 70-60 120-140 120S10 90 10 20z" fill="${p.a}"/><ellipse cx="150" cy="20" rx="140" ry="18" fill="#ffc98a"/><ellipse cx="150" cy="20" rx="140" ry="18" fill="none" stroke="${rgba('#000', .1)}" stroke-width="3"/></svg>`, 'left:1560px;top:830px');
+      const v1 = linea(bg, 'M1660 830c-30-60 30-90 0-150s30-90 0-150', rgba('#ffffff', .95), 10, 6), v2 = linea(bg, 'M1730 830c-30-60 30-90 0-150s30-90 0-140', rgba('#ffffff', .85), 8, 6, 2), v3 = linea(bg, 'M1800 830c-30-60 30-90 0-150', rgba('#ffffff', .8), 7, 6, 4);
+      const cu = capa(bg, ICO.cuchara(340, p.b), 'left:-40px;top:880px;transform:rotate(-12deg);filter:drop-shadow(6px 10px 8px rgba(140,100,70,.25))');
+      capa(bg, ICO.biberon(250, p.b, p.c), 'left:240px;top:822px;transform:rotate(-6deg);filter:drop-shadow(8px 12px 10px rgba(140,100,70,.22))');
+      const b = burbujas(10, [p.a, p.b, p.c], .55);
+      AMB.push((t) => { v1(t); v2(t); v3(t); cu.style.transform = `rotate(${-12 + Math.sin(t * .8) * 4}deg)`; b(t); });
+    } else if (DIR === 2) { // cuarto del bebé: lunares, nubes que pasan, móvil de estrellas y osito
+      bg.style.background = `radial-gradient(circle,${rgba(p.a, .16)} 0 9px,transparent 10px) 0 0/90px 90px,radial-gradient(circle,${rgba(p.b, .14)} 0 7px,transparent 8px) 45px 45px/90px 90px,linear-gradient(180deg,#f6fbff,${p.bg})`;
+      const nubes = [[120, 110, 300], [1450, 70, 360], [700, 960, 260]].map(([x, y, s]) => ({e: capa(bg, ICO.nube(s, '#ffffff'), `left:${x}px;top:${y}px;filter:drop-shadow(0 10px 20px rgba(60,80,120,.12))`), x}));
+      const movil = capa(bg, `<svg width="420" height="320" style="overflow:visible"><path d="M20 20H400" stroke="${rgba(p.ink, .35)}" stroke-width="5" stroke-linecap="round"/>${[60, 160, 260, 360].map((x, j) => `<path d="M${x} 20V${110 + (j % 2) * 60}" stroke="${rgba(p.ink, .3)}" stroke-width="2"/>`).join('')}</svg>`, 'left:1440px;top:250px;transform-origin:210px 20px');
+      [p.c, p.a, p.b, p.c].forEach((col, j) => capa(movil, j % 2 ? ICO.corazon(60, col) : ICO.estrella(64, col), `left:${28 + j * 100}px;top:${100 + (j % 2) * 60}px`));
+      capa(bg, ICO.osito(210, '#d9a77c', '#f3d6bb'), 'left:1690px;top:850px;filter:drop-shadow(0 16px 20px rgba(60,80,120,.2))');
+      capa(bg, ICO.sonaja(150, p.a, p.c), 'left:30px;top:920px;transform:rotate(-24deg);opacity:.85');
+      AMB.push((t) => { nubes.forEach((n, j) => { n.e.style.transform = `translateX(${Math.sin(t * .18 + j * 2) * 120}px)`; }); movil.style.transform = `rotate(${Math.sin(t * .9) * 5}deg)`; });
+    } else if (DIR === 3) { // noche en el cuarto: estrellas que titilan, luna y la curva de crecimiento de fondo
+      bg.style.background = `radial-gradient(1200px 700px at 50% 60%,#3a3350,${p.bg} 72%)`;
+      const es = Array.from({length: 34}, (_, j) => capa(bg, ICO.estrella(14 + (j % 4) * 6, j % 3 ? '#fff3c4' : p.a), `left:${(j * 173) % 1880 + 20}px;top:${(j * 97) % 1000 + 20}px`));
+      capa(bg, `<svg width="220" height="220"><circle cx="110" cy="110" r="90" fill="#fff3c4"/><circle cx="150" cy="86" r="80" fill="#3a3350"/></svg>`, 'right:50px;top:20px;opacity:.3;transform:scale(.7);transform-origin:100% 0;filter:drop-shadow(0 0 40px rgba(255,243,196,.5))');
+      const cur = linea(bg, 'M-20 1000C300 990 520 930 800 840S1300 640 1560 560 1880 470 1960 450', rgba(p.b, .35), 8, 12);
+      AMB.push((t) => { es.forEach((e, j) => { e.style.opacity = String(.25 + .75 * Math.abs(Math.sin(t * 1.1 + j * 1.7))); }); cur(t); });
+    } else if (DIR === 4) { // mantel de cuadritos (se ve detrás de las tarjetas de receta)
+      bg.style.background = p.bg; bg.appendChild(H.$('<div class="trama"></div>'));
+    } else { // álbum familiar: luz cálida que se mueve, burbujas de luz y corazones
+      bg.style.background = `radial-gradient(1400px 900px at 50% 0%,#5a3442,${p.bg} 70%)`;
+      const f = H.$('<div class="fuga" style="left:-300px;top:-400px"></div>'); bg.appendChild(f);
+      const b = burbujas(14, [p.a, p.c, '#ffffff'], .35);
+      const co = corazones([[160, 820, 70, .07, .1], [1700, 760, 60, .06, .5], [940, 900, 46, .08, .8], [420, 300, 40, .05, .3]], rgba(p.a, .95));
+      AMB.push((t) => { b(t); co(t); f.style.transform = `translate(${Math.sin(t * .2) * 600 + 700}px,${Math.cos(t * .15) * 200}px)`; f.style.opacity = .5 + .4 * Math.sin(t * .7); });
+    }
+  },
+  // director 1: burbujas que suben detrás del texto (en DJ eran láseres)
+  rayos(c, H, inverso) {
+    const {pal} = H, cols = [pal.a, pal.b, pal.c];
+    for (let i = 0; i < 14; i++) {
+      const r = 18 + (i * 29) % 40, x = (i * 139 + (inverso ? 70 : 0)) % 1860 + 30;
+      const e = H.$(`<div class="abs" style="left:${x}px;top:1120px;width:${r * 2}px;height:${r * 2}px;border-radius:50%;background:radial-gradient(circle at 32% 30%,rgba(255,255,255,.95),${rgba(cols[i % 3], .4)} 62%);border:2px solid ${rgba(cols[i % 3], .55)}"></div>`);
+      c.cam.insertBefore(e, c.cam.firstChild);
+      c.tl.fromTo(e, {y: 0, x: 0}, {y: -1300 - (i % 3) * 120, x: (i % 2 ? 1 : -1) * 60, duration: c.D * (.8 + (i % 4) * .1), ease: 'sine.inOut'}, (i % 5) * .12);
+    }
+  },
+  // director 3: la curva de crecimiento con puntos de control (en DJ era la onda de audio)
+  onda(c, o, H) {
+    const {pal} = H, col = o.b ? pal.b : pal.a, w = o.w, h = o.h;
+    const pts = Array.from({length: 9}, (_, j) => [j * w / 8, h * (.85 - .7 * Math.pow(j / 8, .7)) + (o.b ? h * .05 : 0)]);
+    let d = `M${pts[0][0]} ${pts[0][1]}`; for (let j = 1; j < pts.length; j++) { const [x0, y0] = pts[j - 1], [x1, y1] = pts[j]; d += `C${x0 + (x1 - x0) / 2} ${y0} ${x0 + (x1 - x0) / 2} ${y1} ${x1} ${y1}`; }
+    const pun = pts.map(([x, y]) => `<circle cx="${x}" cy="${y}" r="9" fill="${col}"/>`).join('');
+    const e = H.$(`<div class="abs" style="left:${o.x}px;top:${o.y}px;width:${w}px;height:${h}px"><svg width="${w}" height="${h}" style="overflow:visible"><path d="M0 ${h}H${w}" stroke="${rgba(col, .25)}" stroke-width="2" stroke-dasharray="6 10"/><path d="${d}" fill="none" stroke="${col}" stroke-width="7" stroke-linecap="round" pathLength="1" stroke-dasharray="1 1"/><g opacity="0">${pun}</g></svg></div>`);
+    (o.en || c.cam).appendChild(e);
+    c.tl.fromTo(e.querySelectorAll('path')[1], {strokeDashoffset: 1}, {strokeDashoffset: 0, duration: 1.4, ease: 'power1.inOut'}, .3);
+    c.tl.to(e.querySelector('g'), {opacity: 1, duration: .4}, 1.3);
+    return e;
+  },
+  chip: {bg: '#4b3326', ink: '#fff6ec', font: 'DMSans', tt: 'none'},
+};
+
+window.MKT_MUNDOS = {dibujo: DIBUJO, mecanica: MECANICA, canto: CANTO, ajedrez: AJEDREZ, legal: LEGAL, bebes: BEBES};
 // el nicho del curso por su nombre (igual que temas.kit_de en Python)
 window.MKT_NICHO_DE = (txt) => { const t = String(txt || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
-  return /\bdj\b|disc ?jockey/.test(t) ? 'dj' : /mecanic|automotr|motocicl|\bmotos?\b/.test(t) ? 'mecanica' : /dibuj|ilustrac|boceto|acuarel/.test(t) ? 'dibujo' : /\bcanto\b|aprende a cantar|\bcantar\b|tecnica vocal|afinando voces/.test(t) ? 'canto' : /ajedrez|\bchess\b/.test(t) ? 'ajedrez' : /abogad|\bderecho\b|juridic|\bleyes\b|litigac|notari/.test(t) ? 'legal' : ''; };
+  return /\bdj\b|disc ?jockey/.test(t) ? 'dj' : /mecanic|automotr|motocicl|\bmotos?\b/.test(t) ? 'mecanica' : /dibuj|ilustrac|boceto|acuarel/.test(t) ? 'dibujo' : /\bcanto\b|aprende a cantar|\bcantar\b|tecnica vocal|afinando voces/.test(t) ? 'canto' : /ajedrez|\bchess\b/.test(t) ? 'ajedrez' : /abogad|\bderecho\b|juridic|\bleyes\b|litigac|notari/.test(t) ? 'legal' : /recetas?( para| de)? beb|papillas?|alimentacion (infantil|complementaria)|comida para beb/.test(t) ? 'bebes' : ''; };
 window.MKT_RGBA = rgba;
 })();
