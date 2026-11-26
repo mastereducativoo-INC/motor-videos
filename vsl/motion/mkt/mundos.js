@@ -563,10 +563,10 @@ body.mu-bebes .cita b{font-family:Caveat;font-size:40px;letter-spacing:0}`,
     if (DIR === 1) { // cocina de papillas: azulejos pastel, tazón con vapor, cuchara y biberón
       bg.style.background = `linear-gradient(${rgba('#ffffff', .7)} 3px,transparent 3px) 0 0/120px 60px,linear-gradient(90deg,${rgba('#ffffff', .7)} 3px,transparent 3px) 0 0/120px 60px,linear-gradient(180deg,#fff3e4,${p.bg} 70%)`;
       capa(bg, '', `left:0;right:0;bottom:0;height:170px;background:linear-gradient(180deg,#f2d9bf,#e9c9a8);box-shadow:0 -10px 30px rgba(140,100,70,.18)`);
-      capa(bg, `<svg width="300" height="150"><path d="M10 20h280c0 70-60 120-140 120S10 90 10 20z" fill="${p.a}"/><ellipse cx="150" cy="20" rx="140" ry="18" fill="#ffc98a"/><ellipse cx="150" cy="20" rx="140" ry="18" fill="none" stroke="${rgba('#000', .1)}" stroke-width="3"/></svg>`, 'left:1560px;top:830px');
+      capa(bg, `<svg width="300" height="150"><path d="M10 20h280c0 70-60 120-140 120S10 90 10 20z" fill="${p.a}"/><ellipse cx="150" cy="20" rx="140" ry="18" fill="#ffc98a"/><ellipse cx="150" cy="20" rx="140" ry="18" fill="none" stroke="${rgba('#000', .1)}" stroke-width="3"/></svg>`, 'left:1590px;top:885px');
       const v1 = linea(bg, 'M1660 830c-30-60 30-90 0-150s30-90 0-150', rgba('#ffffff', .95), 10, 6), v2 = linea(bg, 'M1730 830c-30-60 30-90 0-150s30-90 0-140', rgba('#ffffff', .85), 8, 6, 2), v3 = linea(bg, 'M1800 830c-30-60 30-90 0-150', rgba('#ffffff', .8), 7, 6, 4);
       const cu = capa(bg, ICO.cuchara(340, p.b), 'left:-40px;top:880px;transform:rotate(-12deg);filter:drop-shadow(6px 10px 8px rgba(140,100,70,.25))');
-      capa(bg, ICO.biberon(250, p.b, p.c), 'left:240px;top:822px;transform:rotate(-6deg);filter:drop-shadow(8px 12px 10px rgba(140,100,70,.22))');
+      capa(bg, ICO.biberon(210, p.b, p.c), 'left:230px;top:875px;transform:rotate(-6deg);filter:drop-shadow(8px 12px 10px rgba(140,100,70,.22))');
       const b = burbujas(10, [p.a, p.b, p.c], .55);
       AMB.push((t) => { v1(t); v2(t); v3(t); cu.style.transform = `rotate(${-12 + Math.sin(t * .8) * 4}deg)`; b(t); });
     } else if (DIR === 2) { // cuarto del bebé: lunares, nubes que pasan, móvil de estrellas y osito
