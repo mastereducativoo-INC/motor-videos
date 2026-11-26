@@ -106,7 +106,7 @@ function puntos(c, items, o) {
   const b = $(`<div class="abs" style="left:${o.x}px;top:${o.y}px;width:${o.w}px;display:flex;flex-direction:column;gap:${o.gap || 24}px"></div>`);
   (o.en || c.cam).appendChild(b);
   items.forEach((it, j) => {
-    const lab = DIR === 2 ? 'A' + (j + 1) : DIR === 3 ? String(j + 1).padStart(2, '0') : DIR === 5 ? '' : String(j + 1);
+    const lab = MU && MU.num ? MU.num(DIR, j) : DIR === 2 ? 'A' + (j + 1) : DIR === 3 ? String(j + 1).padStart(2, '0') : DIR === 5 ? '' : String(j + 1);  // 25 nov: un mundo puede numerar a su modo (A1… era del vinilo)
     const f = $(`<div class="fila" style="font-size:${o.size || 44}px">${DIR === 5 ? `<span style="flex:0 0 46px;height:2px;background:var(--a);margin-top:4px"></span>` : `<span class="n">${lab}</span>`}<span>${esc(cap(it))}</span></div>`);
     if (DIR === 1) f.style.cssText += ';padding:16px 24px;border-radius:14px;background:rgba(255,255,255,.05);border:2px solid var(--line)';
     if (DIR === 4) f.style.cssText += chipCss('16px 22px');
@@ -267,8 +267,10 @@ S.k_curso = (c) => {
   else if (DIR === 2) { objeto(c, 'logo', {x: 1160, y: 200, w: 640, h: 560, at: .3}); abanico(560, 540, 470, 200, 7); texto(c, {x: 120, y: 880, w: 900, t: sc.t, size: 60, maxH: 160, at: 1.4}); }
   else if (DIR === 3) {
     const w = ventana(c, {x: 80, y: 70, w: 1760, h: 940, titulo: TX('biblioteca', 'BIBLIOTECA'), der: n + ' MÓDULOS'});
-    M.forEach((k, j) => { const x = 180 + j * 410, y = 220; objeto(c, k, {x, y, w: 340, h: 470, at: .4 + j * .2, halo: false, sfx: j === 0});
-      const r = $(`<div class="abs" style="left:${x}px;top:${y + 500}px;width:340px;font-family:${MU ? 'var(--fm)' : 'JetBrains'};font-size:26px;color:var(--a);font-weight:700">MÓDULO ${String(j + 1).padStart(2, '0')}</div>`); c.cam.appendChild(r); c.tl.from(r, {autoAlpha: 0}, .6 + j * .2); });
+    // 25 nov 2026 (Matemáticas, 5 módulos): con más de 4 portadas la 5ª se salía del cuadro; ahora se reparten en el ancho
+    const st = n > 4 ? 1600 / n : 410, wd = n > 4 ? st - 40 : 340, hd = Math.round(wd * 470 / 340);
+    M.forEach((k, j) => { const x = 180 + j * st, y = 220; objeto(c, k, {x, y, w: wd, h: hd, at: .4 + j * .2, halo: false, sfx: j === 0});
+      const r = $(`<div class="abs" style="left:${x}px;top:${y + hd + 30}px;width:${wd}px;font-family:${MU ? 'var(--fm)' : 'JetBrains'};font-size:26px;color:var(--a);font-weight:700">MÓDULO ${String(j + 1).padStart(2, '0')}</div>`); c.cam.appendChild(r); c.tl.from(r, {autoAlpha: 0}, .6 + j * .2); });
     texto(c, {x: 180, y: 790, w: 1560, t: sc.t, size: 70, maxH: 180, at: 1.4}); c.tl.from(w, {autoAlpha: 0}, 0);
   } else if (DIR === 4) { cartel(c, 2); texto(c, {x: 100, y: 60, w: 1720, t: sc.t, size: 150, maxH: 300}); abanico(960, 700, 470, 390, 6); }
   else { foto(c, fotos()[2] || fotos()[0], {dir: 1, centro: 1}); c.cam.appendChild($('<div class="abs franjas" style="inset:0"></div>')); objeto(c, 'logo', {x: 710, y: 110, w: 500, h: 240, at: .2, halo: false}); abanico(960, 640, 400, 300, 4); texto(c, {x: 260, y: 880, w: 1400, c: 1, t: sc.t, size: 62, maxH: 110, at: 1.4}); }
@@ -460,7 +462,10 @@ function montar() {
     if (i === 0) { el.style.visibility = 'visible'; M.from(el, {opacity: 0, duration: .5}, 0); return; }
     const pv = V.escenas[i - 1].el, t = sc.t0;
     let on = t - .02, off = t + .02;
-    if (DIR === 1) {  // destello y corte con desfase de color
+    // 25 nov 2026 (Matemáticas): un mundo puede traer su propio corte entre escenas (el borrador del pizarrón, la cuadrícula…)
+    const cm = MU && MU.corte ? MU.corte(DIR, {M, el, pv, t, FX, $, i}) : null;
+    if (cm) { on = cm.on; off = cm.off; }
+    else if (DIR === 1) {  // destello y corte con desfase de color
       M.fromTo(tapa, {opacity: 0}, {opacity: .9, duration: .06}, t - .06); M.to(tapa, {opacity: 0, duration: .28}, t);
       if (MU) M.fromTo(el, {x: 40}, {x: 0, duration: .3, ease: 'power2.out'}, t); else M.fromTo(el, {x: 40, filter: 'hue-rotate(90deg) saturate(2)'}, {x: 0, filter: 'hue-rotate(0deg) saturate(1)', duration: .3, ease: 'power2.out'}, t);
     } else if (DIR === 2) {  // se abre en círculo desde el centro del disco
@@ -477,8 +482,8 @@ function montar() {
       M.fromTo(tapa, {opacity: 0, background: '#ffb35a'}, {opacity: .35, duration: .4, yoyo: true, repeat: 1}, t - .4);
     }
     M.set(el, {visibility: 'visible'}, on); M.set(pv, {visibility: 'hidden'}, off);
-    if (DIR !== 4 && i % 3 === 0) sfx(t - .2, 'whoosh');
-    if (DIR === 4) sfx(t - .1, 'golpe');
+    if (cm) { if (cm.sfx) sfx(t - .2, cm.sfx); }
+    else { if (DIR !== 4 && i % 3 === 0) sfx(t - .2, 'whoosh'); if (DIR === 4) sfx(t - .1, 'golpe'); }
   });
   window.__seek = (t) => { M.time(Math.max(0, t), false); AMB.forEach((f) => f(t)); };
   window.__seek(0); window.__listo = true;

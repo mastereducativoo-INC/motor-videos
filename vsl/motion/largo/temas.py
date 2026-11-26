@@ -178,6 +178,9 @@ MKT_MUNDOS = {
     # 25 nov 2026 (Recetas para bebés): mundo tierno y familiar hecho desde cero; música alegre de campanitas y guitarra (Mixkit, gratuita)
     'bebes': dict(nombres=['Cocina de papillas', 'Hora de comer', 'Mi menú', 'Recetario', 'Álbum familiar'],
                   musica=['little-bells', 'smile', 'positive-energy', 'feeling-happy', 'a-baby-story']),
+    # 25 nov 2026 (Matemáticas): mundo hecho desde cero con el kit aprobado del nicho; música del kit de Matemáticas (Mixkit, gratuita)
+    'matematicas': dict(nombres=['Pizarrón', 'Geometría', 'Calculadora', 'Cuaderno cuadriculado', 'Plano cartesiano'],
+                        musica=['driving-ambition', 'just-keep-walking', 'new-bass-01', 'upbeat-jazz', 'epical-drums-02']),
 }
 
 
